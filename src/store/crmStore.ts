@@ -14,7 +14,7 @@ import {
   type LocalInboxMessage,
   type WhatsAppTemplate
 } from '../db/localDb';
-import { supabase, isSupabaseConfigured } from '../services/supabaseClient';
+import { insforge } from '../lib/insforge';
 import { useToastStore } from './toastStore';
 
 interface CrmState {
@@ -402,10 +402,10 @@ export const useCrmStore = create<CrmState>((set, get) => ({
       interactions: [newInteraction, ...state.interactions]
     }));
 
-    if (get().isOnline && isSupabaseConfigured && supabase) {
+    if (get().isOnline && insforge) {
       try {
-        await supabase.from('clients').insert([newClient]);
-        await supabase.from('interactions').insert([newInteraction]);
+        await insforge.database.from('clients').insert([newClient]);
+        await insforge.database.from('interactions').insert([newInteraction]);
       } catch {
         await localDb.offlineQueue.add({
           actionType: 'create_client',
@@ -446,10 +446,10 @@ export const useCrmStore = create<CrmState>((set, get) => ({
       interactions: [newInteraction, ...state.interactions]
     }));
 
-    if (get().isOnline && isSupabaseConfigured && supabase) {
+    if (get().isOnline && insforge) {
       try {
-        await supabase.from('clients').update({ status, last_contact: now }).eq('id', clientId);
-        await supabase.from('interactions').insert([newInteraction]);
+        await insforge.database.from('clients').update({ status, last_contact: now }).eq('id', clientId);
+        await insforge.database.from('interactions').insert([newInteraction]);
       } catch {
         await localDb.offlineQueue.add({
           actionType: 'update_client_status',
@@ -491,10 +491,10 @@ export const useCrmStore = create<CrmState>((set, get) => ({
       interactions: [newInteraction, ...state.interactions]
     }));
 
-    if (get().isOnline && isSupabaseConfigured && supabase) {
+    if (get().isOnline && insforge) {
       try {
-        await supabase.from('interactions').insert([newInteraction]);
-        await supabase.from('clients').update({ last_contact: now }).eq('id', clientId);
+        await insforge.database.from('interactions').insert([newInteraction]);
+        await insforge.database.from('clients').update({ last_contact: now }).eq('id', clientId);
       } catch {
         await localDb.offlineQueue.add({
           actionType: 'create_interaction',
@@ -522,7 +522,7 @@ export const useCrmStore = create<CrmState>((set, get) => ({
     await localDb.whatsappTemplates.put(newTemplate);
     set({ whatsappTemplates: await localDb.whatsappTemplates.toArray() });
 
-    if (get().isOnline && isSupabaseConfigured && supabase) {
+    if (get().isOnline && insforge) {
       try {
         // Optionnel : synchronisation Supabase (si table existe)
       } catch {
@@ -568,10 +568,10 @@ export const useCrmStore = create<CrmState>((set, get) => ({
       interactions: [newInteraction, ...state.interactions]
     }));
 
-    if (get().isOnline && isSupabaseConfigured && supabase) {
+    if (get().isOnline && insforge) {
       try {
-        await supabase.from('clients').update({ assigned_to: newCommercialId, last_contact: now }).eq('id', clientId);
-        await supabase.from('interactions').insert([newInteraction]);
+        await insforge.database.from('clients').update({ assigned_to: newCommercialId, last_contact: now }).eq('id', clientId);
+        await insforge.database.from('interactions').insert([newInteraction]);
       } catch {
         await localDb.offlineQueue.add({
           actionType: 'reassign_client',
@@ -856,23 +856,23 @@ export const useCrmStore = create<CrmState>((set, get) => ({
 
     for (const action of actions.sort((a,b) => (a.id || 0) - (b.id || 0))) {
       try {
-        if (isSupabaseConfigured && supabase) {
+        if (insforge) {
           // Send data to Supabase dynamically if schemas are linked
           const payload = action.payload as any;
           if (action.actionType === 'create_client') {
             const { client, interaction } = payload;
-            await supabase.from('clients').upsert(client);
-            await supabase.from('interactions').upsert(interaction);
+            await insforge.database.from('clients').upsert(client);
+            await insforge.database.from('interactions').upsert(interaction);
           } else if (action.actionType === 'update_client_status') {
             const { clientId, status, interaction } = payload;
-            await supabase.from('clients').update({ status }).eq('id', clientId);
-            await supabase.from('interactions').upsert(interaction);
+            await insforge.database.from('clients').update({ status }).eq('id', clientId);
+            await insforge.database.from('interactions').upsert(interaction);
           } else if (action.actionType === 'create_interaction') {
-            await supabase.from('interactions').upsert(payload);
+            await insforge.database.from('interactions').upsert(payload);
           } else if (action.actionType === 'reassign_client') {
             const { clientId, newCommercialId, interaction } = payload;
-            await supabase.from('clients').update({ assigned_to: newCommercialId }).eq('id', clientId);
-            await supabase.from('interactions').upsert(interaction);
+            await insforge.database.from('clients').update({ assigned_to: newCommercialId }).eq('id', clientId);
+            await insforge.database.from('interactions').upsert(interaction);
           }
         }
         

@@ -9,14 +9,19 @@ import { CommercialDashboard } from './views/CommercialDashboard';
 import { ToastContainer } from './components/ToastContainer';
 
 function App() {
-  const { isAuthenticated, user, login } = useAuthStore();
+  const { isAuthenticated, user, login, initializeAuth, isLoading } = useAuthStore();
   const { init } = useCrmStore();
   const [currentScreen, setCurrentScreen] = useState<'landing' | 'login'>('landing');
 
-  // Initialize Dexie local DB and CRM listeners
+  // Initialize Auth & Dexie local DB
   useEffect(() => {
+    initializeAuth();
     init();
-  }, [init]);
+  }, [initializeAuth, init]);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Chargement...</div>;
+  }
 
   const handleQuickLogin = async (email: string) => {
     const success = await login(email);
