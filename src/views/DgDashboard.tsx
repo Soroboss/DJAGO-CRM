@@ -15,7 +15,7 @@ export const DgDashboard: React.FC = () => {
   const { user, logout, team, createTeammate } = useAuthStore();
   const { addToast } = useToastStore();
   const { 
-    clients, interactions, whatsappTemplates, updateWhatsAppTemplates, updateClientStatus,
+    clients, interactions, whatsappTemplates, addWhatsAppTemplate, updateWhatsAppTemplate, deleteWhatsAppTemplate, updateClientStatus,
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
 
@@ -24,9 +24,8 @@ export const DgDashboard: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // V2 WhatsApp templates editor state
-  const [tempDevisTemplate, setTempDevisTemplate] = useState(whatsappTemplates.devis);
-  const [tempLivraisonTemplate, setTempLivraisonTemplate] = useState(whatsappTemplates.livraison);
-  const [tempFidelisationTemplate, setTempFidelisationTemplate] = useState(whatsappTemplates.fidelisation);
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [newTemplateText, setNewTemplateText] = useState('');
 
   // Form builder state
   const [formTitle, setFormTitle] = useState('');
@@ -35,12 +34,11 @@ export const DgDashboard: React.FC = () => {
   // Selected client for audit modal
   const [selectedClientForModal, setSelectedClientForModal] = useState<LocalClient | null>(null);
 
-  const handleSaveTemplates = async () => {
-    await updateWhatsAppTemplates({
-      devis: tempDevisTemplate,
-      livraison: tempLivraisonTemplate,
-      fidelisation: tempFidelisationTemplate
-    });
+  const handleAddTemplate = async () => {
+    if (!newTemplateName.trim() || !newTemplateText.trim()) return;
+    await addWhatsAppTemplate({ name: newTemplateName, text: newTemplateText });
+    setNewTemplateName('');
+    setNewTemplateText('');
   };
 
   useEffect(() => {
@@ -1229,42 +1227,50 @@ export const DgDashboard: React.FC = () => {
         {/* Tab: Templates */}
         {activeTab === 'templates' && (
           <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-800 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
+            <h3 className="text-lg font-bold text-white">Modèles WhatsApp</h3>
+            <p className="text-xs text-slate-400">Gérez les modèles utilisés par l'équipe commerciale. Variables: {'{{nom_client}}'}, {'{{entreprise}}'}, {'{{nom_commercial}}'}</p>
+
             <div className="flex flex-col gap-4">
+              {whatsappTemplates.map(t => (
+                <div key={t.id} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex flex-col gap-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-bold text-white">{t.name}</span>
+                    <button onClick={() => deleteWhatsAppTemplate(t.id)} className="text-red-500 hover:text-red-400 text-xs font-bold uppercase">
+                      Supprimer
+                    </button>
+                  </div>
+                  <div className="text-xs text-slate-400 font-mono bg-slate-900 p-2 rounded">
+                    {t.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-4 mt-4 pt-4 border-t border-slate-800">
+              <h4 className="text-sm font-bold text-white">Ajouter un nouveau modèle</h4>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-400 uppercase">Relance Devis (modèle 'devis')</label>
-                <textarea
-                  rows={3}
-                  value={tempDevisTemplate}
-                  onChange={(e) => setTempDevisTemplate(e.target.value)}
+                <input
+                  placeholder="Nom du modèle (ex: Relance Impayé)"
+                  value={newTemplateName}
+                  onChange={(e) => setNewTemplateName(e.target.value)}
                   className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-200"
                 />
               </div>
-
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-400 uppercase">Alerte Livraison (modèle 'livraison')</label>
                 <textarea
                   rows={3}
-                  value={tempLivraisonTemplate}
-                  onChange={(e) => setTempLivraisonTemplate(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-200"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-slate-400 uppercase">Fidélisation Client (modèle 'fidelisation')</label>
-                <textarea
-                  rows={3}
-                  value={tempFidelisationTemplate}
-                  onChange={(e) => setTempFidelisationTemplate(e.target.value)}
+                  placeholder="Bonjour {{nom_client}}, ..."
+                  value={newTemplateText}
+                  onChange={(e) => setNewTemplateText(e.target.value)}
                   className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-200"
                 />
               </div>
 
               <button
-                onClick={handleSaveTemplates}
+                onClick={handleAddTemplate}
                 className="w-full py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-sm shadow-lg transition-all cursor-pointer"
               >
-                Sauvegarder les Modèles
+                Ajouter le modèle
               </button>
             </div>
           </div>

@@ -220,13 +220,17 @@ export const CommercialDashboard: React.FC = () => {
   const sendWhatsAppMessage = async () => {
     if (!selectedClientForAction || !user) return;
 
-    const rawTemplate = whatsappTemplates[selectedWhatsAppTemplate] || '';
-    const formattedText = rawTemplate.replace('{name}', selectedClientForAction.name);
+    const templateObj = whatsappTemplates.find(t => t.id === selectedWhatsAppTemplate);
+    const rawTemplate = templateObj ? templateObj.text : '';
+    const formattedText = rawTemplate
+      .replace(/\\{\\{nom_client\\}\\}/g, selectedClientForAction.name)
+      .replace(/\\{\\{entreprise\\}\\}/g, selectedClientForAction.company || 'votre entreprise')
+      .replace(/\\{\\{nom_commercial\\}\\}/g, user?.name || 'votre conseiller');
 
     await addInteraction(
       selectedClientForAction.id,
       'whatsapp',
-      `Message WhatsApp envoyé (Modèle : ${selectedWhatsAppTemplate}). Contenu : "${formattedText}"`,
+      `Message WhatsApp envoyé (Modèle : ${templateObj?.name || 'Inconnu'}). Contenu : "${formattedText}"`,
       undefined,
       user.id
     );
@@ -1257,13 +1261,16 @@ export const CommercialDashboard: React.FC = () => {
                   onChange={(e) => setSelectedWhatsAppTemplate(e.target.value)}
                   className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-355 focus:outline-none focus:border-brand-emerald"
                 >
-                  <option value="devis">Relance Devis</option>
-                  <option value="livraison">Alerte Livraison</option>
-                  <option value="fidelisation">Message Fidélisation</option>
+                  {whatsappTemplates.map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
                 </select>
 
                 <div className="p-3 rounded-xl bg-slate-955 border border-slate-850 text-[11px] text-slate-400 leading-relaxed font-mono">
-                  {(whatsappTemplates[selectedWhatsAppTemplate] || '').replace('{name}', selectedClientForAction.name)}
+                  {(whatsappTemplates.find(t => t.id === selectedWhatsAppTemplate)?.text || '')
+                    .replace(/\\{\\{nom_client\\}\\}/g, selectedClientForAction.name)
+                    .replace(/\\{\\{entreprise\\}\\}/g, selectedClientForAction.company || 'votre entreprise')
+                    .replace(/\\{\\{nom_commercial\\}\\}/g, user?.name || 'votre conseiller')}
                 </div>
 
                 <button

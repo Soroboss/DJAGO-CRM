@@ -11,7 +11,8 @@ import {
   type LocalOrder,
   type LocalTicket,
   type LocalMeeting,
-  type LocalInboxMessage
+  type LocalInboxMessage,
+  type WhatsAppTemplate
 } from '../db/localDb';
 import { supabase, isSupabaseConfigured } from '../services/supabaseClient';
 import { useToastStore } from './toastStore';
@@ -19,7 +20,7 @@ import { useToastStore } from './toastStore';
 interface CrmState {
   clients: LocalClient[];
   interactions: LocalInteraction[];
-  whatsappTemplates: Record<string, string>;
+  whatsappTemplates: WhatsAppTemplate[];
   offlineActions: OfflineAction[];
   isOnline: boolean;
   isSyncing: boolean;
@@ -40,7 +41,9 @@ interface CrmState {
   updateClientStatus: (clientId: string, status: LocalClient['status'], performedByUserId: string) => Promise<void>;
   addInteraction: (clientId: string, type: LocalInteraction['type'], details: string, gpsCoordinates?: string, performedByUserId?: string) => Promise<void>;
   reassignClient: (clientId: string, newCommercialId: string, performedByUserId: string) => Promise<void>;
-  updateWhatsAppTemplates: (templates: Record<string, string>) => Promise<void>;
+  addWhatsAppTemplate: (template: Omit<WhatsAppTemplate, 'id'>) => Promise<void>;
+  updateWhatsAppTemplate: (template: WhatsAppTemplate) => Promise<void>;
+  deleteWhatsAppTemplate: (id: string) => Promise<void>;
   syncOfflineQueue: () => Promise<void>;
 
   // New modules actions
@@ -274,11 +277,11 @@ const MOCK_INBOX: LocalInboxMessage[] = [
 export const useCrmStore = create<CrmState>((set, get) => ({
   clients: [],
   interactions: [],
-  whatsappTemplates: {
-    devis: "Bonjour {name}, je me permets de vous relancer concernant notre proposition commerciale DjagoCRM. Avez-vous pu y jeter un coup d'œil ? Cordialement.",
-    livraison: "Salut {name}, votre commande est en cours de préparation et de livraison dans la zone. Notre équipe de livraison vous contactera sous peu. Merci !",
-    fidelisation: "Cher {name}, toute l'équipe de DjagoCRM vous remercie pour votre confiance ! Comment se passe l'adoption de notre solution dans vos équipes ?"
-  },
+  whatsappTemplates: [
+    { id: 'devis', name: 'Relance Devis', text: "Bonjour {{nom_client}} de la part de {{nom_commercial}}, je me permets de vous relancer concernant notre proposition. Avez-vous pu y jeter un coup d'œil ?" },
+    { id: 'livraison', name: 'Suivi Livraison', text: "Salut {{nom_client}}, la commande pour {{entreprise}} est en cours de préparation." },
+    { id: 'fidelisation', name: 'Fidélisation', text: "Cher {{nom_client}}, l'équipe vous remercie pour votre confiance !" }
+  ],
   offlineActions: [],
   isOnline: navigator.onLine,
   isSyncing: false,
@@ -314,11 +317,7 @@ export const useCrmStore = create<CrmState>((set, get) => ({
     // Seed default WhatsApp templates if empty
     const templatesCount = await localDb.whatsappTemplates.count();
     if (templatesCount === 0) {
-      await localDb.whatsappTemplates.bulkAdd([
-        { id: 'devis', text: get().whatsappTemplates.devis },
-        { id: 'livraison', text: get().whatsappTemplates.livraison },
-        { id: 'fidelisation', text: get().whatsappTemplates.fidelisation }
-      ]);
+      await localDb.whatsappTemplates.bulkAdd(get().whatsappTemplates);
     }
 
     // 3. Load data from local DB
@@ -336,16 +335,10 @@ export const useCrmStore = create<CrmState>((set, get) => ({
     const allTickets = await localDb.tickets.toArray();
     const allMeetings = await localDb.meetings.toArray();
     const allMessages = await localDb.inbox_messages.toArray();
-
-    const templatesObj: Record<string, string> = {};
-    allTemplates.forEach(t => {
-      templatesObj[t.id] = t.text;
-    });
-    
     set({ 
       clients: allClients.sort((a,b) => b.created_at.localeCompare(a.created_at)), 
       interactions: allInteractions.sort((a,b) => b.created_at.localeCompare(a.created_at)),
-      whatsappTemplates: { ...get().whatsappTemplates, ...templatesObj },
+      whatsappTemplates: allTemplates.length > 0 ? allTemplates : get().whatsappTemplates,
       offlineActions: allQueueActions,
       contacts: allContacts,
       forms: allForms,
@@ -521,35 +514,37 @@ export const useCrmStore = create<CrmState>((set, get) => ({
     set({ offlineActions: await localDb.offlineQueue.toArray() });
   },
 
-  updateWhatsAppTemplates: async (templates: Record<string, string>) => {
+  addWhatsAppTemplate: async (template: Omit<WhatsAppTemplate, 'id'>) => {
     const { addToast } = useToastStore.getState();
+    const id = `tpl-${Math.random().toString(36).substring(2, 9)}`;
+    const newTemplate = { id, ...template };
     
-    for (const [id, text] of Object.entries(templates)) {
-      await localDb.whatsappTemplates.put({ id, text });
-    }
-
-    set({ whatsappTemplates: templates });
+    await localDb.whatsappTemplates.put(newTemplate);
+    set({ whatsappTemplates: await localDb.whatsappTemplates.toArray() });
 
     if (get().isOnline && isSupabaseConfigured && supabase) {
       try {
-        addToast("Modèles WhatsApp synchronisés globalement", "success");
+        // Optionnel : synchronisation Supabase (si table existe)
       } catch {
-        await localDb.offlineQueue.add({
-          actionType: 'update_whatsapp_templates',
-          payload: templates,
-          timestamp: Date.now()
-        });
+        // 
       }
     } else {
-      await localDb.offlineQueue.add({
-        actionType: 'update_whatsapp_templates',
-        payload: templates,
-        timestamp: Date.now()
-      });
-      addToast("Modèles sauvegardés localement", "info");
+      addToast("Modèle ajouté localement", "success");
     }
+  },
 
-    set({ offlineActions: await localDb.offlineQueue.toArray() });
+  updateWhatsAppTemplate: async (template: WhatsAppTemplate) => {
+    const { addToast } = useToastStore.getState();
+    await localDb.whatsappTemplates.put(template);
+    set({ whatsappTemplates: await localDb.whatsappTemplates.toArray() });
+    addToast("Modèle mis à jour", "success");
+  },
+
+  deleteWhatsAppTemplate: async (id: string) => {
+    const { addToast } = useToastStore.getState();
+    await localDb.whatsappTemplates.delete(id);
+    set({ whatsappTemplates: await localDb.whatsappTemplates.toArray() });
+    addToast("Modèle supprimé", "success");
   },
 
   reassignClient: async (clientId: string, newCommercialId: string, performedByUserId: string) => {
@@ -887,7 +882,16 @@ export const useCrmStore = create<CrmState>((set, get) => ({
         successCount++;
       } catch (err) {
         console.error("Failed to sync action", action, err);
-        break;
+        const retries = (action.retries || 0) + 1;
+        if (retries > 3 && action.id !== undefined) {
+          // Trop d'échecs, on supprime de la file pour ne pas bloquer les autres
+          console.warn("Action supprimée après 3 échecs", action);
+          await localDb.offlineQueue.delete(action.id);
+        } else if (action.id !== undefined) {
+          await localDb.offlineQueue.update(action.id, { retries });
+        }
+        // Continue to the next action instead of breaking the entire sync
+        continue;
       }
     }
 

@@ -24,6 +24,7 @@ export interface LocalInteraction {
 
 export interface WhatsAppTemplate {
   id: string;
+  name: string;
   text: string;
 }
 
@@ -32,6 +33,7 @@ export interface OfflineAction {
   actionType: 'create_client' | 'update_client_status' | 'create_interaction' | 'reassign_client' | 'update_whatsapp_templates' | 'create_contact' | 'create_transaction' | 'create_ticket' | 'create_meeting' | 'create_order' | 'create_form' | 'create_segment' | 'send_inbox_message';
   payload: unknown;
   timestamp: number;
+  retries?: number;
 }
 
 export interface LocalContact {
