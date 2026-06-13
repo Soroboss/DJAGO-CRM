@@ -26,7 +26,7 @@ export const ManagerDashboard: React.FC = () => {
   const [tempFidelisationTemplate, setTempFidelisationTemplate] = useState(whatsappTemplates.fidelisation);
 
   // Order status update state
-  const [selectedOrderForEdit, setSelectedOrderForEdit] = useState<unknown>(null);
+  const [selectedOrderForEdit, setSelectedOrderForEdit] = useState<any>(null);
   const [editPaymentStatus, setEditPaymentStatus] = useState<'unpaid' | 'partial' | 'paid'>('unpaid');
   const [editDeliveryStatus, setEditDeliveryStatus] = useState<'preparing' | 'shipping' | 'delivered' | 'returned'>('preparing');
   const [editDeliveryAgent, setEditDeliveryAgent] = useState('');

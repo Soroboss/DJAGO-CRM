@@ -36,7 +36,7 @@ export const CommercialDashboard: React.FC = () => {
   const [recordingTarget, setRecordingTarget] = useState<'call' | 'terrain' | null>(null);
 
   // Client Details Modal state
-  const [selectedClientForModal, setSelectedClientForModal] = useState<unknown>(null);
+  const [selectedClientForModal, setSelectedClientForModal] = useState<any>(null);
 
   // Calendar filtration state
   const [selectedCalendarDay, setSelectedCalendarDay] = useState<number | null>(null);
@@ -77,7 +77,7 @@ export const CommercialDashboard: React.FC = () => {
   const [orderDelivery, setOrderDelivery] = useState<'preparing' | 'shipping' | 'delivered' | 'returned'>('preparing');
 
   // Inbox reply state
-  const [selectedInboxMessage, setSelectedInboxMessage] = useState<unknown>(null);
+  const [selectedInboxMessage, setSelectedInboxMessage] = useState<any>(null);
   const [inboxReplyText, setInboxReplyText] = useState('');
 
   // Products Catalog
@@ -95,7 +95,7 @@ export const CommercialDashboard: React.FC = () => {
   }, []);
 
   // Modal / Interaction flow states
-  const [selectedClientForAction, setSelectedClientForAction] = useState<unknown>(null);
+  const [selectedClientForAction, setSelectedClientForAction] = useState<any>(null);
   const [actionType, setActionType] = useState<'appel' | 'whatsapp' | 'email' | 'terrain' | null>(null);
   
   // Forms & Report fields
@@ -160,12 +160,12 @@ export const CommercialDashboard: React.FC = () => {
     const interval = setInterval(() => {
       setRecordingSeconds(s => s + 1);
     }, 1000);
-    (window as never).recordingIntervalId = interval;
+    (window as any).recordingIntervalId = interval;
   };
 
   const stopRecording = () => {
     setIsRecording(false);
-    clearInterval((window as never).recordingIntervalId);
+    clearInterval((window as any).recordingIntervalId);
     
     const transcription = recordingTarget === 'call'
       ? "Appel de relance effectué. Le client confirme l'intérêt pour DjagoCRM, demande l'envoi d'une offre proforma révisée et se dit prêt à valider sous 48h."
@@ -631,7 +631,7 @@ export const CommercialDashboard: React.FC = () => {
 
                         <select
                           value={client.status}
-                          onChange={(e) => updateClientStatus(client.id, e.target.value as unknown, user?.id || '')}
+                          onChange={(e) => updateClientStatus(client.id, e.target.value as any, user?.id || '')}
                           className="text-[10px] font-bold px-2 py-1 rounded-full bg-slate-950 border border-slate-800 focus:outline-none text-slate-355 cursor-pointer"
                         >
                           <option value="Prospect">Prospect</option>

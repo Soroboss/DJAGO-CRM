@@ -863,18 +863,19 @@ export const useCrmStore = create<CrmState>((set, get) => ({
       try {
         if (isSupabaseConfigured && supabase) {
           // Send data to Supabase dynamically if schemas are linked
+          const payload = action.payload as any;
           if (action.actionType === 'create_client') {
-            const { client, interaction } = action.payload;
+            const { client, interaction } = payload;
             await supabase.from('clients').upsert(client);
             await supabase.from('interactions').upsert(interaction);
           } else if (action.actionType === 'update_client_status') {
-            const { clientId, status, interaction } = action.payload;
+            const { clientId, status, interaction } = payload;
             await supabase.from('clients').update({ status }).eq('id', clientId);
             await supabase.from('interactions').upsert(interaction);
           } else if (action.actionType === 'create_interaction') {
-            await supabase.from('interactions').upsert(action.payload);
+            await supabase.from('interactions').upsert(payload);
           } else if (action.actionType === 'reassign_client') {
-            const { clientId, newCommercialId, interaction } = action.payload;
+            const { clientId, newCommercialId, interaction } = payload;
             await supabase.from('clients').update({ assigned_to: newCommercialId }).eq('id', clientId);
             await supabase.from('interactions').upsert(interaction);
           }
