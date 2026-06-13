@@ -10,17 +10,17 @@ export const ToastContainer: React.FC = () => {
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2.5 w-full max-w-sm px-4">
       {toasts.map((toast) => {
-        let bgColor = 'bg-slate-900/95 text-white';
+        let bgColor = 'bg-slate-50/95 text-slate-900';
         let icon = <Info className="w-5 h-5 text-sky-400" />;
 
         if (toast.type === 'success') {
-          bgColor = 'bg-slate-900/95 border-l-4 border-brand-emerald text-white';
+          bgColor = 'bg-slate-50/95 border-l-4 border-brand-emerald text-slate-900';
           icon = <CheckCircle2 className="w-5 h-5 text-brand-emerald" />;
         } else if (toast.type === 'error') {
-          bgColor = 'bg-slate-900/95 border-l-4 border-red-500 text-white';
+          bgColor = 'bg-slate-50/95 border-l-4 border-red-500 text-slate-900';
           icon = <XCircle className="w-5 h-5 text-red-500" />;
         } else if (toast.type === 'warning') {
-          bgColor = 'bg-slate-900/95 border-l-4 border-brand-orange text-white';
+          bgColor = 'bg-slate-50/95 border-l-4 border-brand-orange text-slate-900';
           icon = <AlertTriangle className="w-5 h-5 text-brand-orange" />;
         }
 
@@ -37,7 +37,7 @@ export const ToastContainer: React.FC = () => {
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-slate-400 hover:text-white transition-colors"
+              className="text-slate-400 hover:text-slate-900 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>

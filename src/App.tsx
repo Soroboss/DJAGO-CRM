@@ -20,7 +20,7 @@ function App() {
   }, [initializeAuth, init]);
 
   if (isLoading) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">Chargement...</div>;
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-slate-900">Chargement...</div>;
   }
 
   const handleQuickLogin = async (email: string) => {
