@@ -12,7 +12,9 @@ import {
 import { type LocalClient } from '../db/localDb';
 
 export const DgDashboard: React.FC = () => {
-  const { user, logout, team, createTeammate } = useAuthStore();
+  const { user, logout, team, createTeammate, organization, industryConfig } = useAuthStore();
+  const vocab = industryConfig?.vocabulary || { client: "Client", clients: "Clients", transaction: "Transaction", transactions: "Transactions", agent: "Agent", agents: "Agents" };
+  const modules = organization?.active_modules || industryConfig?.defaultModules || { sales: true, support: true, delivery: true, field_tracking: true, inventory: false };
   const { addToast } = useToastStore();
   const { 
     clients, interactions, whatsappTemplates, addWhatsAppTemplate, updateWhatsAppTemplate, deleteWhatsAppTemplate, updateClientStatus,
@@ -172,7 +174,7 @@ export const DgDashboard: React.FC = () => {
               <span>Vue d'Ensemble</span>
             </button>
 
-            <button
+            {modules.sales && (<button
               onClick={() => setActiveTab('transactions')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'transactions'
@@ -181,10 +183,10 @@ export const DgDashboard: React.FC = () => {
               }`}
             >
               <ClipboardList className="w-4 h-4" />
-              <span>Transactions Deals</span>
-            </button>
+              <span>{vocab.transactions}</span>
+            </button>)}
 
-            <button
+            {modules.delivery && (<button
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'orders'
@@ -194,7 +196,7 @@ export const DgDashboard: React.FC = () => {
             >
               <ShoppingCart className="w-4 h-4" />
               <span>Logistique Commandes</span>
-            </button>
+            </button>)}
 
             <button
               onClick={() => setActiveTab('forms')}
@@ -208,7 +210,7 @@ export const DgDashboard: React.FC = () => {
               <span>Générateur Formulaire</span>
             </button>
 
-            <button
+            {modules.sales && (<button
               onClick={() => setActiveTab('kanban')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'kanban'
@@ -218,7 +220,7 @@ export const DgDashboard: React.FC = () => {
             >
               <BarChart3 className="w-4 h-4" />
               <span>Pipeline Kanban</span>
-            </button>
+            </button>)}
 
             <button
               onClick={() => setActiveTab('feed')}
@@ -325,7 +327,7 @@ export const DgDashboard: React.FC = () => {
         <div className="mb-8 border-b border-slate-200/50 pb-5 text-left animate-fade-in">
           <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight !my-0">
             {activeTab === 'kpis' && "Vue d'Ensemble & KPIs"}
-            {activeTab === 'transactions' && "Transactions & Pipeline National"}
+            {activeTab === 'transactions' && "{vocab.transactions} & Pipeline< National"}
             {activeTab === 'orders' && "Commandes & Factures Nationales"}
             {activeTab === 'forms' && "Générateur de Formulaires de Capture"}
             {activeTab === 'kanban' && "Pipeline Kanban"}
@@ -395,7 +397,7 @@ export const DgDashboard: React.FC = () => {
 
               <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Waras Recrutés</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{vocab.agents} Recrutés</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
                     {team.filter(t => t.role === 'commercial').length} <span className="text-sm font-bold text-slate-400">Agents</span>
                   </h3>
@@ -408,7 +410,7 @@ export const DgDashboard: React.FC = () => {
 
               <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rétention Client</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rétention {vocab.client}</span>
                   <h3 className="text-2xl font-black text-brand-emerald mt-1.5 font-mono">
                     {retentionRate}%
                   </h3>
@@ -1356,7 +1358,7 @@ export const DgDashboard: React.FC = () => {
 
             {/* Support Tickets for DG audit */}
             <div className="border-t border-slate-200 pt-4">
-              <h4 className="font-bold text-slate-900 text-sm uppercase mb-2">Tickets SAV de ce Client</h4>
+              <h4 className="font-bold text-slate-900 text-sm uppercase mb-2">Tickets SAV de ce {vocab.client}</h4>
               {tickets.filter(t => t.client_id === selectedClientForModal.id).length === 0 ? (
                 <p className="text-xs text-slate-550 italic">Aucun ticket de support ouvert.</p>
               ) : (

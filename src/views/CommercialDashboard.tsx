@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 
 export const CommercialDashboard: React.FC = () => {
-  const { user, logout, team } = useAuthStore();
+  const { user, logout, team, organization, industryConfig } = useAuthStore();
+  const vocab = industryConfig?.vocabulary || { client: "Client", clients: "Clients", transaction: "Transaction", transactions: "Transactions", agent: "Agent", agents: "Agents" };
+  const modules = organization?.active_modules || industryConfig?.defaultModules || { sales: true, support: true, delivery: true, field_tracking: true, inventory: false };
   const { 
     clients, interactions, addClient, updateClientStatus, 
     addInteraction, whatsappTemplates, offlineActions, syncOfflineQueue,
@@ -1110,7 +1112,7 @@ export const CommercialDashboard: React.FC = () => {
 
             <form onSubmit={handleFastCheckoutSubmit} className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Nom Client</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Nom {vocab.client}</label>
                 <input 
                   type="text" required placeholder="Ex: M. Souleymane Diop" value={checkoutClientName} onChange={e => setCheckoutClientName(e.target.value)}
                   className="p-2.5 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
@@ -1684,7 +1686,7 @@ export const CommercialDashboard: React.FC = () => {
           }`}
         >
           <Search className="w-4 h-4 mb-0.5" />
-          <span>Clients</span>
+          <span>{vocab.clients}</span>
         </button>
 
         <button

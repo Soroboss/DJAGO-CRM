@@ -10,7 +10,9 @@ import {
 import { type LocalClient } from '../db/localDb';
 
 export const ManagerDashboard: React.FC = () => {
-  const { user, logout, team, createTeammate } = useAuthStore();
+  const { user, logout, team, createTeammate, organization, industryConfig } = useAuthStore();
+  const vocab = industryConfig?.vocabulary || { client: "Client", clients: "Clients", transaction: "Transaction", transactions: "Transactions", agent: "Agent", agents: "Agents" };
+  const modules = organization?.active_modules || industryConfig?.defaultModules || { sales: true, support: true, delivery: true, field_tracking: true, inventory: false };
   const { 
     clients, reassignClient, interactions, whatsappTemplates, addWhatsAppTemplate, updateWhatsAppTemplate, deleteWhatsAppTemplate, updateClientStatus,
     forms, transactions, updateTransactionStage, orders, segments, addSegment, updateOrderStatus
@@ -174,7 +176,7 @@ export const ManagerDashboard: React.FC = () => {
               <span>Rapports & KPIs</span>
             </button>
 
-            <button
+            {modules.delivery && (<button
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'orders'
@@ -184,7 +186,7 @@ export const ManagerDashboard: React.FC = () => {
             >
               <ShoppingCart className="w-4 h-4" />
               <span>Commandes & Livraisons</span>
-            </button>
+            </button>)}
 
             <button
               onClick={() => setActiveTab('segments')}
@@ -195,10 +197,10 @@ export const ManagerDashboard: React.FC = () => {
               }`}
             >
               <Filter className="w-4 h-4" />
-              <span>Segments Clients</span>
+              <span>Segments {vocab.clients}</span>
             </button>
 
-            <button
+            {modules.sales && (<button
               onClick={() => setActiveTab('kanban')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'kanban'
@@ -208,7 +210,7 @@ export const ManagerDashboard: React.FC = () => {
             >
               <BarChart3 className="w-4 h-4" />
               <span>Pipeline Kanban</span>
-            </button>
+            </button>)}
 
             <button
               onClick={() => setActiveTab('feed')}
@@ -455,7 +457,7 @@ export const ManagerDashboard: React.FC = () => {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-slate-200 text-slate-400 text-xs">
-                        <th className="py-3 px-4 font-bold uppercase text-left">Client</th>
+                        <th className="py-3 px-4 font-bold uppercase text-left">{vocab.client}</th>
                         <th className="py-3 px-4 font-bold uppercase text-left">Entreprise</th>
                         <th className="py-3 px-4 font-bold uppercase text-left">Téléphone</th>
                         <th className="py-3 px-4 font-bold uppercase text-left">Assigné à</th>
@@ -598,7 +600,7 @@ export const ManagerDashboard: React.FC = () => {
                   <thead>
                     <tr className="border-b border-slate-200 text-slate-400 text-xs">
                       <th className="py-2.5 px-4 text-left">Commande</th>
-                      <th className="py-2.5 px-4 text-left">Client</th>
+                      <th className="py-2.5 px-4 text-left">{vocab.client}</th>
                       <th className="py-2.5 px-4 text-left">Montant</th>
                       <th className="py-2.5 px-4 text-left">Paiement</th>
                       <th className="py-2.5 px-4 text-left">Livraison</th>
