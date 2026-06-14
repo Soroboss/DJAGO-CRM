@@ -10,6 +10,8 @@ export const SuperAdminDashboard: React.FC = () => {
   const { addToast } = useToastStore();
   const [activeTab, setActiveTab] = useState<'tenants' | 'health' | 'settings'>('tenants');
   const [organizations, setOrganizations] = useState<any[]>([]);
+  const [usersCount, setUsersCount] = useState<number>(0);
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,12 +21,19 @@ export const SuperAdminDashboard: React.FC = () => {
   const fetchOrganizations = async () => {
     setLoading(true);
     try {
-      const { data, error } = await insforge.database
-        .from('organizations')
-        .select('*');
+      const [orgsRes, usersRes] = await Promise.all([
+        insforge.database.from('organizations').select('*').order('created_at', { ascending: false }),
+        insforge.database.from('team_members').select('id, organization_id')
+      ]);
       
-      if (error) throw error;
-      if (data) setOrganizations(data);
+      if (orgsRes.error) throw orgsRes.error;
+      if (usersRes.error) throw usersRes.error;
+      
+      if (orgsRes.data) setOrganizations(orgsRes.data);
+      if (usersRes.data) {
+        setTeamMembers(usersRes.data);
+        setUsersCount(usersRes.data.length);
+      }
     } catch (err: any) {
       console.error(err);
       addToast("Erreur lors du chargement des tenants", "error");
@@ -34,10 +43,21 @@ export const SuperAdminDashboard: React.FC = () => {
   };
 
   const toggleTenantStatus = async (orgId: string, currentStatus: string) => {
-    // We assume 'active' or 'suspended' exists. If not, we use a basic alert for now.
-    addToast(`Changement de statut pour le tenant ${orgId} en cours...`, "info");
-    // Pseudo-code for changing status if there was a status column
-    // await insforge.database.from('organizations').update({ status: newStatus }).eq('id', orgId);
+    const newStatus = currentStatus === 'suspended' ? 'active' : 'suspended';
+    try {
+      const { error } = await insforge.database
+        .from('organizations')
+        .update({ status: newStatus })
+        .eq('id', orgId);
+        
+      if (error) throw error;
+      
+      addToast(`L'espace a été ${newStatus === 'active' ? 'réactivé' : 'suspendu'}.`, "success");
+      setOrganizations(orgs => orgs.map(o => o.id === orgId ? { ...o, status: newStatus } : o));
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la mise à jour du statut.", "error");
+    }
   };
 
   return (
@@ -141,6 +161,8 @@ export const SuperAdminDashboard: React.FC = () => {
                         <th className="p-4">ID</th>
                         <th className="p-4">Nom de l'Organisation</th>
                         <th className="p-4">Industrie</th>
+                        <th className="p-4">Statut</th>
+                        <th className="p-4">Utilisateurs</th>
                         <th className="p-4">Créé le</th>
                         <th className="p-4 text-right">Actions</th>
                       </tr>
@@ -148,11 +170,11 @@ export const SuperAdminDashboard: React.FC = () => {
                     <tbody className="divide-y divide-slate-100">
                       {loading ? (
                         <tr>
-                          <td colSpan={5} className="p-8 text-center text-slate-500">Chargement...</td>
+                          <td colSpan={6} className="p-8 text-center text-slate-500">Chargement...</td>
                         </tr>
                       ) : organizations.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="p-8 text-center text-slate-500">Aucune organisation trouvée.</td>
+                          <td colSpan={6} className="p-8 text-center text-slate-500">Aucune organisation trouvée.</td>
                         </tr>
                       ) : (
                         organizations.map(org => (
@@ -164,12 +186,23 @@ export const SuperAdminDashboard: React.FC = () => {
                                 {org.industry_category || 'N/A'}
                               </span>
                             </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${org.status === 'suspended' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                {org.status === 'suspended' ? 'Suspendu' : 'Actif'}
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm text-slate-900 font-bold">
+                              {teamMembers.filter(t => t.organization_id === org.id).length}
+                            </td>
                             <td className="p-4 text-sm text-slate-500">
                               {new Date(org.created_at).toLocaleDateString()}
                             </td>
                             <td className="p-4 text-right">
-                              <button onClick={() => toggleTenantStatus(org.id, 'active')} className="text-sm text-orange-600 hover:text-orange-700 font-medium cursor-pointer">
-                                Gérer
+                              <button 
+                                onClick={() => toggleTenantStatus(org.id, org.status || 'active')} 
+                                className={`text-sm font-medium transition-colors cursor-pointer ${org.status === 'suspended' ? 'text-emerald-600 hover:text-emerald-700' : 'text-orange-600 hover:text-orange-700'}`}
+                              >
+                                {org.status === 'suspended' ? 'Réactiver' : 'Suspendre'}
                               </button>
                             </td>
                           </tr>
@@ -192,7 +225,7 @@ export const SuperAdminDashboard: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-sm text-slate-500 font-medium">Base de Données</p>
-                    <p className="text-lg font-bold text-slate-900">Opérationnelle</p>
+                    <p className="text-lg font-bold text-slate-900">{usersCount}</p>
                   </div>
                 </div>
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
@@ -201,7 +234,7 @@ export const SuperAdminDashboard: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-sm text-slate-500 font-medium">API Insforge</p>
-                    <p className="text-lg font-bold text-slate-900">Opérationnelle</p>
+                    <p className="text-lg font-bold text-slate-900">En ligne</p>
                   </div>
                 </div>
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
@@ -209,8 +242,8 @@ export const SuperAdminDashboard: React.FC = () => {
                     <Users className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-sm text-slate-500 font-medium">Sessions Actives</p>
-                    <p className="text-lg font-bold text-slate-900">24 Tenants</p>
+                    <p className="text-sm text-slate-500 font-medium">Utilisateurs Actifs</p>
+                    <p className="text-lg font-bold text-slate-900">{organizations.length} Tenants</p>
                   </div>
                 </div>
               </div>
