@@ -120,7 +120,8 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
           </div>
 
           {/* Toggle Login/Signup */}
-          {!isAdmin && (<div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
+          {!isAdmin && (
+          <div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
             <button 
               onClick={() => setIsSignup(false)}
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${!isSignup ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -134,6 +135,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               Inscription
             </button>
           </div>
+        )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
@@ -184,7 +186,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               </>
             )}
 
-            {true && (<div className="flex flex-col gap-1.5 mt-2">
+            <div className="flex flex-col gap-1.5 mt-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Adresse e-mail</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
@@ -199,7 +201,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               </div>
             </div>
 
-            {true && (<div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
                 {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
