@@ -5,6 +5,8 @@ import { useToastStore } from '../store/toastStore';
 import { NetworkBadge } from '../components/NetworkBadge';
 import { ProductsModule } from '../components/ProductsModule';
 import { BillingModule } from '../components/BillingModule';
+import { SupportModule } from '../components/SupportModule';
+import { LogisticsModule } from '../components/LogisticsModule';
 import { 
   DollarSign, Users, Briefcase, Award, Plus, Search, 
   MapPin, Eye, Calendar, LogOut, ShieldAlert, CheckCircle2, X,
@@ -23,7 +25,7 @@ export const DgDashboard: React.FC = () => {
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
 
-  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing'>('kpis');
+  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics'>('kpis');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 

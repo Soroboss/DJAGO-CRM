@@ -5,6 +5,8 @@ import { useGeolocation } from '../hooks/useGeolocation';
 import { NetworkBadge } from '../components/NetworkBadge';
 import { ProductsModule } from '../components/ProductsModule';
 import { BillingModule } from '../components/BillingModule';
+import { SupportModule } from '../components/SupportModule';
+import { LogisticsModule } from '../components/LogisticsModule';
 import { localDb, type LocalClient } from '../db/localDb';
 import { 
   Phone, MessageSquare, Mail, MapPin, Plus, Search, 
@@ -28,7 +30,7 @@ export const CommercialDashboard: React.FC = () => {
 
   // Search & Navigation tabs
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'prospects' | 'add' | 'history' | 'playbook' | 'leaderboard' | 'inbox' | 'agenda' | 'sales' | 'map' | 'products' | 'billing'>('prospects');
+  const [activeTab, setActiveTab] = useState<'prospects' | 'add' | 'history' | 'playbook' | 'leaderboard' | 'inbox' | 'agenda' | 'sales' | 'map' | 'products' | 'billing' | 'support' | 'logistics'>('prospects');
   
   // Layout detection
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
