@@ -3,7 +3,7 @@ import { insforge } from '../lib/insforge';
 import { useToastStore } from './toastStore';
 import { type IndustryConfig, getIndustryConfig } from '../config/industries';
 
-export type UserRole = 'dg' | 'manager' | 'commercial';
+export type UserRole = 'superadmin' | 'dg' | 'manager' | 'commercial';
 
 export interface Organization {
   id: string;
@@ -32,7 +32,8 @@ interface AuthState {
   team: UserProfile[];
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
-  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<boolean>;
+  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{success: boolean, requiresOtp?: boolean}>;
+  verifyOtp: (email: string, code: string) => Promise<boolean>;
   logout: () => void;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -155,7 +156,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) {
         addToast(error.message, "error");
         set({ isLoading: false });
-        return false;
+        return { success: false };
       }
 
       if (data?.user) {
@@ -169,7 +170,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (orgError || !org) {
           addToast("Erreur lors de la création de l'espace de travail", "error");
           set({ isLoading: false });
-          return false;
+          return { success: false };
         }
 
         // Create user profile
@@ -187,17 +188,49 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (profileError) {
           addToast("Erreur lors de la création du profil", "error");
           set({ isLoading: false });
-          return false;
+          return { success: false };
+        }
+
+        // If no session, it means OTP is required
+        if (!data.session) {
+          addToast("Veuillez vérifier votre email pour le code de confirmation.", "info");
+          set({ isLoading: false });
+          return { success: true, requiresOtp: true };
         }
 
         addToast("Compte créé avec succès ! Bienvenue.", "success");
         await get().initializeAuth();
-        return true;
+        return { success: true, requiresOtp: false };
       }
-      return false;
+      return { success: false };
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       addToast(errorMsg || "Erreur lors de l'inscription", "error");
+      set({ isLoading: false });
+      return false;
+    }
+  },
+
+  
+  verifyOtp: async (email: string, token: string) => {
+    set({ isLoading: true });
+    const { addToast } = useToastStore.getState();
+    try {
+      const { data, error } = await insforge.auth.verifyOtp({
+        email,
+        token,
+        type: 'signup'
+      });
+      if (error) {
+        addToast(error.message, "error");
+        set({ isLoading: false });
+        return false;
+      }
+      addToast("Vérification réussie !", "success");
+      await get().initializeAuth();
+      return true;
+    } catch (err: any) {
+      addToast(err.message || "Erreur de vérification", "error");
       set({ isLoading: false });
       return false;
     }

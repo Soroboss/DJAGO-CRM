@@ -144,12 +144,12 @@ export const DgDashboard: React.FC = () => {
         <div className="flex flex-col gap-8">
           {/* Logo & Info */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-orange to-brand-emerald flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-brand-orange/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-brand-emerald flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-brand-orange/20">
               DJ
             </div>
             <div className="text-left">
               <h2 className="text-lg font-black text-slate-900 leading-tight">DjagoCRM</h2>
-              <span className="text-[10px] bg-brand-orange/15 text-brand-orange px-2 py-0.5 rounded font-bold uppercase tracking-wider">DG</span>
+              <span className="text-[10px] bg-orange-500/15 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">DG</span>
             </div>
           </div>
 
@@ -166,7 +166,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('kpis')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'kpis'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -178,7 +178,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('transactions')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'transactions'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -190,7 +190,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'orders'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -202,7 +202,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('forms')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'forms'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -214,7 +214,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('kanban')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'kanban'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -226,7 +226,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('feed')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'feed'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -238,7 +238,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('admin')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'admin'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -250,7 +250,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('audit')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'audit'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -262,7 +262,7 @@ export const DgDashboard: React.FC = () => {
               onClick={() => setActiveTab('templates')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'templates'
-                  ? 'bg-brand-orange text-slate-900 shadow-md'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -279,7 +279,7 @@ export const DgDashboard: React.FC = () => {
           </div>
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 border border-slate-200 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 text-sm font-bold text-slate-700 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-sm font-bold text-slate-700 transition-all cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Se Déconnecter</span>
@@ -290,7 +290,7 @@ export const DgDashboard: React.FC = () => {
       {/* Top Header for Mobile */}
       <header className="md:hidden bg-white border-b border-slate-200/60 px-4 py-3 sticky top-0 z-35 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-orange to-brand-emerald flex items-center justify-center font-black text-white text-md">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-orange-500 to-brand-emerald flex items-center justify-center font-black text-white text-md">
             DJ
           </div>
           <span className="text-md font-bold text-slate-900">DjagoCRM DG</span>
@@ -299,7 +299,7 @@ export const DgDashboard: React.FC = () => {
           <NetworkBadge />
           <button
             onClick={logout}
-            className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-400"
+            className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-600"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -313,7 +313,7 @@ export const DgDashboard: React.FC = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all uppercase ${
-              activeTab === tab ? 'bg-brand-orange text-slate-900' : 'text-slate-400 bg-slate-950/30'
+              activeTab === tab ? 'bg-orange-500 text-slate-900' : 'text-slate-400 bg-white/30'
             }`}
           >
             {tab === 'kpis' ? 'KPIs' : tab === 'transactions' ? 'Deals' : tab === 'orders' ? 'Commandes' : tab === 'forms' ? 'Forms' : tab}
@@ -360,7 +360,7 @@ export const DgDashboard: React.FC = () => {
                   onClick={() => setTimeFilter(tf)}
                   className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all uppercase ${
                     timeFilter === tf 
-                      ? 'bg-brand-orange text-slate-900 shadow-md' 
+                      ? 'bg-orange-500 text-slate-900 shadow-md' 
                       : 'text-slate-400 hover:text-slate-800 hover:bg-slate-100'
                   }`}
                 >
@@ -369,20 +369,20 @@ export const DgDashboard: React.FC = () => {
               ))}
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chiffre d'Affaires</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {totalRevenue.toLocaleString()} <span className="text-sm font-bold text-brand-orange">FCFA</span>
+                    {totalRevenue.toLocaleString()} <span className="text-sm font-bold text-orange-600">FCFA</span>
                   </h3>
-                  <p className="text-[10px] text-brand-emerald font-semibold mt-1">Sur contrats conclus & livrés</p>
+                  <p className="text-[10px] text-emerald-600 font-semibold mt-1">Sur contrats conclus & livrés</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center border border-brand-orange/10">
+                <div className="w-12 h-12 rounded-xl bg-orange-500/15 text-white flex items-center justify-center border border-brand-orange/10">
                   <DollarSign className="w-6 h-6" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pipeline Négociation</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
@@ -395,7 +395,7 @@ export const DgDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{vocab.agents} Recrutés</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
@@ -403,20 +403,20 @@ export const DgDashboard: React.FC = () => {
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Répartis sur 4 zones géographiques</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center border border-blue-500/10">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
                   <Users className="w-6 h-6" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rétention {vocab.client}</span>
-                  <h3 className="text-2xl font-black text-brand-emerald mt-1.5 font-mono">
+                  <h3 className="text-2xl font-black text-emerald-600 mt-1.5 font-mono">
                     {retentionRate}%
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Taux d'adoption après livraison</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-brand-emerald/15 text-brand-emerald flex items-center justify-center border border-brand-emerald/10">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-white flex items-center justify-center border border-brand-emerald/10">
                   <Award className="w-6 h-6" />
                 </div>
               </div>
@@ -426,58 +426,58 @@ export const DgDashboard: React.FC = () => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Box 1: Profitability & Unit Economics */}
               <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-4 shadow-xl">
-                <div className="flex justify-between items-center border-b border-slate-850 pb-3">
+                <div className="flex justify-between items-center border-b border-slate-200 shadow-sm pb-3">
                   <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4 text-brand-orange" />
+                    <DollarSign className="w-4 h-4 text-orange-600" />
                     <span>Rentabilité & Unit Economics</span>
                   </h4>
-                  <span className="text-[9px] bg-brand-orange/15 text-brand-orange px-2.5 py-0.5 rounded-full font-black border border-brand-orange/15">Santé : Excellente</span>
+                  <span className="text-[9px] bg-orange-500/15 text-white px-2.5 py-0.5 rounded-full font-black border border-brand-orange/15">Santé : Excellente</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">CAC Moyen (Acquisition)</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">120 000 FCFA</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">LTV Client (Valeur à vie)</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">1 850 000 FCFA</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Efficacité LTV/CAC</span>
-                    <span className="text-xs font-black text-brand-emerald block mt-1">15.4x <span className="text-[8px] text-slate-400 font-normal">(Objectif &gt; 3x)</span></span>
+                    <span className="text-xs font-black text-emerald-600 block mt-1">15.4x <span className="text-[8px] text-slate-400 font-normal">(Objectif &gt; 3x)</span></span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Marge brute nette</span>
-                    <span className="text-xs font-black text-brand-emerald block mt-1 font-mono">82% <span className="text-[8px] text-slate-400 font-normal">SaaS</span></span>
+                    <span className="text-xs font-black text-emerald-600 block mt-1 font-mono">82% <span className="text-[8px] text-slate-400 font-normal">SaaS</span></span>
                   </div>
                 </div>
               </div>
 
               {/* Box 2: Speed of Execution & Business Intelligence */}
               <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-4 shadow-xl">
-                <div className="flex justify-between items-center border-b border-slate-850 pb-3">
+                <div className="flex justify-between items-center border-b border-slate-200 shadow-sm pb-3">
                   <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-brand-emerald" />
+                    <Activity className="w-4 h-4 text-emerald-600" />
                     <span>Vélocité Opérationnelle & Intelligence</span>
                   </h4>
-                  <span className="text-[9px] bg-brand-emerald/15 text-brand-emerald px-2.5 py-0.5 rounded-full font-black border border-brand-emerald/15">SLA Respecté</span>
+                  <span className="text-[9px] bg-emerald-500/15 text-white px-2.5 py-0.5 rounded-full font-black border border-brand-emerald/15">SLA Respecté</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Cycle de vente moyen</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">12.4 jours</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Délai Résolution SAV</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">18 minutes</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Taux d'automatisation IA</span>
-                    <span className="text-xs font-black text-brand-orange block mt-1">86.2%</span>
+                    <span className="text-xs font-black text-orange-600 block mt-1">86.2%</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3.5 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <span className="text-[9px] text-slate-400 font-bold block uppercase">Check-ins GPS Terrain</span>
-                    <span className="text-xs font-black text-brand-emerald block mt-1">98.4% validité</span>
+                    <span className="text-xs font-black text-emerald-600 block mt-1">98.4% validité</span>
                   </div>
                 </div>
               </div>
@@ -499,36 +499,36 @@ export const DgDashboard: React.FC = () => {
             <div className="flex flex-col gap-6 text-left animate-fade-in">
               {/* Deals KPIs */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Volume total & Win-Rate</span>
                   <h4 className="text-xl font-black text-slate-900">{totalDeals} opportunités</h4>
-                  <div className="text-[10px] text-brand-emerald font-semibold flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald" />
+                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     <span>Taux de réussite : {winRate}%</span>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pipeline Brut Actif</span>
-                  <h4 className="text-xl font-black text-brand-orange">{activePipeline.toLocaleString()} FCFA</h4>
+                  <h4 className="text-xl font-black text-orange-600">{activePipeline.toLocaleString()} FCFA</h4>
                   <div className="text-[10px] text-slate-400">Somme des transactions en cours</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pipeline Pondéré IA</span>
-                  <h4 className="text-xl font-black text-blue-400">{weightedPipeline.toLocaleString()} FCFA</h4>
+                  <h4 className="text-xl font-black text-blue-600">{weightedPipeline.toLocaleString()} FCFA</h4>
                   <div className="text-[10px] text-blue-450 font-semibold">Probabilité x Montant</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Chiffre Gagné (Won)</span>
-                  <h4 className="text-xl font-black text-brand-emerald">{wonDealsValue.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-brand-emerald/75">Signatures fermes clôturées</div>
+                  <h4 className="text-xl font-black text-emerald-600">{wonDealsValue.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-emerald-600/75">Signatures fermes clôturées</div>
                 </div>
               </div>
 
               {/* Transactions Table */}
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
                 <h3 className="text-base font-bold text-slate-900 mb-4">Suivi Financier National des Deals</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -545,15 +545,15 @@ export const DgDashboard: React.FC = () => {
                     <tbody>
                       {transactions.map((trans) => {
                         let stageBadge = 'bg-slate-100 text-slate-600';
-                        if (trans.stage === 'won') stageBadge = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                        if (trans.stage === 'lost') stageBadge = 'bg-red-500/10 text-red-400 border border-red-500/20';
-                        if (trans.stage === 'negotiation') stageBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-                        if (trans.stage === 'proposal') stageBadge = 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
+                        if (trans.stage === 'won') stageBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                        if (trans.stage === 'lost') stageBadge = 'bg-red-50 text-red-600 border border-red-200';
+                        if (trans.stage === 'negotiation') stageBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
+                        if (trans.stage === 'proposal') stageBadge = 'bg-purple-50 text-purple-600 border border-purple-200';
                         
                         return (
-                          <tr key={trans.id} className="border-b border-slate-850 hover:bg-slate-50/30">
+                          <tr key={trans.id} className="border-b border-slate-200 shadow-sm hover:bg-slate-50/30">
                             <td className="py-3 px-4 font-bold text-slate-900">{trans.title}</td>
-                            <td className="py-3 px-4 font-semibold text-brand-orange">{trans.amount.toLocaleString()} FCFA</td>
+                            <td className="py-3 px-4 font-semibold text-orange-600">{trans.amount.toLocaleString()} FCFA</td>
                             <td className="py-3 px-4">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${stageBadge}`}>
                                 {trans.stage}
@@ -563,7 +563,7 @@ export const DgDashboard: React.FC = () => {
                               <div className="flex items-center gap-2">
                                 <div className="w-16 h-1.5 rounded-full bg-slate-50 overflow-hidden">
                                   <div 
-                                    className="h-full bg-gradient-to-r from-brand-orange to-brand-emerald rounded-full"
+                                    className="h-full bg-gradient-to-r from-orange-500 to-brand-emerald rounded-full"
                                     style={{ width: `${trans.probability}%` }}
                                   />
                                 </div>
@@ -595,36 +595,36 @@ export const DgDashboard: React.FC = () => {
             <div className="flex flex-col gap-6 text-left animate-fade-in">
               {/* Logistics KPIs */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Total Bons Commandes</span>
                   <h4 className="text-xl font-black text-slate-900">{totalOrders} Commandes</h4>
                   <div className="text-[10px] text-slate-400 font-semibold">{activeDeliveries} livraisons en cours</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">CA Encaissé (Payé)</span>
-                  <h4 className="text-xl font-black text-brand-emerald">{paidAmount.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-brand-emerald font-semibold flex items-center gap-1">
+                  <h4 className="text-xl font-black text-emerald-600">{paidAmount.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>{paidOrders.length} payées</span>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Vélocité Logistique</span>
-                  <h4 className="text-xl font-black text-blue-400">94.2% respecté</h4>
+                  <h4 className="text-xl font-black text-blue-600">94.2% respecté</h4>
                   <div className="text-[10px] text-slate-400">SLA moyen : 45 min</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
+                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
                   <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Retards ou Anomalies</span>
-                  <h4 className="text-xl font-black text-red-400">{unpaidOrders.length} Attentes</h4>
+                  <h4 className="text-xl font-black text-red-600">{unpaidOrders.length} Attentes</h4>
                   <div className="text-[10px] text-red-450 font-semibold">Bons en attente de solde</div>
                 </div>
               </div>
 
               {/* Orders Table */}
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
                 <h3 className="text-base font-bold text-slate-900 mb-4">Logistique de Commandes & Factures Nationales</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -644,24 +644,24 @@ export const DgDashboard: React.FC = () => {
                         const client = clients.find(c => c.id === order.client_id);
                         
                         let payBadge = 'bg-slate-100 text-slate-600';
-                        if (order.payment_status === 'paid') payBadge = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                        if (order.payment_status === 'partial') payBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-                        if (order.payment_status === 'unpaid') payBadge = 'bg-red-500/10 text-red-400 border border-red-500/20';
+                        if (order.payment_status === 'paid') payBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                        if (order.payment_status === 'partial') payBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
+                        if (order.payment_status === 'unpaid') payBadge = 'bg-red-50 text-red-600 border border-red-200';
 
                         let delBadge = 'bg-slate-100 text-slate-600';
-                        if (order.delivery_status === 'delivered') delBadge = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                        if (order.delivery_status === 'shipping') delBadge = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                        if (order.delivery_status === 'preparing') delBadge = 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
-                        if (order.delivery_status === 'returned') delBadge = 'bg-red-500/10 text-red-400 border border-red-500/20';
+                        if (order.delivery_status === 'delivered') delBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                        if (order.delivery_status === 'shipping') delBadge = 'bg-blue-50 text-blue-600 border border-blue-200';
+                        if (order.delivery_status === 'preparing') delBadge = 'bg-amber-50 text-amber-600 border border-amber-200';
+                        if (order.delivery_status === 'returned') delBadge = 'bg-red-50 text-red-600 border border-red-200';
 
                         return (
-                          <tr key={order.id} className="border-b border-slate-850 hover:bg-slate-50/30">
+                          <tr key={order.id} className="border-b border-slate-200 shadow-sm hover:bg-slate-50/30">
                             <td className="py-3 px-4">
                               <span className="font-bold text-slate-900 block">{client?.name || '—'}</span>
                               <span className="text-[10px] text-slate-400 block">{client?.company || 'Individuel'}</span>
                             </td>
                             <td className="py-3 px-4 font-semibold text-slate-700">{order.items}</td>
-                            <td className="py-3 px-4 font-mono font-bold text-brand-orange">{order.total_amount.toLocaleString()} FCFA</td>
+                            <td className="py-3 px-4 font-mono font-bold text-orange-600">{order.total_amount.toLocaleString()} FCFA</td>
                             <td className="py-3 px-4">
                               <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${payBadge}`}>
                                 {order.payment_status}
@@ -689,7 +689,7 @@ export const DgDashboard: React.FC = () => {
         {activeTab === 'forms' && (
           <div className="grid lg:grid-cols-3 gap-6 text-left animate-fade-in">
             {/* Creator form */}
-            <div className="p-6 rounded-2xl bg-slate-955 border border-slate-200 shadow-xl flex flex-col gap-5">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xl flex flex-col gap-5">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Nouveau Formulaire Public</h3>
                 <p className="text-[11px] text-slate-400 mt-1">Configurez un formulaire public pour capturer des prospects.</p>
@@ -700,13 +700,13 @@ export const DgDashboard: React.FC = () => {
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Titre du Formulaire</label>
                   <input 
                     type="text" required placeholder="Ex: Contact Salon Agricole 2026" value={formTitle} onChange={e => setFormTitle(e.target.value)}
-                    className="p-2.5 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
+                    className="p-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase">Champs à Activer</label>
-                  <div className="flex flex-col gap-2 bg-slate-950/50 p-3 rounded-xl border border-slate-900 text-xs text-slate-700">
+                  <div className="flex flex-col gap-2 bg-white/50 p-3 rounded-xl border border-slate-900 text-xs text-slate-700">
                     <label className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900 transition-colors">
                       <input type="checkbox" checked={selectedFields.includes('name')} onChange={() => toggleField('name')} className="rounded accent-brand-orange" />
                       <span>Nom complet (Requis)</span>
@@ -726,7 +726,7 @@ export const DgDashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <button type="submit" className="py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/90 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                <button type="submit" className="py-3 rounded-xl bg-orange-500 hover:bg-orange-500/90 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer">
                   <Plus className="w-3.5 h-3.5" />
                   <span>Générer le Formulaire</span>
                 </button>
@@ -734,15 +734,15 @@ export const DgDashboard: React.FC = () => {
             </div>
 
             {/* Live Form Mockup Preview */}
-            <div className="p-6 rounded-2xl bg-slate-955 border border-slate-200 shadow-xl flex flex-col gap-4">
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xl flex flex-col gap-4">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Aperçu Live du Formulaire</h3>
                 <p className="text-[11px] text-slate-400 mt-1">Rendu dynamique public visible par les clients.</p>
               </div>
 
-              <div className="flex-1 bg-gradient-to-br from-brand-orange/5 to-slate-950 p-5 rounded-xl border border-slate-850/80 flex flex-col justify-between min-h-[300px]">
+              <div className="flex-1 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between min-h-[300px]">
                 <div className="flex flex-col gap-3">
-                  <div className="border-b border-slate-850 pb-2">
+                  <div className="border-b border-slate-200 pb-4 mb-2">
                     <h4 className="text-xs font-black text-slate-900">{formTitle || "Aperçu de votre formulaire"}</h4>
                     <p className="text-[9px] text-slate-400 mt-0.5">Veuillez remplir les informations suivantes</p>
                   </div>
@@ -750,32 +750,32 @@ export const DgDashboard: React.FC = () => {
                   <div className="flex flex-col gap-2.5 text-left">
                     {selectedFields.includes('name') && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-slate-400 uppercase">Nom complet *</label>
-                        <input type="text" disabled placeholder="M. Konan Jean" className="p-2 bg-slate-50/60 border border-slate-200 rounded-lg text-[10px] text-slate-400" />
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Nom complet *</label>
+                        <input type="text" disabled placeholder="M. Konan Jean" className="p-2.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 shadow-sm" />
                       </div>
                     )}
                     {selectedFields.includes('phone') && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-slate-400 uppercase">Téléphone *</label>
-                        <input type="tel" disabled placeholder="+225 0707..." className="p-2 bg-slate-50/60 border border-slate-200 rounded-lg text-[10px] text-slate-400" />
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Téléphone *</label>
+                        <input type="tel" disabled placeholder="+225 0707..." className="p-2.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 shadow-sm" />
                       </div>
                     )}
                     {selectedFields.includes('company') && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-slate-400 uppercase">Entreprise</label>
-                        <input type="text" disabled placeholder="Cacao Trading Inc." className="p-2 bg-slate-50/60 border border-slate-200 rounded-lg text-[10px] text-slate-400" />
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Entreprise</label>
+                        <input type="text" disabled placeholder="Cacao Trading Inc." className="p-2.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 shadow-sm" />
                       </div>
                     )}
                     {selectedFields.includes('email') && (
                       <div className="flex flex-col gap-1">
-                        <label className="text-[9px] font-bold text-slate-400 uppercase">Adresse e-mail</label>
-                        <input type="email" disabled placeholder="jean@cacao.ci" className="p-2 bg-slate-50/60 border border-slate-200 rounded-lg text-[10px] text-slate-400" />
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Adresse e-mail</label>
+                        <input type="email" disabled placeholder="jean@cacao.ci" className="p-2.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-700 shadow-sm" />
                       </div>
                     )}
                   </div>
                 </div>
 
-                <button disabled className="w-full mt-4 py-2.5 rounded-lg bg-brand-orange text-white text-[10px] font-black uppercase tracking-wider opacity-60">
+                <button disabled className="w-full mt-4 py-2.5 rounded-lg bg-orange-500 text-white text-xs font-bold shadow-md transition-all opacity-70">
                   Envoyer ma demande
                 </button>
               </div>
@@ -795,13 +795,13 @@ export const DgDashboard: React.FC = () => {
                     const embedHtml = `<iframe src="${linkUrl}" width="100%" height="450" frameborder="0"></iframe>`;
 
                     return (
-                      <div key={f.id} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex flex-col gap-3">
+                      <div key={f.id} className="p-4 rounded-xl bg-white border border-slate-200 shadow-md flex flex-col gap-3">
                         <div className="flex justify-between items-start">
                           <div>
                             <h4 className="text-xs font-extrabold text-slate-800">{f.title}</h4>
                             <p className="text-[9px] text-slate-550 mt-0.5">Champs : {f.fields.join(', ')}</p>
                           </div>
-                          <span className="text-[9px] bg-brand-orange/10 text-brand-orange px-2 py-0.5 rounded font-black uppercase">
+                          <span className="text-[9px] bg-orange-50 text-orange-600 px-2 py-0.5 rounded font-black uppercase">
                             Actif
                           </span>
                         </div>
@@ -814,7 +814,7 @@ export const DgDashboard: React.FC = () => {
                           </div>
                           <div>
                             <span className="text-slate-400 font-bold block">CONVERSION</span>
-                            <span className="font-extrabold text-brand-emerald">{simulatedConversion.toFixed(1)}%</span>
+                            <span className="font-extrabold text-emerald-600">{simulatedConversion.toFixed(1)}%</span>
                           </div>
                         </div>
 
@@ -824,7 +824,7 @@ export const DgDashboard: React.FC = () => {
                           <div className="flex gap-1">
                             <input 
                               type="text" readOnly value={linkUrl}
-                              className="p-1.5 bg-slate-950 border border-slate-900 rounded text-[9px] text-brand-emerald cursor-text w-full focus:outline-none font-mono"
+                              className="p-1.5 bg-white border border-slate-900 rounded text-[9px] text-emerald-600 cursor-text w-full focus:outline-none font-mono"
                             />
                             <button
                               onClick={() => {
@@ -845,7 +845,7 @@ export const DgDashboard: React.FC = () => {
                           <div className="flex gap-1">
                             <input 
                               type="text" readOnly value={embedHtml}
-                              className="p-1.5 bg-slate-950 border border-slate-900 rounded text-[9px] text-slate-400 cursor-text w-full focus:outline-none font-mono truncate"
+                              className="p-1.5 bg-white border border-slate-900 rounded text-[9px] text-slate-400 cursor-text w-full focus:outline-none font-mono truncate"
                             />
                             <button
                               onClick={() => {
@@ -874,26 +874,26 @@ export const DgDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 overflow-x-auto pb-4">
               {(['Prospect', 'Négociation', 'Vendu', 'En cours de livraison', 'Livré & Adopté'] as const).map((status) => {
                 const laneClients = clients.filter(c => c.status === status);
-                let titleColor = 'text-blue-400';
-                let borderColor = 'border-blue-500/20';
-                let badgeBg = 'bg-blue-500/10';
+                let titleColor = 'text-blue-600';
+                let borderColor = 'border-blue-200';
+                let badgeBg = 'bg-blue-50';
 
                 if (status === 'Négociation') {
-                  titleColor = 'text-amber-400';
+                  titleColor = 'text-amber-600';
                   borderColor = 'border-amber-500/20';
-                  badgeBg = 'bg-amber-400/10';
+                  badgeBg = 'bg-amber-50';
                 } else if (status === 'Vendu') {
-                  titleColor = 'text-brand-orange';
-                  borderColor = 'border-brand-orange/20';
-                  badgeBg = 'bg-brand-orange/10';
+                  titleColor = 'text-orange-600';
+                  borderColor = 'border-orange-200';
+                  badgeBg = 'bg-orange-50';
                 } else if (status === 'En cours de livraison') {
-                  titleColor = 'text-teal-400';
-                  borderColor = 'border-teal-500/20';
-                  badgeBg = 'bg-teal-500/10';
+                  titleColor = 'text-teal-600';
+                  borderColor = 'border-teal-200';
+                  badgeBg = 'bg-teal-50';
                 } else if (status === 'Livré & Adopté') {
-                  titleColor = 'text-brand-emerald';
-                  borderColor = 'border-brand-emerald/20';
-                  badgeBg = 'bg-brand-emerald/10';
+                  titleColor = 'text-emerald-600';
+                  borderColor = 'border-emerald-200';
+                  badgeBg = 'bg-emerald-50';
                 }
 
                 return (
@@ -914,14 +914,14 @@ export const DgDashboard: React.FC = () => {
                         laneClients.map(c => {
                           const comm = team.find(t => t.id === c.assigned_to);
                           return (
-                            <div key={c.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-900 flex flex-col gap-2.5 shadow-sm hover:border-slate-200 transition-all text-left">
+                            <div key={c.id} className="p-3.5 rounded-xl bg-white border border-slate-900 flex flex-col gap-2.5 shadow-sm hover:border-slate-200 transition-all text-left">
                               <div>
                                 <h4 className="text-xs font-bold text-slate-800 truncate">{c.name}</h4>
                                 <p className="text-[10px] text-slate-400 truncate mt-0.5">{c.company || 'Individuel'}</p>
                               </div>
                               
                               <div className="flex justify-between items-center border-t border-slate-900/60 pt-2 text-[9px] text-slate-455 font-semibold">
-                                <span>Wara: {comm?.name || '—'}</span>
+                                <span>Commercial: {comm?.name || '—'}</span>
                                 <span>Zone: {comm?.zone || '—'}</span>
                               </div>
 
@@ -969,7 +969,7 @@ export const DgDashboard: React.FC = () => {
         {activeTab === 'feed' && (
           <div className="flex flex-col gap-6 text-left animate-fade-in">
             <div className="flex justify-end mb-2">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold border border-brand-orange/20">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 text-orange-600 text-xs font-bold border border-orange-200">
                 <Activity className="w-3.5 h-3.5 animate-pulse" />
                 <span>LIVE FEED</span>
               </div>
@@ -981,10 +981,10 @@ export const DgDashboard: React.FC = () => {
                 const comm = team.find(t => t.id === int.performed_by);
                 
                 let badgeStyle = 'bg-slate-50 text-slate-400';
-                if (int.type === 'appel') badgeStyle = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                if (int.type === 'whatsapp') badgeStyle = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                if (int.type === 'terrain') badgeStyle = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-                if (int.type === 'statut') badgeStyle = 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
+                if (int.type === 'appel') badgeStyle = 'bg-blue-50 text-blue-600 border border-blue-200';
+                if (int.type === 'whatsapp') badgeStyle = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                if (int.type === 'terrain') badgeStyle = 'bg-orange-50 text-orange-600 border border-orange-200';
+                if (int.type === 'statut') badgeStyle = 'bg-amber-50 text-amber-600 border border-amber-200';
 
                 return (
                   <div key={int.id} className="relative flex flex-col gap-1.5 pb-2 text-left">
@@ -996,7 +996,7 @@ export const DgDashboard: React.FC = () => {
                       <span className="text-slate-600">{comm?.name || 'Système'} ({comm?.zone || 'Zone Globale'})</span>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900 flex items-start gap-4 shadow-md glass-panel">
+                    <div className="p-4 rounded-xl bg-white/60 border border-slate-900 flex items-start gap-4 shadow-md glass-panel">
                       <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold uppercase shrink-0 ${badgeStyle}`}>
                         {int.type}
                       </span>
@@ -1005,7 +1005,7 @@ export const DgDashboard: React.FC = () => {
                           {int.details} {client && <span>concernant <strong>{client.name}</strong> ({client.company || 'Sans entreprise'})</span>}
                         </p>
                         {int.gps_coordinates && (
-                          <p className="text-[10px] text-brand-orange font-bold mt-1.5 flex items-center gap-1">
+                          <p className="text-[10px] text-orange-600 font-bold mt-1.5 flex items-center gap-1">
                             <MapPin className="w-3.5 h-3.5" /> Géolocalisation GPS vérifiée : {int.gps_coordinates}
                           </p>
                         )}
@@ -1021,7 +1021,7 @@ export const DgDashboard: React.FC = () => {
         {/* Tab: Admin */}
         {activeTab === 'admin' && (
           <div className="grid lg:grid-cols-12 gap-8 text-left animate-fade-in">
-            <div className="lg:col-span-5 p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-6">
+            <div className="lg:col-span-5 p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-6">
               <form onSubmit={handleCreateCollab} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase">Nom Complet</label>
@@ -1031,7 +1031,7 @@ export const DgDashboard: React.FC = () => {
                     placeholder="Ex: Kouamé Koffi"
                     value={newCollabName}
                     onChange={(e) => setNewCollabName(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
+                    className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
                   />
                 </div>
 
@@ -1043,7 +1043,7 @@ export const DgDashboard: React.FC = () => {
                     placeholder="Ex: kouame@djagocrm.ci"
                     value={newCollabEmail}
                     onChange={(e) => setNewCollabEmail(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
+                    className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
                   />
                 </div>
 
@@ -1053,7 +1053,7 @@ export const DgDashboard: React.FC = () => {
                     <select
                       value={newCollabRole}
                       onChange={(e) => setNewCollabRole(e.target.value as UserRole)}
-                      className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-700"
+                      className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-700"
                     >
                       <option value="commercial">Commercial</option>
                       <option value="manager">Manager</option>
@@ -1065,7 +1065,7 @@ export const DgDashboard: React.FC = () => {
                     <select
                       value={newCollabZone}
                       onChange={(e) => setNewCollabZone(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-sm text-slate-700"
+                      className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-md focus:outline-none focus:border-brand-orange text-sm text-slate-700"
                     >
                       <option value="Ouest">Ouest</option>
                       <option value="Sud">Sud</option>
@@ -1081,7 +1081,7 @@ export const DgDashboard: React.FC = () => {
                     <select
                       value={newCollabManager}
                       onChange={(e) => setNewCollabManager(e.target.value)}
-                      className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-700"
+                      className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-700"
                     >
                       <option value="">Aucun Manager (Rattachement DG)</option>
                       {team.filter(t => t.role === 'manager').map(m => (
@@ -1103,7 +1103,7 @@ export const DgDashboard: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full mt-2 py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  className="w-full mt-2 py-3 rounded-xl bg-orange-500 hover:bg-orange-500/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Enregistrer Collaborateur</span>
@@ -1111,7 +1111,7 @@ export const DgDashboard: React.FC = () => {
               </form>
             </div>
 
-            <div className="lg:col-span-7 p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-4">
+            <div className="lg:col-span-7 p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-4">
               <h3 className="text-lg font-bold text-slate-900">Équipe Commerciale</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -1125,7 +1125,7 @@ export const DgDashboard: React.FC = () => {
                   </thead>
                   <tbody>
                     {team.map((t) => (
-                      <tr key={t.id} className="border-b border-slate-850 hover:bg-slate-50/30">
+                      <tr key={t.id} className="border-b border-slate-200 shadow-sm hover:bg-slate-50/30">
                         <td className="py-3 px-4 font-semibold text-slate-900">
                           <div>
                             {t.name}
@@ -1134,8 +1134,8 @@ export const DgDashboard: React.FC = () => {
                         </td>
                         <td className="py-3 px-4">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                            t.role === 'dg' ? 'bg-brand-orange/15 text-brand-orange' :
-                            t.role === 'manager' ? 'bg-brand-emerald/15 text-brand-emerald' : 'bg-slate-100 text-slate-400'
+                            t.role === 'dg' ? 'bg-orange-500/15 text-orange-600' :
+                            t.role === 'manager' ? 'bg-emerald-500/15 text-emerald-600' : 'bg-slate-100 text-slate-400'
                           }`}>
                             {t.role}
                           </span>
@@ -1154,13 +1154,13 @@ export const DgDashboard: React.FC = () => {
         {/* Tab: Audit */}
         {activeTab === 'audit' && (
           <div className="flex flex-col gap-6 text-left animate-fade-in">
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2 w-full sm:w-72">
                 <Search className="w-4 h-4 text-slate-400 absolute ml-3 pointer-events-none" />
                 <select
                   value={selectedCommercialId}
                   onChange={(e) => setSelectedCommercialId(e.target.value)}
-                  className="pl-9 pr-4 py-2.5 w-full rounded-xl bg-slate-955 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-600"
+                  className="pl-9 pr-4 py-2.5 w-full rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-600"
                 >
                   <option value="">Tous les commerciaux</option>
                   {team.filter(t => t.role === 'commercial').map(c => (
@@ -1170,7 +1170,7 @@ export const DgDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
               <h3 className="text-lg font-bold text-slate-900 mb-6">Chronologie des Actions Relances</h3>
               
               {filteredInteractions.length === 0 ? (
@@ -1181,17 +1181,17 @@ export const DgDashboard: React.FC = () => {
                     const client = clients.find(c => c.id === int.client_id);
                     const agent = team.find(t => t.id === int.performed_by);
 
-                    let iconBadge = 'bg-slate-850 text-slate-305';
-                    if (int.type === 'appel') iconBadge = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                    if (int.type === 'whatsapp') iconBadge = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                    if (int.type === 'terrain') iconBadge = 'bg-amber-400/10 text-amber-455 border border-amber-455/20';
-                    if (int.type === 'creation') iconBadge = 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
-                    if (int.type === 'transfert') iconBadge = 'bg-pink-500/10 text-pink-400 border border-pink-500/20';
-                    if (int.type === 'statut') iconBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
+                    let iconBadge = 'bg-slate-50 text-slate-305';
+                    if (int.type === 'appel') iconBadge = 'bg-blue-50 text-blue-600 border border-blue-200';
+                    if (int.type === 'whatsapp') iconBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                    if (int.type === 'terrain') iconBadge = 'bg-amber-50 text-amber-455 border border-amber-455/20';
+                    if (int.type === 'creation') iconBadge = 'bg-purple-50 text-purple-600 border border-purple-200';
+                    if (int.type === 'transfert') iconBadge = 'bg-pink-50 text-pink-600 border border-pink-200';
+                    if (int.type === 'statut') iconBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
 
                     return (
                       <div key={int.id} className="relative flex flex-col gap-1.5 text-left">
-                        <div className="absolute left-[-31px] top-1.5 w-2.5 h-2.5 rounded-full bg-brand-orange ring-4 ring-slate-900" />
+                        <div className="absolute left-[-31px] top-1.5 w-2.5 h-2.5 rounded-full bg-orange-500 ring-4 ring-slate-900" />
                         
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-xs text-slate-400 font-medium font-semibold">
@@ -1203,14 +1203,14 @@ export const DgDashboard: React.FC = () => {
                           <span className="text-xs text-slate-400 font-medium">Client : <span className="font-semibold text-slate-800">{client?.name || 'Inconnu'}</span></span>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-850 flex items-start gap-4">
+                        <div className="p-4 rounded-xl bg-white/60 border border-slate-200 shadow-sm flex items-start gap-4">
                           <span className={`px-2 py-1 rounded text-[10px] font-extrabold uppercase shrink-0 ${iconBadge}`}>
                             {int.type}
                           </span>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-slate-250 leading-relaxed font-medium">{int.details}</p>
                             {int.gps_coordinates && (
-                              <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold mt-2">
+                              <div className="flex items-center gap-1.5 text-xs text-amber-600 font-bold mt-2">
                                 <MapPin className="w-3.5 h-3.5" />
                                 <span>Coordonnées GPS : {int.gps_coordinates}</span>
                               </div>
@@ -1228,16 +1228,16 @@ export const DgDashboard: React.FC = () => {
 
         {/* Tab: Templates */}
         {activeTab === 'templates' && (
-          <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
+          <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
             <h3 className="text-lg font-bold text-slate-900">Modèles WhatsApp</h3>
             <p className="text-xs text-slate-400">Gérez les modèles utilisés par l'équipe commerciale. Variables: {'{{nom_client}}'}, {'{{entreprise}}'}, {'{{nom_commercial}}'}</p>
 
             <div className="flex flex-col gap-4">
               {whatsappTemplates.map(t => (
-                <div key={t.id} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex flex-col gap-2">
+                <div key={t.id} className="p-4 rounded-xl bg-white border border-slate-200 shadow-md flex flex-col gap-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-bold text-slate-900">{t.name}</span>
-                    <button onClick={() => deleteWhatsAppTemplate(t.id)} className="text-red-500 hover:text-red-400 text-xs font-bold uppercase">
+                    <button onClick={() => deleteWhatsAppTemplate(t.id)} className="text-red-500 hover:text-red-600 text-xs font-bold uppercase">
                       Supprimer
                     </button>
                   </div>
@@ -1255,7 +1255,7 @@ export const DgDashboard: React.FC = () => {
                   placeholder="Nom du modèle (ex: Relance Impayé)"
                   value={newTemplateName}
                   onChange={(e) => setNewTemplateName(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-200 shadow-md focus:outline-none focus:border-brand-orange text-xs text-slate-800"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -1264,13 +1264,13 @@ export const DgDashboard: React.FC = () => {
                   placeholder="Bonjour {{nom_client}}, ..."
                   value={newTemplateText}
                   onChange={(e) => setNewTemplateText(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-200 shadow-md focus:outline-none focus:border-brand-orange text-xs text-slate-800"
                 />
               </div>
 
               <button
                 onClick={handleAddTemplate}
-                className="w-full py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-sm shadow-lg transition-all cursor-pointer"
+                className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-500/95 text-white font-bold text-sm shadow-lg transition-all cursor-pointer"
               >
                 Ajouter le modèle
               </button>
@@ -1281,7 +1281,7 @@ export const DgDashboard: React.FC = () => {
 
       {/* Client Detail Modal */}
       {selectedClientForModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-2xl flex flex-col gap-5 text-left max-h-[85vh] overflow-y-auto">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
@@ -1290,7 +1290,7 @@ export const DgDashboard: React.FC = () => {
               </div>
               <button 
                 onClick={() => setSelectedClientForModal(null)}
-                className="p-1.5 rounded-lg bg-slate-950 border border-slate-850 hover:bg-slate-100 text-slate-400"
+                className="p-1.5 rounded-lg bg-white border border-slate-200 shadow-md hover:bg-slate-100 text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1307,7 +1307,7 @@ export const DgDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-semibold uppercase">Statut Actuel</p>
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-orange/15 text-brand-orange border border-brand-orange/20 mt-1">
+                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-500/15 text-white border border-orange-200 mt-1">
                   {selectedClientForModal.status}
                 </span>
               </div>
@@ -1324,12 +1324,12 @@ export const DgDashboard: React.FC = () => {
               <h4 className="font-bold text-slate-900 text-sm uppercase">Fiche Contacts & Transactions associées</h4>
               <div className="grid sm:grid-cols-2 gap-4 text-xs">
                 <div>
-                  <p className="font-bold text-brand-orange mb-1">Contacts secondaires</p>
+                  <p className="font-bold text-orange-600 mb-1">Contacts secondaires</p>
                   {contacts.filter(c => c.client_id === selectedClientForModal.id).length === 0 ? (
                     <p className="text-slate-400 italic">Aucun contact enregistré.</p>
                   ) : (
                     contacts.filter(c => c.client_id === selectedClientForModal.id).map(c => (
-                      <div key={c.id} className="p-2 rounded bg-slate-950 border border-slate-850 mb-1">
+                      <div key={c.id} className="p-2 rounded bg-white border border-slate-200 shadow-md mb-1">
                         <p className="font-bold text-slate-800">{c.name} ({c.role})</p>
                         <p className="text-slate-400">{c.phone}</p>
                       </div>
@@ -1338,15 +1338,15 @@ export const DgDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <p className="font-bold text-brand-orange mb-1">Transactions (Deals)</p>
+                  <p className="font-bold text-orange-600 mb-1">Transactions (Deals)</p>
                   {transactions.filter(t => t.client_id === selectedClientForModal.id).length === 0 ? (
                     <p className="text-slate-400 italic">Aucune transaction enregistrée.</p>
                   ) : (
                     transactions.filter(t => t.client_id === selectedClientForModal.id).map(t => (
-                      <div key={t.id} className="p-2 rounded bg-slate-950 border border-slate-850 mb-1 flex justify-between items-center">
+                      <div key={t.id} className="p-2 rounded bg-white border border-slate-200 shadow-md mb-1 flex justify-between items-center">
                         <div>
                           <p className="font-bold text-slate-800">{t.title}</p>
-                          <p className="text-[10px] text-brand-orange">{t.amount.toLocaleString()} FCFA</p>
+                          <p className="text-[10px] text-orange-600">{t.amount.toLocaleString()} FCFA</p>
                         </div>
                         <span className="text-[10px] font-black uppercase">{t.stage}</span>
                       </div>
@@ -1363,14 +1363,14 @@ export const DgDashboard: React.FC = () => {
                 <p className="text-xs text-slate-550 italic">Aucun ticket de support ouvert.</p>
               ) : (
                 tickets.filter(t => t.client_id === selectedClientForModal.id).map(t => (
-                  <div key={t.id} className="p-3 rounded-xl bg-slate-955 border border-slate-850 mb-2 flex justify-between items-center text-xs">
+                  <div key={t.id} className="p-3 rounded-xl bg-white border border-slate-200 shadow-md mb-2 flex justify-between items-center text-xs">
                     <div>
                       <p className="font-bold text-slate-800">{t.subject}</p>
                       <p className="text-[10px] text-slate-400">{t.description}</p>
                     </div>
                     <div className="flex gap-2">
-                      <span className="px-2 py-0.5 rounded text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 uppercase font-black">{t.priority}</span>
-                      <span className="px-2 py-0.5 rounded text-[9px] bg-slate-950 text-slate-400 border border-slate-200 font-bold">{t.status}</span>
+                      <span className="px-2 py-0.5 rounded text-[9px] bg-red-50 text-red-600 border border-red-200 uppercase font-black">{t.priority}</span>
+                      <span className="px-2 py-0.5 rounded text-[9px] bg-white text-slate-400 border border-slate-200 font-bold">{t.status}</span>
                     </div>
                   </div>
                 ))

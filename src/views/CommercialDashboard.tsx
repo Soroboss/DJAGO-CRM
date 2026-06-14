@@ -87,7 +87,7 @@ export const CommercialDashboard: React.FC = () => {
     { id: 'p1', name: 'Licence DjagoCRM Standard', price: 1200000, desc: 'Accès complet pour 1 utilisateur, mode offline inclus.' },
     { id: 'p2', name: 'Pack Offline Router Core', price: 2500000, desc: 'Passerelle réseau locale configurée pour synchronisation régionale.' },
     { id: 'p3', name: 'Abonnement SMS Hub (1 an)', price: 600000, desc: '10 000 SMS de relance automatisés pré-configurés.' },
-    { id: 'p4', name: 'Formation & Intégration Équipe', price: 800000, desc: 'Accompagnement terrain de vos Waras par un coach certifié.' }
+    { id: 'p4', name: 'Formation & Intégration Équipe', price: 800000, desc: 'Accompagnement terrain de vos Commerciaux par un coach certifié.' }
   ];
 
   useEffect(() => {
@@ -378,7 +378,7 @@ export const CommercialDashboard: React.FC = () => {
     if (!selectedInboxMessage || !inboxReplyText) return;
     await sendInboxMessage(
       selectedInboxMessage.client_id,
-      user?.name || 'Wara CRM',
+      user?.name || 'Commercial CRM',
       user?.email || 'sales@djagocrm.ci',
       selectedInboxMessage.channel,
       inboxReplyText,
@@ -466,7 +466,7 @@ export const CommercialDashboard: React.FC = () => {
       {/* Top Mobile Header */}
       <header className="sticky top-0 bg-white/80 backdrop-blur-md border-b border-slate-900 px-4 py-3.5 flex items-center justify-between z-30">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-orange to-brand-emerald flex items-center justify-center font-bold text-white text-base">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-orange-500 to-brand-emerald flex items-center justify-center font-bold text-white text-base">
             DJ
           </div>
           <div className="text-left">
@@ -479,17 +479,17 @@ export const CommercialDashboard: React.FC = () => {
           {offlineActions.length > 0 && (
             <button 
               onClick={() => setIsQueueDrawerOpen(true)}
-              className="px-2.5 py-1 rounded bg-brand-orange/15 border border-brand-orange/20 text-brand-orange text-[10px] font-bold flex items-center gap-1.5 animate-pulse"
+              className="px-2.5 py-1 rounded bg-orange-500/15 border border-orange-200 text-white text-[10px] font-bold flex items-center gap-1.5 animate-pulse"
             >
               <span>{offlineActions.length}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping" />
             </button>
           )}
           <NetworkBadge />
           {!isDesktop && (
             <button 
               onClick={logout}
-              className="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all"
+              className="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -505,14 +505,14 @@ export const CommercialDashboard: React.FC = () => {
           <div className="flex flex-col gap-4 animate-fade-in text-left">
             
             {/* Gamification Objective Card */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-brand-orange/15 to-brand-emerald/15 border border-slate-900/60 text-left flex flex-col gap-3 shadow-inner">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-orange-500/15 to-brand-emerald/15 border border-slate-900/60 text-left flex flex-col gap-3 shadow-inner">
               <div className="flex justify-between items-start">
                 <div>
-                  <h4 className="font-extrabold text-xs text-slate-900">Mon Objectif Wara</h4>
+                  <h4 className="font-extrabold text-xs text-slate-900">Mon Objectif Commercial</h4>
                   <p className="text-[9px] text-slate-400">Objectif mensuel de 5 ventes (6.000.000 FCFA)</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-black text-brand-orange font-mono">
+                  <div className="text-sm font-black text-orange-600 font-mono">
                     {earnedCommissions.toLocaleString()} <span className="text-[10px] text-slate-900">FCFA</span>
                   </div>
                   <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider block">Commissions Encaissées (5%)</p>
@@ -529,9 +529,9 @@ export const CommercialDashboard: React.FC = () => {
                   <span>Progression encaissements : {myPaidOrders.length} / 5 Ventes</span>
                   <span>{Math.min(Math.round((myPaidOrders.length / 5) * 100), 100)}%</span>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-slate-950 overflow-hidden">
+                <div className="w-full h-1.5 rounded-full bg-white overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-brand-orange to-brand-emerald rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-orange-500 to-brand-emerald rounded-full transition-all duration-500"
                     style={{ width: `${Math.min((myPaidOrders.length / 5) * 100, 100)}%` }}
                   />
                 </div>
@@ -539,23 +539,23 @@ export const CommercialDashboard: React.FC = () => {
 
               {/* Real Speed & Intelligence Sub-grid */}
               <div className="grid grid-cols-2 gap-2 mt-1 pt-2.5 border-t border-slate-900/60 text-[9px] text-slate-400">
-                <div className="bg-slate-950/40 p-1.5 rounded-xl border border-slate-900 flex flex-col gap-0.5">
+                <div className="bg-white/40 p-1.5 rounded-xl border border-slate-900 flex flex-col gap-0.5">
                   <span className="font-bold text-slate-400 uppercase tracking-wider">⚡ Vitesse d'exécution</span>
                   <span className="font-extrabold text-slate-800">Relance moyenne : ~2.4 h</span>
-                  <span className="text-[8px] text-brand-emerald font-semibold">SLA Réponse : 8 min (Optimal)</span>
+                  <span className="text-[8px] text-emerald-600 font-semibold">SLA Réponse : 8 min (Optimal)</span>
                 </div>
-                <div className="bg-slate-950/40 p-1.5 rounded-xl border border-slate-900 flex flex-col gap-0.5">
+                <div className="bg-white/40 p-1.5 rounded-xl border border-slate-900 flex flex-col gap-0.5">
                   <span className="font-bold text-slate-400 uppercase tracking-wider">🧠 Intelligence Relance</span>
                   <span className="font-extrabold text-slate-800">Automatisation IA : 86%</span>
-                  <span className="text-[8px] text-brand-orange font-semibold">Taux d'engagement : 92%</span>
+                  <span className="text-[8px] text-orange-600 font-semibold">Taux d'engagement : 92%</span>
                 </div>
               </div>
             </div>
 
             {/* Relances Urgentes Alerts */}
             {urgentClients.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-red-500/10 border border-red-500/25 flex flex-col gap-2.5 animate-fade-in text-left">
-                <div className="flex items-center gap-2 text-red-400 font-extrabold text-xs tracking-wider uppercase">
+              <div className="p-3.5 rounded-2xl bg-red-50 border border-red-500/25 flex flex-col gap-2.5 animate-fade-in text-left">
+                <div className="flex items-center gap-2 text-red-600 font-extrabold text-xs tracking-wider uppercase">
                   <span>⚠️ Relances Urgentes ({urgentClients.length})</span>
                 </div>
                 <p className="text-[10px] text-slate-400 font-semibold leading-relaxed">
@@ -563,7 +563,7 @@ export const CommercialDashboard: React.FC = () => {
                 </p>
                 <div className="flex flex-col gap-1.5 mt-1">
                   {urgentClients.map(c => (
-                    <div key={c.id} className="flex justify-between items-center bg-slate-950/40 p-2 rounded-xl border border-slate-900 text-xs">
+                    <div key={c.id} className="flex justify-between items-center bg-white/40 p-2 rounded-xl border border-slate-900 text-xs">
                       <div>
                         <span className="font-bold text-slate-800">{c.name}</span>
                         <span className="text-[9px] text-slate-400 ml-2">({c.company || 'Individuel'})</span>
@@ -573,7 +573,7 @@ export const CommercialDashboard: React.FC = () => {
                           setSelectedClientForAction(c);
                           setActionType('whatsapp');
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-brand-orange hover:bg-brand-orange/90 text-white font-bold text-[9px] cursor-pointer"
+                        className="px-2.5 py-1 rounded-lg bg-orange-500 hover:bg-orange-500/90 text-white font-bold text-[9px] cursor-pointer"
                       >
                         Relancer
                       </button>
@@ -616,7 +616,7 @@ export const CommercialDashboard: React.FC = () => {
                     >
                       <div className="flex justify-between items-start">
                         <div onClick={() => setSelectedClientForModal(client)} className="cursor-pointer group flex-1">
-                          <h4 className="font-bold text-slate-900 text-base leading-snug group-hover:text-brand-orange transition-colors flex items-center gap-1.5">
+                          <h4 className="font-bold text-slate-900 text-base leading-snug group-hover:text-orange-600 transition-colors flex items-center gap-1.5">
                             <span>{client.name}</span>
                             <ChevronRight className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
                           </h4>
@@ -626,7 +626,7 @@ export const CommercialDashboard: React.FC = () => {
                           <p className="text-[10px] text-slate-400 font-medium mt-1">Tél : {client.phone}</p>
                           {/* AI & Performance Indicators */}
                           <div className="flex gap-2 mt-2">
-                            <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald px-1.5 py-0.5 rounded font-black border border-brand-emerald/15 flex items-center gap-1">
+                            <span className="text-[9px] bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded font-black border border-brand-emerald/15 flex items-center gap-1">
                               <Sparkles className="w-2.5 h-2.5" /> Score IA : {Math.round(75 + (client.name.charCodeAt(0) % 23))}%
                             </span>
                             <span className="text-[9px] bg-white text-slate-400 px-1.5 py-0.5 rounded font-bold border border-slate-200">
@@ -638,7 +638,7 @@ export const CommercialDashboard: React.FC = () => {
                         <select
                           value={client.status}
                           onChange={(e) => updateClientStatus(client.id, e.target.value as any, user?.id || '')}
-                          className="text-[10px] font-bold px-2 py-1 rounded-full bg-slate-950 border border-slate-200 focus:outline-none text-slate-355 cursor-pointer"
+                          className="text-[10px] font-bold px-2 py-1 rounded-full bg-white border border-slate-200 focus:outline-none text-slate-355 cursor-pointer"
                         >
                           <option value="Prospect">Prospect</option>
                           <option value="Négociation">Négociation</option>
@@ -652,7 +652,7 @@ export const CommercialDashboard: React.FC = () => {
                       <div className="grid grid-cols-4 gap-2 pt-2 border-t border-slate-900/60">
                         <button
                           onClick={() => triggerCallAction(client)}
-                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/15 hover:bg-blue-500/20 transition-all active:scale-95 cursor-pointer"
+                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-blue-50 text-white border border-blue-500/15 hover:bg-blue-500/20 transition-all active:scale-95 cursor-pointer"
                         >
                           <Phone className="w-4 h-4 mb-1" />
                           <span className="text-[9px] font-bold uppercase tracking-wider">Appel</span>
@@ -660,7 +660,7 @@ export const CommercialDashboard: React.FC = () => {
 
                         <button
                           onClick={() => triggerWhatsAppAction(client)}
-                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/15 hover:bg-brand-emerald/20 transition-all active:scale-95 cursor-pointer"
+                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-emerald-50 text-white border border-brand-emerald/15 hover:bg-emerald-500/20 transition-all active:scale-95 cursor-pointer"
                         >
                           <MessageSquare className="w-4 h-4 mb-1" />
                           <span className="text-[9px] font-bold uppercase tracking-wider">WhatsApp</span>
@@ -669,7 +669,7 @@ export const CommercialDashboard: React.FC = () => {
                         <button
                           onClick={() => triggerEmailAction(client)}
                           disabled={!client.email}
-                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/15 hover:bg-purple-500/20 transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95 cursor-pointer"
+                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-purple-50 text-purple-600 border border-purple-500/15 hover:bg-purple-500/20 transition-all disabled:opacity-30 disabled:pointer-events-none active:scale-95 cursor-pointer"
                         >
                           <Mail className="w-4 h-4 mb-1" />
                           <span className="text-[9px] font-bold uppercase tracking-wider">Mail</span>
@@ -677,7 +677,7 @@ export const CommercialDashboard: React.FC = () => {
 
                         <button
                           onClick={() => triggerTerrainAction(client)}
-                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-brand-orange/10 text-brand-orange border border-brand-orange/15 hover:bg-brand-orange/20 transition-all active:scale-95 cursor-pointer"
+                          className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-orange-50 text-white border border-brand-orange/15 hover:bg-orange-500/20 transition-all active:scale-95 cursor-pointer"
                         >
                           <MapPin className="w-4 h-4 mb-1" />
                           <span className="text-[9px] font-bold uppercase tracking-wider">Terrain</span>
@@ -696,7 +696,7 @@ export const CommercialDashboard: React.FC = () => {
           <div className="flex flex-col gap-6 animate-fade-in text-left">
             <div>
               <h3 className="text-lg font-bold text-slate-900 flex items-center gap-1.5">
-                <Sparkles className="w-5 h-5 text-brand-orange" />
+                <Sparkles className="w-5 h-5 text-orange-600" />
                 <span>Nouveau Prospect</span>
               </h3>
               <p className="text-xs text-slate-400">Ajouter rapidement un prospect à suivre</p>
@@ -751,7 +751,7 @@ export const CommercialDashboard: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full mt-2 py-3.5 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                className="w-full mt-2 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-500/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Enregistrer Prospect</span>
@@ -789,13 +789,13 @@ export const CommercialDashboard: React.FC = () => {
                       onClick={() => setSelectedCalendarDay(isSelected ? null : day)}
                       className={`h-7 w-7 mx-auto rounded-full flex flex-col items-center justify-center relative transition-all cursor-pointer ${
                         isSelected 
-                          ? 'bg-brand-orange text-slate-900' 
+                          ? 'bg-orange-500 text-slate-900' 
                           : 'hover:bg-slate-100 text-slate-700'
                       }`}
                     >
                       <span>{day}</span>
                       {dayHasMeeting && !isSelected && (
-                        <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-emerald" />
+                        <span className="absolute bottom-1 w-1 h-1 rounded-full bg-emerald-500" />
                       )}
                     </button>
                   );
@@ -804,7 +804,7 @@ export const CommercialDashboard: React.FC = () => {
               {selectedCalendarDay && (
                 <button 
                   onClick={() => setSelectedCalendarDay(null)}
-                  className="mt-3 text-[10px] text-brand-orange font-bold hover:underline"
+                  className="mt-3 text-[10px] text-orange-600 font-bold hover:underline"
                 >
                   Afficher toutes les réunions
                 </button>
@@ -834,17 +834,17 @@ export const CommercialDashboard: React.FC = () => {
                   const client = clients.find(c => c.id === meet.client_id);
                   return (
                     <div key={meet.id} className="p-3.5 rounded-xl bg-slate-50 border border-slate-850 flex items-start gap-3 shadow-md">
-                      <div className="w-10 h-10 rounded-lg bg-brand-emerald/10 text-brand-emerald flex items-center justify-center border border-brand-emerald/20 shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200 shrink-0">
                         <Calendar className="w-5 h-5" />
                       </div>
                       <div className="flex-1 text-left min-w-0">
                         <h4 className="text-xs font-extrabold text-slate-900 truncate">{meet.title}</h4>
                         <p className="text-[10px] text-slate-400 font-semibold mt-0.5">Client : {client?.name || '—'}</p>
-                        <p className="text-[9px] text-brand-orange font-bold uppercase tracking-wider mt-1">
+                        <p className="text-[9px] text-orange-600 font-bold uppercase tracking-wider mt-1">
                           📅 {new Date(meet.scheduled_at).toLocaleString()}
                         </p>
                       </div>
-                      <span className="px-2 py-0.5 rounded text-[8px] bg-slate-950 border border-slate-200 font-bold uppercase text-slate-400 shrink-0">
+                      <span className="px-2 py-0.5 rounded text-[8px] bg-white border border-slate-200 font-bold uppercase text-slate-400 shrink-0">
                         {meet.type}
                       </span>
                     </div>
@@ -873,13 +873,13 @@ export const CommercialDashboard: React.FC = () => {
                     key={msg.id} 
                     onClick={() => setSelectedInboxMessage(msg)}
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer text-left flex flex-col gap-1.5 shadow ${
-                      msg.is_read ? 'bg-slate-50/60 border-[#1e293b]/50' : 'bg-brand-orange/5 border-brand-orange/20 ring-1 ring-brand-orange/10'
+                      msg.is_read ? 'bg-slate-50/60 border-[#1e293b]/50' : 'bg-orange-500/5 border-orange-200 ring-1 ring-brand-orange/10'
                     }`}
                   >
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-slate-900">{msg.sender_name}</span>
                       <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase ${
-                        msg.channel === 'whatsapp' ? 'bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/20' : 'bg-blue-500/15 text-blue-400 border border-blue-500/20'
+                        msg.channel === 'whatsapp' ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-200' : 'bg-blue-50 text-blue-600 border border-blue-200'
                       }`}>
                         {msg.channel}
                       </span>
@@ -903,7 +903,7 @@ export const CommercialDashboard: React.FC = () => {
               </span>
               <button 
                 onClick={() => setFastCheckoutOpen(true)}
-                className="px-3 py-1.5 rounded-xl bg-brand-orange hover:bg-brand-orange/90 text-white font-extrabold text-[10px] uppercase shadow flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-500/90 text-white font-extrabold text-[10px] uppercase shadow flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" /> Fast Checkout
               </button>
@@ -914,7 +914,7 @@ export const CommercialDashboard: React.FC = () => {
                 <div key={prod.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-850 flex flex-col gap-2">
                   <div className="flex justify-between items-start">
                     <h4 className="text-sm font-extrabold text-slate-900 leading-snug">{prod.name}</h4>
-                    <span className="text-xs font-mono font-black text-brand-orange shrink-0">{prod.price.toLocaleString()} FCFA</span>
+                    <span className="text-xs font-mono font-black text-orange-600 shrink-0">{prod.price.toLocaleString()} FCFA</span>
                   </div>
                   <p className="text-xs text-slate-400 leading-relaxed">{prod.desc}</p>
                   <button 
@@ -922,7 +922,7 @@ export const CommercialDashboard: React.FC = () => {
                       setSelectedProduct(prod);
                       setFastCheckoutOpen(true);
                     }}
-                    className="mt-2 py-2 rounded-xl bg-white border border-slate-200 hover:bg-brand-emerald/10 hover:text-brand-emerald hover:border-brand-emerald/30 text-slate-600 text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer"
+                    className="mt-2 py-2 rounded-xl bg-white border border-slate-200 hover:bg-emerald-50 hover:text-emerald-600 hover:border-brand-emerald/30 text-slate-600 text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer"
                   >
                     Vente en 1 clic
                   </button>
@@ -948,9 +948,9 @@ export const CommercialDashboard: React.FC = () => {
                 {myInteractions.map((int) => {
                   const client = clients.find(c => c.id === int.client_id);
                   let badgeStyle = 'bg-slate-50 text-slate-400';
-                  if (int.type === 'appel') badgeStyle = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                  if (int.type === 'whatsapp') badgeStyle = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                  if (int.type === 'terrain') badgeStyle = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
+                  if (int.type === 'appel') badgeStyle = 'bg-blue-50 text-blue-600 border border-blue-200';
+                  if (int.type === 'whatsapp') badgeStyle = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                  if (int.type === 'terrain') badgeStyle = 'bg-orange-50 text-orange-600 border border-orange-200';
 
                   return (
                     <div key={int.id} className="relative flex flex-col gap-1.5 text-left">
@@ -969,7 +969,7 @@ export const CommercialDashboard: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-slate-700 font-medium leading-relaxed">{int.details}</p>
                           {int.gps_coordinates && (
-                            <p className="text-[9px] text-brand-orange font-bold mt-1.5 flex items-center gap-1">
+                            <p className="text-[9px] text-orange-600 font-bold mt-1.5 flex items-center gap-1">
                               <Navigation className="w-3 h-3" /> GPS: {int.gps_coordinates}
                             </p>
                           )}
@@ -990,7 +990,7 @@ export const CommercialDashboard: React.FC = () => {
             </span>
             <div className="flex flex-col gap-3">
               <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200">
-                <span className="text-[10px] bg-brand-orange/15 text-brand-orange px-2 py-0.5 rounded font-bold uppercase">Pitch Nouchi 🇨🇮</span>
+                <span className="text-[10px] bg-orange-500/15 text-white px-2 py-0.5 rounded font-bold uppercase">Pitch Nouchi 🇨🇮</span>
                 <p className="text-xs font-bold text-slate-800 mt-2">"Faut pas y a gâté !"</p>
                 <p className="text-xs text-slate-400 mt-1 italic">
                   "Mon frère, y a pas l'homme pour DjagoCRM ! Le réseau se fatigue au pays mais tes ventes continuent. Tu tapes tes check-ins et tes rapports sans connexion, dès que le réseau revient, tout est dja dans le système. C'est le gbonhi pour douahou ton business !"
@@ -998,7 +998,7 @@ export const CommercialDashboard: React.FC = () => {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200">
-                <span className="text-[10px] bg-brand-emerald/15 text-brand-emerald px-2 py-0.5 rounded font-bold uppercase">Pitch Dioula 🌍</span>
+                <span className="text-[10px] bg-emerald-500/15 text-white px-2 py-0.5 rounded font-bold uppercase">Pitch Dioula 🌍</span>
                 <p className="text-xs font-bold text-slate-800 mt-2">"DjagoCRM bè ta gnè"</p>
                 <p className="text-xs text-slate-400 mt-1 italic">
                   "N'gagnan, DjagoCRM bè a to i bè baara kaili ni réseaux té yé. I bè clients toukoun, i bè appels ni WhatsApp kaili kabini i bolo la. DjagoCRM bè saii ye i bè wari sôrô !"
@@ -1006,7 +1006,7 @@ export const CommercialDashboard: React.FC = () => {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200">
-                <span className="text-[10px] bg-blue-500/15 text-blue-400 px-2 py-0.5 rounded font-bold uppercase">Pitch Pro (DG / Décideur) 💼</span>
+                <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-bold uppercase">Pitch Pro (DG / Décideur) 💼</span>
                 <p className="text-xs font-bold text-slate-800 mt-2">"Supériorité Terrain face à Salesforce"</p>
                 <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                   "DjagoCRM est conçu spécifiquement pour le contexte africain. Contrairement aux solutions américaines lourdes et coûteuses, notre CRM fonctionne en mode hors-ligne complet pour vos commerciaux terrain, intègre un bouton de relance WhatsApp direct avec templates pré-remplis et audite la position GPS réelle de vos visites physiques."
@@ -1019,15 +1019,15 @@ export const CommercialDashboard: React.FC = () => {
         {activeTab === 'leaderboard' && (
           <div className="flex flex-col gap-4 animate-fade-in text-left">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">
-              Classement des Waras 🏆
+              Classement des Commerciaux 🏆
             </span>
             <div className="flex flex-col gap-3">
-              <div className="p-4 rounded-2xl bg-gradient-to-tr from-brand-orange/20 to-brand-emerald/10 border border-brand-orange/30 flex items-center justify-between">
+              <div className="p-4 rounded-2xl bg-gradient-to-tr from-orange-500/20 to-brand-emerald/10 border border-brand-orange/30 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-brand-orange flex items-center justify-center font-extrabold text-white text-xs">1</div>
+                  <div className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center font-extrabold text-white text-xs">1</div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">Salif Wara (Moi)</h4>
-                    <p className="text-[9px] text-brand-orange font-bold uppercase tracking-wider">Wara Suprême 🦁</p>
+                    <h4 className="text-xs font-bold text-slate-900">Salif Commercial (Moi)</h4>
+                    <p className="text-[9px] text-orange-600 font-bold uppercase tracking-wider">Commercial Suprême 🦁</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -1074,7 +1074,7 @@ export const CommercialDashboard: React.FC = () => {
               Tournée Terrain (Vue Carte)
             </span>
             <div className="w-full h-[400px] bg-slate-50 rounded-2xl border border-slate-200 relative overflow-hidden flex flex-col items-center justify-center glass-panel">
-              <MapPin className="w-12 h-12 text-brand-orange mb-2 animate-bounce" />
+              <MapPin className="w-12 h-12 text-orange-600 mb-2 animate-bounce" />
               <p className="text-slate-400 font-medium text-sm text-center px-4">
                 La carte interactive s'affichera ici.<br/>
                 Intégration Google Maps / Leaflet à venir.
@@ -1086,7 +1086,7 @@ export const CommercialDashboard: React.FC = () => {
                   <h5 className="text-sm font-bold text-slate-800">{c.name}</h5>
                   <p className="text-[10px] text-slate-400">{c.company || 'Sans entreprise'}</p>
                 </div>
-                <button className="p-2 rounded-lg bg-brand-orange/10 text-brand-orange hover:bg-brand-orange hover:text-white transition-all">
+                <button className="p-2 rounded-lg bg-orange-50 text-white hover:bg-orange-500 hover:text-white transition-all">
                   <Navigation className="w-4 h-4" />
                 </button>
               </div>
@@ -1098,14 +1098,14 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Fast Checkout Form Modal */}
       {fastCheckoutOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-slate-50 border border-slate-200 rounded-3xl p-5 shadow-2xl flex flex-col gap-4 text-left">
             <div className="flex justify-between items-start border-b border-slate-200 pb-2">
               <div>
                 <h4 className="font-extrabold text-slate-900 text-base">Vente Rapide & Paiement</h4>
                 <p className="text-[10px] text-slate-400">Produit: {selectedProduct.name}</p>
               </div>
-              <button onClick={() => setFastCheckoutOpen(false)} className="p-1 rounded bg-slate-950 text-slate-400 hover:text-slate-900">
+              <button onClick={() => setFastCheckoutOpen(false)} className="p-1 rounded bg-white text-slate-400 hover:text-slate-900">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -1115,7 +1115,7 @@ export const CommercialDashboard: React.FC = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Nom {vocab.client}</label>
                 <input 
                   type="text" required placeholder="Ex: M. Souleymane Diop" value={checkoutClientName} onChange={e => setCheckoutClientName(e.target.value)}
-                  className="p-2.5 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
+                  className="p-2.5 bg-white border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
                 />
               </div>
 
@@ -1123,7 +1123,7 @@ export const CommercialDashboard: React.FC = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Téléphone</label>
                 <input 
                   type="tel" required placeholder="Ex: +225 0708091011" value={checkoutClientPhone} onChange={e => setCheckoutClientPhone(e.target.value)}
-                  className="p-2.5 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
+                  className="p-2.5 bg-white border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
                 />
               </div>
 
@@ -1131,16 +1131,16 @@ export const CommercialDashboard: React.FC = () => {
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Entreprise (Optionnel)</label>
                 <input 
                   type="text" placeholder="Ex: Diop Transport" value={checkoutClientCompany} onChange={e => setCheckoutClientCompany(e.target.value)}
-                  className="p-2.5 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
+                  className="p-2.5 bg-white border border-slate-850 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-brand-orange"
                 />
               </div>
 
-              <div className="flex flex-col gap-1.5 p-3 rounded-xl bg-slate-950 border border-slate-850">
+              <div className="flex flex-col gap-1.5 p-3 rounded-xl bg-white border border-slate-850">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-400">Total à payer</span>
-                  <span className="font-mono font-black text-brand-orange">{selectedProduct.price.toLocaleString()} FCFA</span>
+                  <span className="font-mono font-black text-orange-600">{selectedProduct.price.toLocaleString()} FCFA</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px] text-brand-emerald font-bold mt-1">
+                <div className="flex justify-between items-center text-[10px] text-emerald-600 font-bold mt-1">
                   <span>Méthode: Mobile Money (Wave/Orange)</span>
                   <span>Facture Acquittée</span>
                 </div>
@@ -1148,7 +1148,7 @@ export const CommercialDashboard: React.FC = () => {
 
               <button 
                 type="submit"
-                className="w-full py-3 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-500/95 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
               >
                 <Check className="w-4 h-4" />
                 <span>Enregistrer la Vente</span>
@@ -1160,7 +1160,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Action Overlay Modals */}
       {selectedClientForAction && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-end justify-center px-4 pb-6">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-end justify-center px-4 pb-6">
           <div className="w-full max-w-sm p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left shadow-2xl flex flex-col gap-4 animate-toast-slide-in">
             <div className="flex justify-between items-start">
               <div>
@@ -1177,7 +1177,7 @@ export const CommercialDashboard: React.FC = () => {
                   setSelectedClientForAction(null);
                   setActionType(null);
                 }}
-                className="p-1 rounded bg-slate-955 border border-slate-850 hover:bg-slate-100 text-slate-400"
+                className="p-1 rounded bg-white border border-slate-850 hover:bg-slate-100 text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1189,7 +1189,7 @@ export const CommercialDashboard: React.FC = () => {
                   Veuillez enregistrer les notes d'échange après votre appel ou dicter votre rapport.
                 </p>
 
-                <div className="flex flex-col gap-2 p-3 rounded-xl bg-slate-950 border border-slate-850">
+                <div className="flex flex-col gap-2 p-3 rounded-xl bg-white border border-slate-850">
                   <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase">
                     <span>Dictée Vocale Intelligente (Offline)</span>
                     {isRecording && recordingTarget === 'call' && (
@@ -1230,7 +1230,7 @@ export const CommercialDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => startRecording('call')}
-                      className="py-2 bg-slate-50 hover:bg-slate-100 text-brand-orange font-bold text-xs rounded-lg border border-brand-orange/20 flex items-center justify-center gap-1.5 transition-all"
+                      className="py-2 bg-slate-50 hover:bg-slate-100 text-orange-600 font-bold text-xs rounded-lg border border-orange-200 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <Mic className="w-3.5 h-3.5" />
                       <span>Dicter mon rapport d'appel</span>
@@ -1244,7 +1244,7 @@ export const CommercialDashboard: React.FC = () => {
                   placeholder="Ex: Client intéressé, demande un devis révisé par e-mail demain."
                   value={callNotes}
                   onChange={(e) => setCallNotes(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-blue-500 text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-850 focus:outline-none focus:border-blue-500 text-xs text-slate-800"
                 />
                 <button
                   onClick={saveCallNotes}
@@ -1261,14 +1261,14 @@ export const CommercialDashboard: React.FC = () => {
                 <select
                   value={selectedWhatsAppTemplate}
                   onChange={(e) => setSelectedWhatsAppTemplate(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-200 text-xs text-slate-355 focus:outline-none focus:border-brand-emerald"
+                  className="w-full p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-355 focus:outline-none focus:border-brand-emerald"
                 >
                   {whatsappTemplates.map(t => (
                     <option key={t.id} value={t.id}>{t.name}</option>
                   ))}
                 </select>
 
-                <div className="p-3 rounded-xl bg-slate-955 border border-slate-850 text-[11px] text-slate-400 leading-relaxed font-mono">
+                <div className="p-3 rounded-xl bg-white border border-slate-850 text-[11px] text-slate-400 leading-relaxed font-mono">
                   {(whatsappTemplates.find(t => t.id === selectedWhatsAppTemplate)?.text || '')
                     .replace(/\\{\\{nom_client\\}\\}/g, selectedClientForAction.name)
                     .replace(/\\{\\{entreprise\\}\\}/g, selectedClientForAction.company || 'votre entreprise')
@@ -1277,7 +1277,7 @@ export const CommercialDashboard: React.FC = () => {
 
                 <button
                   onClick={sendWhatsAppMessage}
-                  className="w-full py-2.5 rounded-xl bg-brand-emerald hover:bg-brand-emerald/95 text-white font-bold text-xs shadow-lg transition-all"
+                  className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-500/95 text-white font-bold text-xs shadow-lg transition-all"
                 >
                   Ouvrir WhatsApp
                 </button>
@@ -1292,7 +1292,7 @@ export const CommercialDashboard: React.FC = () => {
                     type="text"
                     value={emailSubject}
                     onChange={(e) => setEmailSubject(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-200 text-xs text-slate-900 focus:outline-none"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs text-slate-900 focus:outline-none"
                   />
                 </div>
 
@@ -1303,7 +1303,7 @@ export const CommercialDashboard: React.FC = () => {
                     placeholder="Contenu envoyé (catalogue joint, facture proforma...)"
                     value={emailNotes}
                     onChange={(e) => setEmailNotes(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800"
+                    className="w-full p-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800"
                   />
                 </div>
 
@@ -1322,7 +1322,7 @@ export const CommercialDashboard: React.FC = () => {
                   L'application va capturer votre géolocalisation GPS réelle pour valider le passage terrain.
                 </p>
 
-                <div className="flex flex-col gap-2 p-3 rounded-xl bg-slate-950 border border-slate-850">
+                <div className="flex flex-col gap-2 p-3 rounded-xl bg-white border border-slate-850">
                   <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase">
                     <span>Dictée Vocale Intelligente (Offline)</span>
                     {isRecording && recordingTarget === 'terrain' && (
@@ -1333,14 +1333,14 @@ export const CommercialDashboard: React.FC = () => {
                   </div>
                   
                   {isRecording && recordingTarget === 'terrain' ? (
-                    <div className="flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-brand-orange/20 to-slate-900 border border-brand-orange/30 p-4 rounded-2xl glass-panel relative overflow-hidden">
-                      <div className="absolute inset-0 bg-brand-orange/5 animate-pulse-slow"></div>
+                    <div className="flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-orange-500/20 to-slate-900 border border-brand-orange/30 p-4 rounded-2xl glass-panel relative overflow-hidden">
+                      <div className="absolute inset-0 bg-orange-500/5 animate-pulse-slow"></div>
                       <div className="flex items-center gap-1.5 h-12 relative z-10">
                         {/* Audio Waveform Effect */}
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                           <div 
                             key={i} 
-                            className="w-1.5 bg-brand-orange rounded-full animate-bounce" 
+                            className="w-1.5 bg-orange-500 rounded-full animate-bounce" 
                             style={{ 
                               height: `${Math.max(10, (i * 17) % 40)}px`, 
                               animationDelay: `${i * 0.1}s`,
@@ -1354,7 +1354,7 @@ export const CommercialDashboard: React.FC = () => {
                       </p>
                       <button
                         onClick={stopRecording}
-                        className="w-full py-2.5 bg-brand-orange hover:bg-brand-orange/90 text-white font-bold text-[10px] rounded-xl uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(255,122,0,0.5)] relative z-10"
+                        className="w-full py-2.5 bg-orange-500 hover:bg-orange-500/90 text-white font-bold text-[10px] rounded-xl uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(255,122,0,0.5)] relative z-10"
                       >
                         Arrêter & Transcrire
                       </button>
@@ -1363,7 +1363,7 @@ export const CommercialDashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => startRecording('terrain')}
-                      className="py-2 bg-slate-50 hover:bg-slate-100 text-brand-orange font-bold text-xs rounded-lg border border-brand-orange/20 flex items-center justify-center gap-1.5 transition-all"
+                      className="py-2 bg-slate-50 hover:bg-slate-100 text-orange-600 font-bold text-xs rounded-lg border border-orange-200 flex items-center justify-center gap-1.5 transition-all"
                     >
                       <Mic className="w-3.5 h-3.5" />
                       <span>Dicter mon rapport de visite</span>
@@ -1377,13 +1377,13 @@ export const CommercialDashboard: React.FC = () => {
                   placeholder="Rapport du passage physique (signature de devis, présentation échantillon...)"
                   value={terrainNotes}
                   onChange={(e) => setTerrainNotes(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
                 />
 
                 <button
                   onClick={saveTerrainCheckin}
                   disabled={gpsLoading || isRecording}
-                  className="w-full py-2.5 rounded-xl bg-brand-orange hover:bg-brand-orange/95 text-white font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 rounded-xl bg-orange-500 hover:bg-orange-500/95 text-white font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-1.5"
                 >
                   {gpsLoading ? (
                     <>
@@ -1402,7 +1402,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Reply to Inbox Message Modal */}
       {selectedInboxMessage && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xl flex flex-col gap-4 text-left">
             <div className="flex justify-between items-start border-b border-slate-200 pb-2">
               <div>
@@ -1411,13 +1411,13 @@ export const CommercialDashboard: React.FC = () => {
               </div>
               <button 
                 onClick={() => setSelectedInboxMessage(null)}
-                className="p-1 rounded bg-slate-955 text-slate-400 hover:text-slate-900"
+                className="p-1 rounded bg-white text-slate-400 hover:text-slate-900"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-3 bg-slate-950 border border-slate-850 rounded-xl text-xs text-slate-600 italic leading-relaxed">
+            <div className="p-3 bg-white border border-slate-850 rounded-xl text-xs text-slate-600 italic leading-relaxed">
               "{selectedInboxMessage.body}"
             </div>
 
@@ -1428,11 +1428,11 @@ export const CommercialDashboard: React.FC = () => {
                 placeholder="Écrivez votre réponse..."
                 value={inboxReplyText}
                 onChange={(e) => setInboxReplyText(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                className="w-full p-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
               />
               <button
                 type="submit"
-                className="w-full py-2 rounded-xl bg-brand-orange text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+                className="w-full py-2 rounded-xl bg-orange-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Envoyer la réponse</span>
@@ -1444,7 +1444,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Client Detail Modal with Submodules */}
       {selectedClientForModal && (
-        <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-slate-50 border border-slate-200 rounded-3xl p-5 shadow-2xl flex flex-col gap-4 text-left max-h-[85vh] overflow-y-auto scrollbar-none">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
@@ -1453,7 +1453,7 @@ export const CommercialDashboard: React.FC = () => {
               </div>
               <button 
                 onClick={() => setSelectedClientForModal(null)}
-                className="p-1.5 rounded-lg bg-slate-950 border border-slate-850 hover:bg-slate-100 text-slate-400"
+                className="p-1.5 rounded-lg bg-white border border-slate-850 hover:bg-slate-100 text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1461,7 +1461,7 @@ export const CommercialDashboard: React.FC = () => {
 
             {/* Contacts Submodule */}
             <div className="border-t border-slate-200/60 pt-3">
-              <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5" />
                 <span>Contacts secondaires</span>
               </h4>
@@ -1470,7 +1470,7 @@ export const CommercialDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400 italic">Aucun contact enregistré.</p>
                 ) : (
                   contacts.filter(c => c.client_id === selectedClientForModal.id).map(c => (
-                    <div key={c.id} className="p-2 rounded-lg bg-slate-955 border border-slate-850 text-[10px] flex justify-between items-center">
+                    <div key={c.id} className="p-2 rounded-lg bg-white border border-slate-850 text-[10px] flex justify-between items-center">
                       <div>
                         <span className="font-extrabold text-slate-800">{c.name}</span>
                         <span className="text-slate-455 ml-1.5">({c.role})</span>
@@ -1483,17 +1483,17 @@ export const CommercialDashboard: React.FC = () => {
               <form onSubmit={handleAddContactSubmit} className="grid grid-cols-2 gap-2 mt-2">
                 <input 
                   type="text" required placeholder="Nom" value={contactName} onChange={e => setContactName(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <input 
                   type="text" placeholder="Poste/Role" value={contactRole} onChange={e => setContactRole(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <input 
                   type="tel" required placeholder="Téléphone" value={contactPhone} onChange={e => setContactPhone(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800 col-span-2"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800 col-span-2"
                 />
-                <button type="submit" className="col-span-2 py-1.5 rounded bg-brand-emerald text-white text-[10px] font-bold">
+                <button type="submit" className="col-span-2 py-1.5 rounded bg-emerald-500 text-white text-[10px] font-bold">
                   + Ajouter Contact
                 </button>
               </form>
@@ -1501,7 +1501,7 @@ export const CommercialDashboard: React.FC = () => {
 
             {/* Transactions Submodule */}
             <div className="border-t border-slate-200/60 pt-3">
-              <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <ClipboardList className="w-3.5 h-3.5" />
                 <span>Transactions (Deals)</span>
               </h4>
@@ -1510,10 +1510,10 @@ export const CommercialDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400 italic">Aucun deal en cours.</p>
                 ) : (
                   transactions.filter(t => t.client_id === selectedClientForModal.id).map(t => (
-                    <div key={t.id} className="p-2 rounded-lg bg-slate-955 border border-slate-850 text-[10px] flex justify-between items-center">
+                    <div key={t.id} className="p-2 rounded-lg bg-white border border-slate-850 text-[10px] flex justify-between items-center">
                       <div>
                         <span className="font-extrabold text-slate-800 truncate block max-w-[150px]">{t.title}</span>
-                        <span className="text-[9px] text-brand-orange">{t.amount.toLocaleString()} FCFA</span>
+                        <span className="text-[9px] text-orange-600">{t.amount.toLocaleString()} FCFA</span>
                       </div>
                       <select 
                         value={t.stage}
@@ -1534,16 +1534,16 @@ export const CommercialDashboard: React.FC = () => {
               <form onSubmit={handleAddTransactionSubmit} className="flex flex-col gap-2 mt-2">
                 <input 
                   type="text" required placeholder="Titre opportunité" value={dealTitle} onChange={e => setDealTitle(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <input 
                     type="number" required placeholder="Montant (FCFA)" value={dealAmount} onChange={e => setDealAmount(e.target.value)}
-                    className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                    className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                   />
                   <select 
                     value={dealStage} onChange={e => setDealStage(e.target.value as never)}
-                    className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-600"
+                    className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-600"
                   >
                     <option value="contact">Contact</option>
                     <option value="presentation">Présentation</option>
@@ -1551,7 +1551,7 @@ export const CommercialDashboard: React.FC = () => {
                     <option value="negotiation">Négociation</option>
                   </select>
                 </div>
-                <button type="submit" className="py-1.5 rounded bg-brand-emerald text-white text-[10px] font-bold">
+                <button type="submit" className="py-1.5 rounded bg-emerald-500 text-white text-[10px] font-bold">
                   + Créer Deal
                 </button>
               </form>
@@ -1559,7 +1559,7 @@ export const CommercialDashboard: React.FC = () => {
 
             {/* Commandes Submodule */}
             <div className="border-t border-slate-200/60 pt-3">
-              <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <CheckSquare className="w-3.5 h-3.5" />
                 <span>Commandes & Livraisons</span>
               </h4>
@@ -1568,14 +1568,14 @@ export const CommercialDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400 italic">Aucune commande enregistrée.</p>
                 ) : (
                   orders.filter(o => o.client_id === selectedClientForModal.id).map(o => (
-                    <div key={o.id} className="p-2 rounded-lg bg-slate-955 border border-slate-850 text-[9px] flex justify-between items-center">
+                    <div key={o.id} className="p-2 rounded-lg bg-white border border-slate-850 text-[9px] flex justify-between items-center">
                       <div>
                         <span className="font-extrabold text-slate-700 block truncate max-w-[120px]">{o.items}</span>
-                        <span className="text-brand-orange font-bold">{o.total_amount.toLocaleString()} FCFA</span>
+                        <span className="text-orange-600 font-bold">{o.total_amount.toLocaleString()} FCFA</span>
                       </div>
                       <div className="flex flex-col gap-0.5 items-end">
                         <span className={`px-1 rounded text-[7px] font-black uppercase ${
-                          o.payment_status === 'paid' ? 'bg-brand-emerald/10 text-brand-emerald' : 'bg-red-500/10 text-red-400'
+                          o.payment_status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
                         }`}>{o.payment_status}</span>
                         <span className="text-[7px] text-slate-400">{o.delivery_status}</span>
                       </div>
@@ -1586,13 +1586,13 @@ export const CommercialDashboard: React.FC = () => {
               <form onSubmit={handleAddOrderSubmit} className="grid grid-cols-2 gap-2 mt-2">
                 <input 
                   type="text" required placeholder="Articles (ex: Licence x2)" value={orderItems} onChange={e => setOrderItems(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <input 
                   type="number" required placeholder="Total (FCFA)" value={orderAmount} onChange={e => setOrderAmount(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
-                <button type="submit" className="col-span-2 py-1.5 rounded bg-brand-emerald text-white text-[10px] font-bold">
+                <button type="submit" className="col-span-2 py-1.5 rounded bg-emerald-500 text-white text-[10px] font-bold">
                   + Créer Commande
                 </button>
               </form>
@@ -1600,7 +1600,7 @@ export const CommercialDashboard: React.FC = () => {
 
             {/* Tickets SAV Submodule */}
             <div className="border-t border-slate-200/60 pt-3">
-              <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <HeartHandshake className="w-3.5 h-3.5" />
                 <span>Tickets SAV</span>
               </h4>
@@ -1609,7 +1609,7 @@ export const CommercialDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400 italic">Aucun ticket ouvert.</p>
                 ) : (
                   tickets.filter(t => t.client_id === selectedClientForModal.id).map(t => (
-                    <div key={t.id} className="p-2 rounded-lg bg-slate-955 border border-slate-850 text-[10px] flex justify-between items-center">
+                    <div key={t.id} className="p-2 rounded-lg bg-white border border-slate-850 text-[10px] flex justify-between items-center">
                       <div>
                         <span className="font-extrabold text-slate-800">{t.subject}</span>
                         <span className="text-[9px] text-slate-400 block">Priorité: {t.priority}</span>
@@ -1630,13 +1630,13 @@ export const CommercialDashboard: React.FC = () => {
               <form onSubmit={handleAddTicketSubmit} className="flex flex-col gap-2 mt-2">
                 <input 
                   type="text" required placeholder="Sujet de l'anomalie" value={ticketSubject} onChange={e => setTicketSubject(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <textarea 
                   rows={2} placeholder="Description du problème..." value={ticketDesc} onChange={e => setTicketDesc(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
-                <button type="submit" className="py-1.5 rounded bg-brand-emerald text-white text-[10px] font-bold">
+                <button type="submit" className="py-1.5 rounded bg-emerald-500 text-white text-[10px] font-bold">
                   + Ouvrir Ticket
                 </button>
               </form>
@@ -1644,30 +1644,30 @@ export const CommercialDashboard: React.FC = () => {
 
             {/* Agenda Meeting Submodule */}
             <div className="border-t border-slate-200/60 pt-3">
-              <h4 className="text-xs font-bold text-brand-orange uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-orange-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>Planifier un RDV / Réunion</span>
               </h4>
               <form onSubmit={handleAddMeetingSubmit} className="flex flex-col gap-2">
                 <input 
                   type="text" required placeholder="Titre de la réunion (ex: Démo)" value={meetTitle} onChange={e => setMeetTitle(e.target.value)}
-                  className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-800"
+                  className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-800"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <input 
                     type="datetime-local" required value={meetDate} onChange={e => setMeetDate(e.target.value)}
-                    className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-600"
+                    className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-600"
                   />
                   <select 
                     value={meetType} onChange={e => setMeetType(e.target.value as never)}
-                    className="p-2 bg-slate-950 border border-slate-855 rounded-lg text-[10px] text-slate-600"
+                    className="p-2 bg-white border border-slate-855 rounded-lg text-[10px] text-slate-600"
                   >
                     <option value="appel">Téléphone</option>
                     <option value="terrain">Visite Terrain</option>
                     <option value="demo">Démo Visio</option>
                   </select>
                 </div>
-                <button type="submit" className="py-1.5 rounded bg-brand-orange text-white text-[10px] font-bold">
+                <button type="submit" className="py-1.5 rounded bg-orange-500 text-white text-[10px] font-bold">
                   + Planifier Réunion
                 </button>
               </form>
@@ -1678,11 +1678,11 @@ export const CommercialDashboard: React.FC = () => {
       )}
 
       {/* Bottom Navigation Bar */}
-      <nav className="absolute bottom-0 left-0 w-full bg-slate-950 border-t border-[#1e293b]/70 py-2.5 px-2 grid grid-cols-8 gap-0.5 z-40">
+      <nav className="absolute bottom-0 left-0 w-full bg-white border-t border-[#1e293b]/70 py-2.5 px-2 grid grid-cols-8 gap-0.5 z-40">
         <button
           onClick={() => setActiveTab('prospects')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'prospects' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'prospects' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <Search className="w-4 h-4 mb-0.5" />
@@ -1692,7 +1692,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('sales')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'sales' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'sales' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <ShoppingCart className="w-4 h-4 mb-0.5" />
@@ -1702,7 +1702,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('add')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'add' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'add' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <Plus className="w-4 h-4 mb-0.5" />
@@ -1712,7 +1712,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('agenda')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'agenda' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'agenda' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <Calendar className="w-4 h-4 mb-0.5" />
@@ -1722,20 +1722,20 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('inbox')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors relative ${
-            activeTab === 'inbox' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'inbox' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <Mail className="w-4 h-4 mb-0.5" />
           <span>Inbox</span>
           {inboxMessages.filter(m => !m.is_read).length > 0 && (
-            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-brand-orange" />
+            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-orange-500" />
           )}
         </button>
 
         <button 
             onClick={() => setActiveTab('map')}
             className={`flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'map' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'map' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}>
             <MapPin className="w-5 h-5 mb-1" />
             <span className="text-[8px] font-bold uppercase tracking-widest">Carte</span>
@@ -1744,7 +1744,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('history')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'history' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'history' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <MapPin className="w-4 h-4 mb-0.5" />
@@ -1754,7 +1754,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('playbook')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'playbook' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'playbook' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <BookOpen className="w-4 h-4 mb-0.5" />
@@ -1764,7 +1764,7 @@ export const CommercialDashboard: React.FC = () => {
         <button
           onClick={() => setActiveTab('leaderboard')}
           className={`flex flex-col items-center justify-center text-[7.5px] font-extrabold uppercase tracking-wide transition-colors ${
-            activeTab === 'leaderboard' ? 'text-brand-orange' : 'text-slate-400 hover:text-slate-600'
+            activeTab === 'leaderboard' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-600'
           }`}
         >
           <Trophy className="w-4 h-4 mb-0.5" />
@@ -1775,19 +1775,19 @@ export const CommercialDashboard: React.FC = () => {
   );
 
   return (
-    <div className={`min-h-screen text-slate-900 flex items-center justify-center bg-slate-950 ${isDesktop ? 'p-8' : ''}`}>
+    <div className={`min-h-screen text-slate-900 flex items-center justify-center bg-white ${isDesktop ? 'p-8' : ''}`}>
       {isDesktop ? (
         <div className="max-w-6xl w-full grid grid-cols-12 gap-8 items-center">
           {/* Companion Left Panel */}
           <div className="col-span-7 flex flex-col gap-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-semibold w-fit border border-brand-orange/20 tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 text-orange-600 text-xs font-semibold w-fit border border-orange-200 tracking-wider">
               💼 COMPAGNON DE BUREAU - WARA SPACE
             </div>
 
             <div className="flex flex-col gap-1.5">
               <h2 className="text-3xl font-extrabold text-slate-900 !my-0">
                 Espace Commercial de <br />
-                <span className="text-brand-orange">{user?.name}</span>
+                <span className="text-orange-600">{user?.name}</span>
               </h2>
               <p className="text-sm text-slate-400">
                 Visualisez vos performances de terrain, gérez vos deals commerciaux, planifiez vos visites et répondez aux messages de vos clients.
@@ -1802,17 +1802,17 @@ export const CommercialDashboard: React.FC = () => {
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Deals Actifs</span>
-                <span className="text-2xl font-black text-brand-orange block mt-1">
+                <span className="text-2xl font-black text-orange-600 block mt-1">
                   {transactions.filter(t => t.stage !== 'won' && t.stage !== 'lost').length}
                 </span>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Réunions</span>
-                <span className="text-2xl font-black text-blue-400 block mt-1">{meetings.filter(m => m.assigned_to === user?.id).length}</span>
+                <span className="text-2xl font-black text-blue-600 block mt-1">{meetings.filter(m => m.assigned_to === user?.id).length}</span>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Visites</span>
-                <span className="text-2xl font-black text-brand-emerald block mt-1">{countInteractionsByType('terrain')}</span>
+                <span className="text-2xl font-black text-emerald-600 block mt-1">{countInteractionsByType('terrain')}</span>
               </div>
             </div>
 
@@ -1831,7 +1831,7 @@ export const CommercialDashboard: React.FC = () => {
             <div className="flex gap-4">
               <button
                 onClick={logout}
-                className="px-5 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-555/20 text-red-400 text-xs font-bold border border-red-500/20 flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-red-50 hover:bg-red-555/20 text-red-600 text-xs font-bold border border-red-200 flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Déconnexion</span>
@@ -1842,7 +1842,7 @@ export const CommercialDashboard: React.FC = () => {
           {/* Phone Frame App Interface */}
           <div className="col-span-5 flex justify-center">
             <div className="relative">
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-6 rounded-full bg-slate-950 z-40 border border-slate-855 flex items-center justify-center pointer-events-none">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-6 rounded-full bg-white z-40 border border-slate-855 flex items-center justify-center pointer-events-none">
                 <div className="w-12 h-1 bg-slate-100 rounded-full" />
               </div>
               {mobileInterface}
@@ -1855,7 +1855,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Offline Queue Inspector Drawer */}
       {isQueueDrawerOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left shadow-2xl flex flex-col gap-4 animate-toast-slide-in">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
@@ -1864,7 +1864,7 @@ export const CommercialDashboard: React.FC = () => {
               </div>
               <button 
                 onClick={() => setIsQueueDrawerOpen(false)}
-                className="p-1 rounded bg-slate-950 border border-slate-850 hover:bg-slate-100 text-slate-400"
+                className="p-1 rounded bg-white border border-slate-850 hover:bg-slate-100 text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1873,22 +1873,22 @@ export const CommercialDashboard: React.FC = () => {
             <div className="flex flex-col gap-2.5 max-h-60 overflow-y-auto pr-1">
               {offlineActions.length === 0 ? (
                 <div className="py-8 flex flex-col items-center justify-center gap-3 text-slate-400">
-                  <CheckCircle2 className="w-8 h-8 text-brand-emerald opacity-50" />
+                  <CheckCircle2 className="w-8 h-8 text-emerald-600 opacity-50" />
                   <p className="text-xs font-medium">Toutes vos données sont synchronisées.</p>
                 </div>
               ) : (
                 offlineActions.map((act) => (
                   <div key={act.id} className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/50 flex items-center justify-between shadow-sm relative overflow-hidden group">
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-orange group-hover:w-1.5 transition-all"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-orange-500 group-hover:w-1.5 transition-all"></div>
                     <div className="pl-2">
-                      <span className="font-extrabold text-brand-orange uppercase text-[10px] tracking-wider block">
+                      <span className="font-extrabold text-orange-600 uppercase text-[10px] tracking-wider block">
                         {act.actionType.replace(/_/g, ' ')}
                       </span>
                       <span className="text-slate-400 text-[10px] font-medium mt-0.5 block">
                         Enregistré à {new Date(act.timestamp).toLocaleTimeString()}
                       </span>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-brand-orange/10 text-brand-orange text-[9px] font-bold border border-brand-orange/20">
+                    <span className="px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 text-[9px] font-bold border border-orange-200">
                       En attente réseau
                     </span>
                   </div>
@@ -1902,7 +1902,7 @@ export const CommercialDashboard: React.FC = () => {
                 setIsQueueDrawerOpen(false);
               }}
               disabled={offlineActions.length === 0}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-orange to-brand-emerald hover:opacity-90 text-white font-black text-[11px] uppercase tracking-widest shadow-lg transition-all disabled:opacity-30 disabled:grayscale"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-brand-emerald hover:opacity-90 text-white font-black text-[11px] uppercase tracking-widest shadow-lg transition-all disabled:opacity-30 disabled:grayscale"
             >
               Forcer la Synchronisation
             </button>

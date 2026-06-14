@@ -4,11 +4,14 @@ import { ArrowLeft, Mail, Lock, LogIn, Sparkles, ShieldCheck, Zap, BarChart3, Da
 import { INDUSTRIES } from '../config/industries';
 
 interface LoginProps {
+  isAdmin?: boolean;
   onBack: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ onBack }) => {
+export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const [isSignup, setIsSignup] = useState(false);
+  const [otpPending, setOtpPending] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
   
   // Login fields
   const [email, setEmail] = useState('');
@@ -21,24 +24,30 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
 
   const login = useAuthStore((state) => state.login);
   const signup = useAuthStore((state) => state.signup);
+  const verifyOtp = useAuthStore((state: any) => state.verifyOtp);
   const isLoading = useAuthStore((state) => state.isLoading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (otpPending) {
+      if (!otpCode) return;
+      const success = await verifyOtp(email, otpCode);
+      if (success) setOtpPending(false);
+      return;
+    }
     if (isSignup) {
       if (!email || !password || !name || !orgName) return;
-      await signup(email, password, name, orgName, industryCategory);
+      const res = await signup(email, password, name, orgName, industryCategory);
+      if (res?.requiresOtp) {
+        setOtpPending(true);
+      }
     } else {
       if (!email) return;
       await login(email, password || undefined);
     }
   };
 
-  const handleQuickFill = (demoEmail: string) => {
-    setIsSignup(false);
-    setEmail(demoEmail);
-    setPassword('DjagoAdmin2026!');
-  };
+  
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex relative overflow-hidden">
@@ -115,17 +124,19 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
         <div className="w-full max-w-[420px] mt-12 lg:mt-0">
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-              {isSignup ? "Créer un espace" : "Accès Sécurisé"}
+              {otpPending ? "Vérification requise" : isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
             </h2>
             <p className="text-slate-500 text-sm">
-              {isSignup 
-                ? "Configurez le CRM pour votre entreprise en 2 minutes." 
-                : "Connectez-vous pour accéder à votre espace de travail."}
+              {otpPending 
+                ? "Veuillez entrer le code de vérification à 6 chiffres envoyé à votre adresse e-mail."
+                : isSignup 
+                  ? "Configurez le CRM pour votre entreprise en 2 minutes." 
+                  : "Connectez-vous pour accéder à votre espace de travail."}
             </p>
           </div>
 
           {/* Toggle Login/Signup */}
-          <div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
+          {!isAdmin && !otpPending && (<div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
             <button 
               onClick={() => setIsSignup(false)}
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${!isSignup ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -138,11 +149,11 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
             >
               Inscription
             </button>
-          </div>
+          </div>)}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
-            {isSignup && (
+            {!otpPending && isSignup && (
               <>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom Complet</label>
@@ -189,7 +200,7 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
               </>
             )}
 
-            <div className="flex flex-col gap-1.5 mt-2">
+            {!otpPending && (<div className="flex flex-col gap-1.5 mt-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Adresse e-mail</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
@@ -202,9 +213,9 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                 />
               </div>
-            </div>
+            </div>)}
 
-            <div className="flex flex-col gap-1.5">
+            {!otpPending && (<div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
                 {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
@@ -220,8 +231,25 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                 />
               </div>
-            </div>
+            </div>)}
 
+            {otpPending && (
+              <div className="flex flex-col gap-1.5 mt-4">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1 text-center">Code PIN de Vérification</label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
+                  <input
+                    type="text"
+                    placeholder="Ex: 123456"
+                    value={otpCode}
+                    onChange={(e) => setOtpCode(e.target.value)}
+                    required
+                    maxLength={6}
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white border-2 border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange text-center text-2xl font-bold tracking-[0.5em] transition-all shadow-sm"
+                  />
+                </div>
+              </div>
+            )}
             <button
               type="submit"
               disabled={isLoading}
@@ -234,47 +262,13 @@ export const Login: React.FC<LoginProps> = ({ onBack }) => {
                 </span>
               ) : (
                 <>
-                  {isSignup ? "Créer mon Espace" : "Se Connecter"} {isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                  {otpPending ? "Vérifier le code" : isSignup ? "Créer mon Espace" : "Se Connecter"} {otpPending ? <ShieldCheck className="w-5 h-5" /> : isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
                 </>
               )}
             </button>
           </form>
 
-          {/* Quick Demo selector (Only in Login mode) */}
-          {!isSignup && (
-            <>
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-slate-200"></div>
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="px-4 bg-slate-50 text-slate-400 uppercase font-bold tracking-widest">
-                    Accès Super Admin
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-6 flex flex-col gap-3">
-                <button
-                  onClick={() => handleQuickFill('soroboss.bossimpact@gmail.com')}
-                  className="w-full group flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200 hover:border-brand-orange/40 text-left transition-all cursor-pointer shadow-sm hover:shadow-brand-orange/10"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center border border-brand-orange/20 group-hover:scale-110 transition-transform">
-                      <ShieldCheck className="w-5 h-5 text-brand-orange" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-slate-800">Soro Nagony Adama</div>
-                      <div className="text-sm text-slate-500">soroboss.bossimpact@gmail.com</div>
-                    </div>
-                  </div>
-                  <div className="px-3 py-1 rounded-full bg-brand-orange/10 border border-brand-orange/20">
-                    <span className="text-[10px] text-brand-orange font-bold uppercase tracking-wider">Connexion</span>
-                  </div>
-                </button>
-              </div>
-            </>
-          )}
+          
         </div>
       </div>
     </div>

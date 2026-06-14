@@ -55,8 +55,8 @@ export const ManagerDashboard: React.FC = () => {
   const [selectedCommercialId, setSelectedCommercialId] = useState('');
 
   // Recruit form state
-  const [newWaraName, setNewWaraName] = useState('');
-  const [newWaraEmail, setNewWaraEmail] = useState('');
+  const [newCommercialName, setNewCommercialName] = useState('');
+  const [newCommercialEmail, setNewCommercialEmail] = useState('');
 
   // Find commercials under this manager
   const teamMembers = team.filter(t => t.manager_id === user?.id && t.role === 'commercial');
@@ -81,20 +81,20 @@ export const ManagerDashboard: React.FC = () => {
     return found ? found.name : 'Inconnu';
   };
 
-  const handleRecruitWara = async (e: React.FormEvent) => {
+  const handleRecruitCommercial = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newWaraName || !newWaraEmail || !user) return;
+    if (!newCommercialName || !newCommercialEmail || !user) return;
 
     await createTeammate(
-      newWaraName,
-      newWaraEmail,
+      newCommercialName,
+      newCommercialEmail,
       'commercial',
       user.zone,
       user.id
     );
 
-    setNewWaraName('');
-    setNewWaraEmail('');
+    setNewCommercialName('');
+    setNewCommercialEmail('');
   };
 
   const handleReassign = async (e: React.FormEvent) => {
@@ -134,12 +134,12 @@ export const ManagerDashboard: React.FC = () => {
         <div className="flex flex-col gap-8">
           {/* Logo & Info */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-orange to-brand-emerald flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-brand-orange/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-brand-emerald flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-brand-orange/20">
               DJ
             </div>
             <div className="text-left">
               <h2 className="text-lg font-black text-slate-900 leading-tight">DjagoCRM</h2>
-              <span className="text-[10px] bg-brand-emerald/15 text-brand-emerald px-2 py-0.5 rounded font-bold uppercase tracking-wider">Manager</span>
+              <span className="text-[10px] bg-emerald-500/15 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider">Manager</span>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('team')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'team'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -168,7 +168,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('reporting')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'reporting'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -180,7 +180,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('orders')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'orders'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -192,7 +192,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('segments')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'segments'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -204,7 +204,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('kanban')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'kanban'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -216,7 +216,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('feed')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'feed'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -228,7 +228,7 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('reassign')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'reassign'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -240,19 +240,19 @@ export const ManagerDashboard: React.FC = () => {
               onClick={() => setActiveTab('recruit')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'recruit'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
               <Plus className="w-4 h-4" />
-              <span>Recruter un Wara</span>
+              <span>Recruter un Commercial</span>
             </button>
 
             <button
               onClick={() => setActiveTab('templates')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'templates'
-                  ? 'bg-brand-emerald text-slate-900 shadow-md'
+                  ? 'bg-emerald-500 text-slate-900 shadow-md'
                   : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
               }`}
             >
@@ -269,7 +269,7 @@ export const ManagerDashboard: React.FC = () => {
           </div>
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 border border-slate-200 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 text-sm font-bold text-slate-700 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 border border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-sm font-bold text-slate-700 transition-all cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>Se Déconnecter</span>
@@ -280,7 +280,7 @@ export const ManagerDashboard: React.FC = () => {
       {/* Top Header for Mobile */}
       <header className="md:hidden bg-white border-b border-slate-200/60 px-4 py-3 sticky top-0 z-35 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-orange to-brand-emerald flex items-center justify-center font-black text-white text-md">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-orange-500 to-brand-emerald flex items-center justify-center font-black text-white text-md">
             DJ
           </div>
           <span className="text-md font-bold text-slate-900">DjagoCRM MGR</span>
@@ -289,7 +289,7 @@ export const ManagerDashboard: React.FC = () => {
           <NetworkBadge />
           <button
             onClick={logout}
-            className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-400"
+            className="p-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:text-red-600"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -303,7 +303,7 @@ export const ManagerDashboard: React.FC = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all uppercase ${
-              activeTab === tab ? 'bg-brand-emerald text-slate-900' : 'text-slate-400 bg-slate-950/30'
+              activeTab === tab ? 'bg-emerald-500 text-slate-900' : 'text-slate-400 bg-white/30'
             }`}
           >
             {tab === 'team' ? 'Équipe' : tab === 'reporting' ? 'Rapports' : tab === 'orders' ? 'Commandes' : tab === 'segments' ? 'Segments' : tab}
@@ -323,7 +323,7 @@ export const ManagerDashboard: React.FC = () => {
             {activeTab === 'kanban' && "Pipeline Kanban de Zone"}
             {activeTab === 'feed' && "Activité de Zone en Direct"}
             {activeTab === 'reassign' && "Réassignations de Portefeuille"}
-            {activeTab === 'recruit' && "Recruter un Wara"}
+            {activeTab === 'recruit' && "Recruter un Commercial"}
             {activeTab === 'templates' && "Modèles WhatsApp de Zone"}
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1">
@@ -334,7 +334,7 @@ export const ManagerDashboard: React.FC = () => {
             {activeTab === 'kanban' && "Visualisez et déplacez vos prospects dans le pipeline de vente régional."}
             {activeTab === 'feed' && "Flux d'activité en temps réel pour vos commerciaux terrain de la zone."}
             {activeTab === 'reassign' && "Réaffectez rapidement un client d'un commercial à un autre en cas de besoin."}
-            {activeTab === 'recruit' && "Ajoutez de nouveaux commerciaux ('Waras') directement sous votre responsabilité."}
+            {activeTab === 'recruit' && "Ajoutez de nouveaux commerciaux ('Commerciaux') directement sous votre responsabilité."}
             {activeTab === 'templates' && "Consultez et ajustez les modèles de relance WhatsApp pour votre équipe."}
           </p>
         </div>
@@ -343,43 +343,43 @@ export const ManagerDashboard: React.FC = () => {
           <div className="flex flex-col gap-8 text-left animate-fade-in">
             {/* Supervision KPIs */}
             <div className="grid sm:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Contrats de l'Équipe</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {teamTotalRevenue.toLocaleString()} <span className="text-sm font-bold text-brand-emerald">FCFA</span>
+                    {teamTotalRevenue.toLocaleString()} <span className="text-sm font-bold text-emerald-600">FCFA</span>
                   </h3>
-                  <p className="text-[10px] text-brand-emerald font-semibold mt-1">
+                  <p className="text-[10px] text-emerald-600 font-semibold mt-1">
                     {teamOrders.length} commande(s) ({teamPaidOrders.length} payée(s))
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-brand-emerald/10 text-brand-emerald flex items-center justify-center border border-brand-emerald/20">
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
                   <DollarSign className="w-6 h-6" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Ma Commission (1.5%)</span>
-                  <h3 className="text-2xl font-black text-brand-orange mt-1.5 font-mono">
-                    {supervisionCommission.toLocaleString()} <span className="text-sm font-bold text-brand-orange">FCFA</span>
+                  <h3 className="text-2xl font-black text-orange-600 mt-1.5 font-mono">
+                    {supervisionCommission.toLocaleString()} <span className="text-sm font-bold text-orange-600">FCFA</span>
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Calculée automatiquement en supervision</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-brand-orange/10 text-brand-orange flex items-center justify-center border border-brand-orange/20">
+                <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-200">
                   <Award className="w-6 h-6" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Commerciaux Actifs</span>
                   <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {teamMembers.length} <span className="text-sm font-bold text-slate-400">Waras</span>
+                    {teamMembers.length} <span className="text-sm font-bold text-slate-400">Commerciaux</span>
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Affectés sur la zone {user?.zone}</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
                   <Users className="w-6 h-6" />
                 </div>
               </div>
@@ -393,13 +393,13 @@ export const ManagerDashboard: React.FC = () => {
                   <p className="text-[10px] text-slate-400">Objectif mensuel de l'équipe fixé à 10 000 000 FCFA</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-md font-black text-brand-emerald">
+                  <span className="text-md font-black text-emerald-600">
                     {Math.min(Math.round((teamTotalRevenue / 10000000) * 100), 100)}%
                   </span>
                   <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block">Atteint</p>
                 </div>
               </div>
-              <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-white overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-brand-emerald to-teal-400 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min((teamTotalRevenue / 10000000) * 100, 100)}%` }}
@@ -416,14 +416,14 @@ export const ManagerDashboard: React.FC = () => {
               <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-3">
                 <div className="flex justify-between items-center">
                   <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">⚡ Vitesse Opérationnelle Locale</h4>
-                  <span className="text-[10px] bg-brand-emerald/15 text-brand-emerald px-2 py-0.5 rounded font-black">94.2% SLA</span>
+                  <span className="text-[10px] bg-emerald-500/15 text-white px-2 py-0.5 rounded font-black">94.2% SLA</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-slate-950/45 p-3 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3 rounded-xl border border-slate-850">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Livraison Moyenne</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">38 minutes</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3 rounded-xl border border-slate-850">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Closing de Deals</span>
                     <span className="text-xs font-black text-slate-800 block mt-1">9.5 jours</span>
                   </div>
@@ -432,23 +432,23 @@ export const ManagerDashboard: React.FC = () => {
               <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-3">
                 <div className="flex justify-between items-center">
                   <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">🧠 Performance & Intelligence</h4>
-                  <span className="text-[10px] bg-brand-orange/15 text-brand-orange px-2 py-0.5 rounded font-black">Score : A+</span>
+                  <span className="text-[10px] bg-orange-500/15 text-white px-2 py-0.5 rounded font-black">Score : A+</span>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-slate-950/45 p-3 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3 rounded-xl border border-slate-850">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Conversion Segments</span>
-                    <span className="text-xs font-black text-brand-orange block mt-1">74.2%</span>
+                    <span className="text-xs font-black text-orange-600 block mt-1">74.2%</span>
                   </div>
-                  <div className="bg-slate-950/45 p-3 rounded-xl border border-slate-850">
+                  <div className="bg-white/45 p-3 rounded-xl border border-slate-850">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Taux d'automatisation</span>
-                    <span className="text-xs font-black text-brand-emerald block mt-1">82.5%</span>
+                    <span className="text-xs font-black text-emerald-600 block mt-1">82.5%</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Team Clients table */}
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
               <h3 className="text-lg font-bold text-slate-900 mb-4">Portefeuille Clients de la Zone</h3>
               {teamClients.length === 0 ? (
                 <p className="text-sm text-slate-400 py-6 text-center">Aucun client enregistré dans votre zone.</p>
@@ -468,11 +468,11 @@ export const ManagerDashboard: React.FC = () => {
                     <tbody>
                       {teamClients.map((client) => {
                         let statusBadge = 'bg-slate-100 text-slate-700';
-                        if (client.status === 'Prospect') statusBadge = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                        if (client.status === 'Négociation') statusBadge = 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
-                        if (client.status === 'Vendu') statusBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-                        if (client.status === 'En cours de livraison') statusBadge = 'bg-teal-500/10 text-teal-400 border border-teal-500/20';
-                        if (client.status === 'Livré & Adopté') statusBadge = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
+                        if (client.status === 'Prospect') statusBadge = 'bg-blue-50 text-blue-600 border border-blue-200';
+                        if (client.status === 'Négociation') statusBadge = 'bg-amber-50 text-amber-600 border border-amber-200';
+                        if (client.status === 'Vendu') statusBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
+                        if (client.status === 'En cours de livraison') statusBadge = 'bg-teal-50 text-teal-600 border border-teal-200';
+                        if (client.status === 'Livré & Adopté') statusBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
 
                         return (
                           <tr key={client.id} className="border-b border-slate-850 hover:bg-slate-50/30">
@@ -488,7 +488,7 @@ export const ManagerDashboard: React.FC = () => {
                             <td className="py-3 px-4 text-right">
                               <button
                                 onClick={() => setSelectedClientForModal(client)}
-                                className="p-1.5 rounded-lg bg-slate-100 border border-slate-200/60 hover:bg-brand-emerald/20 hover:text-brand-emerald text-slate-700 transition-all"
+                                className="p-1.5 rounded-lg bg-slate-100 border border-slate-200/60 hover:bg-emerald-500/20 hover:text-white text-white transition-all"
                               >
                                 <Eye className="w-4 h-4" />
                               </button>
@@ -508,27 +508,27 @@ export const ManagerDashboard: React.FC = () => {
         {activeTab === 'reporting' && (
           <div className="flex flex-col gap-6 text-left animate-fade-in">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200">
+              <div className="p-5 rounded-2xl bg-white/45 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Deals Régionaux</span>
                 <span className="text-2xl font-black text-slate-900 block mt-1">
                   {transactions.filter(t => teamIds.includes(t.assigned_to)).length}
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200">
+              <div className="p-5 rounded-2xl bg-white/45 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Valeur Pipeline</span>
-                <span className="text-2xl font-black text-brand-orange block mt-1">
+                <span className="text-2xl font-black text-orange-600 block mt-1">
                   {transactions.filter(t => teamIds.includes(t.assigned_to) && t.stage !== 'lost' && t.stage !== 'won').reduce((acc, t) => acc + t.amount, 0).toLocaleString()} FCFA
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200">
+              <div className="p-5 rounded-2xl bg-white/45 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">CA Encaissé (Reel)</span>
-                <span className="text-2xl font-black text-brand-emerald block mt-1">
+                <span className="text-2xl font-black text-emerald-600 block mt-1">
                   {teamPaidRevenue.toLocaleString()} FCFA
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-slate-950/45 border border-slate-200">
+              <div className="p-5 rounded-2xl bg-white/45 border border-slate-200">
                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Marge Estimée (78%)</span>
-                <span className="text-2xl font-black text-blue-400 block mt-1 font-mono">
+                <span className="text-2xl font-black text-blue-600 block mt-1 font-mono">
                   {Math.round(teamPaidRevenue * 0.78).toLocaleString()} FCFA
                 </span>
               </div>
@@ -547,9 +547,9 @@ export const ManagerDashboard: React.FC = () => {
                         <span className="uppercase">{stage}</span>
                         <span>{stageDeals.length} Deal(s)</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-white overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-brand-orange to-brand-emerald rounded-full"
+                          className="h-full bg-gradient-to-r from-orange-500 to-brand-emerald rounded-full"
                           style={{ width: `${percentage || 10}%` }}
                         />
                       </div>
@@ -572,7 +572,7 @@ export const ManagerDashboard: React.FC = () => {
                     <div key={member.id} className="flex flex-col items-center flex-1 gap-2 group">
                       <div className="w-full flex justify-center h-full relative items-end group">
                         {/* Tooltip on hover */}
-                        <div className="absolute -top-8 bg-slate-50 border border-slate-200 px-2 py-1 rounded text-[10px] font-bold text-brand-emerald opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
+                        <div className="absolute -top-8 bg-slate-50 border border-slate-200 px-2 py-1 rounded text-[10px] font-bold text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg">
                           {memberRevenue.toLocaleString()} FCFA
                         </div>
                         {/* Bar */}
@@ -593,7 +593,7 @@ export const ManagerDashboard: React.FC = () => {
         {/* Tab: Orders */}
         {activeTab === 'orders' && (
           <div className="flex flex-col gap-6 text-left animate-fade-in">
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
               <h3 className="text-base font-bold text-slate-900 mb-4">Suivi Logistique de Livraison</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -615,10 +615,10 @@ export const ManagerDashboard: React.FC = () => {
                         <tr key={order.id} className="border-b border-slate-850 hover:bg-slate-50/30">
                           <td className="py-3 px-4 font-bold text-slate-900">{order.items}</td>
                           <td className="py-3 px-4 text-slate-600">{client?.name || '—'}</td>
-                          <td className="py-3 px-4 font-mono text-brand-orange">{order.total_amount.toLocaleString()} FCFA</td>
+                          <td className="py-3 px-4 font-mono text-orange-600">{order.total_amount.toLocaleString()} FCFA</td>
                           <td className="py-3 px-4">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${
-                              order.payment_status === 'paid' ? 'bg-brand-emerald/10 text-brand-emerald' : 'bg-red-500/10 text-red-400'
+                              order.payment_status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
                             }`}>{order.payment_status}</span>
                           </td>
                           <td className="py-3 px-4">
@@ -633,7 +633,7 @@ export const ManagerDashboard: React.FC = () => {
                                 setEditDeliveryStatus(order.delivery_status);
                                 setEditDeliveryAgent(order.delivery_agent || '');
                               }}
-                              className="p-1 rounded bg-white border border-slate-200 text-slate-600 hover:text-brand-emerald"
+                              className="p-1 rounded bg-white border border-slate-200 text-slate-600 hover:text-emerald-600"
                             >
                               <Truck className="w-3.5 h-3.5" />
                             </button>
@@ -652,7 +652,7 @@ export const ManagerDashboard: React.FC = () => {
         {activeTab === 'segments' && (
           <div className="grid lg:grid-cols-3 gap-8 text-left animate-fade-in">
             {/* Create segment form */}
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-6">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-6">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Nouveau Segment de Zone</h3>
                 <p className="text-xs text-slate-400">Définissez des filtres pour cibler des prospects régionaux.</p>
@@ -663,7 +663,7 @@ export const ManagerDashboard: React.FC = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase">Nom du segment</label>
                   <input 
                     type="text" required placeholder="Ex: Prospects Chauds Sud" value={segmentName} onChange={e => setSegmentName(e.target.value)}
-                    className="p-2.5 bg-slate-950 border border-slate-200 rounded-xl text-xs text-slate-800"
+                    className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800"
                   />
                 </div>
 
@@ -671,7 +671,7 @@ export const ManagerDashboard: React.FC = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase">Filtre par Statut client</label>
                   <select 
                     value={segmentStatus} onChange={e => setSegmentStatus(e.target.value)}
-                    className="p-2.5 bg-slate-950 border border-slate-200 rounded-xl text-xs text-slate-700"
+                    className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700"
                   >
                     <option value="">Tous les statuts</option>
                     <option value="Prospect">Prospect</option>
@@ -682,27 +682,27 @@ export const ManagerDashboard: React.FC = () => {
                   </select>
                 </div>
 
-                <button type="submit" className="py-2.5 rounded-xl bg-brand-emerald text-white text-xs font-bold mt-2">
+                <button type="submit" className="py-2.5 rounded-xl bg-emerald-500 text-white text-xs font-bold mt-2">
                   + Configurer le Segment
                 </button>
               </form>
             </div>
 
             {/* List segments */}
-            <div className="lg:col-span-2 p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-4">
+            <div className="lg:col-span-2 p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-4">
               <h3 className="text-base font-bold text-slate-900">Mes segments configurés</h3>
               <div className="flex flex-col gap-3">
                 {segments.map((seg) => {
                   const filtered = teamClients.filter(c => !seg.criteria.status || c.status === seg.criteria.status);
                   return (
-                    <div key={seg.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-850 flex items-center justify-between">
+                    <div key={seg.id} className="p-3.5 rounded-xl bg-white border border-slate-850 flex items-center justify-between">
                       <div>
                         <h4 className="text-xs font-extrabold text-slate-900">{seg.name}</h4>
                         <p className="text-[10px] text-slate-400 mt-1">
                           Critères : {seg.criteria.status ? `Statut = ${seg.criteria.status}` : 'Tous les prospects'}
                         </p>
                       </div>
-                      <span className="px-2.5 py-1 rounded bg-brand-emerald/10 text-brand-emerald text-xs font-black">
+                      <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-600 text-xs font-black">
                         {filtered.length} client(s)
                       </span>
                     </div>
@@ -719,26 +719,26 @@ export const ManagerDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 overflow-x-auto pb-4">
               {(['Prospect', 'Négociation', 'Vendu', 'En cours de livraison', 'Livré & Adopté'] as const).map((status) => {
                 const laneClients = teamClients.filter(c => c.status === status);
-                let titleColor = 'text-blue-400';
-                let borderColor = 'border-blue-500/20';
-                let badgeBg = 'bg-blue-500/10';
+                let titleColor = 'text-blue-600';
+                let borderColor = 'border-blue-200';
+                let badgeBg = 'bg-blue-50';
 
                 if (status === 'Négociation') {
-                  titleColor = 'text-amber-400';
+                  titleColor = 'text-amber-600';
                   borderColor = 'border-amber-500/20';
-                  badgeBg = 'bg-amber-400/10';
+                  badgeBg = 'bg-amber-50';
                 } else if (status === 'Vendu') {
-                  titleColor = 'text-brand-orange';
-                  borderColor = 'border-brand-orange/20';
-                  badgeBg = 'bg-brand-orange/10';
+                  titleColor = 'text-orange-600';
+                  borderColor = 'border-orange-200';
+                  badgeBg = 'bg-orange-50';
                 } else if (status === 'En cours de livraison') {
-                  titleColor = 'text-teal-400';
-                  borderColor = 'border-teal-500/20';
-                  badgeBg = 'bg-teal-500/10';
+                  titleColor = 'text-teal-600';
+                  borderColor = 'border-teal-200';
+                  badgeBg = 'bg-teal-50';
                 } else if (status === 'Livré & Adopté') {
-                  titleColor = 'text-brand-emerald';
-                  borderColor = 'border-brand-emerald/20';
-                  badgeBg = 'bg-brand-emerald/10';
+                  titleColor = 'text-emerald-600';
+                  borderColor = 'border-emerald-200';
+                  badgeBg = 'bg-emerald-50';
                 }
 
                 return (
@@ -759,14 +759,14 @@ export const ManagerDashboard: React.FC = () => {
                         laneClients.map(c => {
                           const comm = teamMembers.find(t => t.id === c.assigned_to);
                           return (
-                            <div key={c.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-900 flex flex-col gap-2.5 shadow-sm hover:border-slate-200 transition-all text-left">
+                            <div key={c.id} className="p-3.5 rounded-xl bg-white border border-slate-900 flex flex-col gap-2.5 shadow-sm hover:border-slate-200 transition-all text-left">
                               <div>
                                 <h4 className="text-xs font-bold text-slate-800 truncate">{c.name}</h4>
                                 <p className="text-[10px] text-slate-400 truncate mt-0.5">{c.company || 'Individuel'}</p>
                               </div>
                               
                               <div className="flex justify-between items-center border-t border-slate-900/60 pt-2 text-[9px] text-slate-455 font-semibold">
-                                <span>Wara: {comm?.name || '—'}</span>
+                                <span>Commercial: {comm?.name || '—'}</span>
                               </div>
 
                               <div className="flex justify-between gap-1 mt-1 border-t border-slate-900 pt-2">
@@ -813,7 +813,7 @@ export const ManagerDashboard: React.FC = () => {
         {activeTab === 'feed' && (
           <div className="flex flex-col gap-6 text-left animate-fade-in">
             <div className="flex justify-end mb-2">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-emerald/10 text-brand-emerald text-xs font-bold border border-brand-emerald/20">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-200">
                 <Activity className="w-3.5 h-3.5 animate-pulse" />
                 <span>ZONE FEED</span>
               </div>
@@ -831,22 +831,22 @@ export const ManagerDashboard: React.FC = () => {
                   const comm = teamMembers.find(t => t.id === int.performed_by);
                   
                   let badgeStyle = 'bg-slate-50 text-slate-400';
-                  if (int.type === 'appel') badgeStyle = 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
-                  if (int.type === 'whatsapp') badgeStyle = 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20';
-                  if (int.type === 'terrain') badgeStyle = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
-                  if (int.type === 'statut') badgeStyle = 'bg-amber-400/10 text-amber-400 border border-amber-400/20';
+                  if (int.type === 'appel') badgeStyle = 'bg-blue-50 text-blue-600 border border-blue-200';
+                  if (int.type === 'whatsapp') badgeStyle = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
+                  if (int.type === 'terrain') badgeStyle = 'bg-orange-50 text-orange-600 border border-orange-200';
+                  if (int.type === 'statut') badgeStyle = 'bg-amber-50 text-amber-600 border border-amber-200';
 
                   return (
                     <div key={int.id} className="relative flex flex-col gap-1.5 pb-2 text-left">
-                      <div className="absolute left-[-21px] top-1.5 w-2 h-2 rounded-full bg-brand-emerald ring-4 ring-[#05070c]" />
+                      <div className="absolute left-[-21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-[#05070c]" />
                       
                       <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold">
                         <span>{new Date(int.created_at).toLocaleString()}</span>
                         <span>•</span>
-                        <span className="text-slate-600">{comm?.name || 'Wara'}</span>
+                        <span className="text-slate-600">{comm?.name || 'Commercial'}</span>
                       </div>
 
-                      <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-900 flex items-start gap-4 shadow-md glass-panel">
+                      <div className="p-4 rounded-xl bg-white/60 border border-slate-900 flex items-start gap-4 shadow-md glass-panel">
                         <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold uppercase shrink-0 ${badgeStyle}`}>
                           {int.type}
                         </span>
@@ -855,7 +855,7 @@ export const ManagerDashboard: React.FC = () => {
                             {int.details} {client && <span>concernant <strong>{client.name}</strong> ({client.company || 'Sans entreprise'})</span>}
                           </p>
                           {int.gps_coordinates && (
-                            <p className="text-[10px] text-brand-orange font-bold mt-1.5 flex items-center gap-1">
+                            <p className="text-[10px] text-orange-600 font-bold mt-1.5 flex items-center gap-1">
                               <MapPin className="w-3.5 h-3.5" /> GPS vérifié : {int.gps_coordinates}
                             </p>
                           )}
@@ -870,7 +870,7 @@ export const ManagerDashboard: React.FC = () => {
 
         {/* Tab: Reassign */}
         {activeTab === 'reassign' && (
-          <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 text-left max-w-xl mx-auto shadow-xl animate-fade-in flex flex-col gap-6">
+          <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 text-left max-w-xl mx-auto shadow-xl animate-fade-in flex flex-col gap-6">
             <h3 className="text-base font-bold text-slate-900">Attribution en masse (Bulk Assign)</h3>
             <form onSubmit={handleReassign} className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
@@ -908,9 +908,9 @@ export const ManagerDashboard: React.FC = () => {
                   required
                   value={selectedCommercialId}
                   onChange={(e) => setSelectedCommercialId(e.target.value)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-700"
+                  className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-700"
                 >
-                  <option value="">-- Choisir un Wara --</option>
+                  <option value="">-- Choisir un Commercial --</option>
                   {teamMembers.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name} ({m.zone})
@@ -922,7 +922,7 @@ export const ManagerDashboard: React.FC = () => {
               <button
                 type="submit"
                 disabled={selectedClientIds.length === 0 || !selectedCommercialId}
-                className="w-full mt-2 py-3.5 rounded-xl bg-brand-emerald hover:bg-brand-emerald/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:grayscale"
+                className="w-full mt-2 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-500/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:grayscale"
               >
                 <RefreshCw className="w-4 h-4 animate-spin-slow" />
                 <span>Transférer {selectedClientIds.length} client(s)</span>
@@ -934,17 +934,17 @@ export const ManagerDashboard: React.FC = () => {
         {/* Tab: Recruit */}
         {activeTab === 'recruit' && (
           <div className="grid lg:grid-cols-2 gap-8 text-left animate-fade-in">
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-6">
-              <form onSubmit={handleRecruitWara} className="flex flex-col gap-4">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-6">
+              <form onSubmit={handleRecruitCommercial} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase">Nom Complet</label>
                   <input
                     type="text"
                     required
                     placeholder="Ex: Amadou Diallo"
-                    value={newWaraName}
-                    onChange={(e) => setNewWaraName(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-800"
+                    value={newCommercialName}
+                    onChange={(e) => setNewCommercialName(e.target.value)}
+                    className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-800"
                   />
                 </div>
 
@@ -954,9 +954,9 @@ export const ManagerDashboard: React.FC = () => {
                     type="email"
                     required
                     placeholder="Ex: amadou@djagocrm.ci"
-                    value={newWaraEmail}
-                    onChange={(e) => setNewWaraEmail(e.target.value)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-800"
+                    value={newCommercialEmail}
+                    onChange={(e) => setNewCommercialEmail(e.target.value)}
+                    className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 focus:outline-none focus:border-brand-emerald text-sm text-slate-800"
                   />
                 </div>
 
@@ -984,15 +984,15 @@ export const ManagerDashboard: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full mt-2 py-3 rounded-xl bg-brand-emerald hover:bg-brand-emerald/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  className="w-full mt-2 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-500/95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Enregistrer le Wara</span>
+                  <span>Enregistrer le Commercial</span>
                 </button>
               </form>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 shadow-xl flex flex-col gap-4">
+            <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl flex flex-col gap-4">
               <h3 className="text-lg font-bold text-slate-900">Mon Équipe terrain</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -1020,16 +1020,16 @@ export const ManagerDashboard: React.FC = () => {
 
         {/* Tab: Templates */}
         {activeTab === 'templates' && (
-          <div className="p-6 rounded-2xl bg-slate-950/45 border border-slate-200 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
+          <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
             <h3 className="text-lg font-bold text-slate-900">Modèles WhatsApp</h3>
             <p className="text-xs text-slate-400">Gérez les modèles utilisés par votre équipe. Variables: {'{{nom_client}}'}, {'{{entreprise}}'}, {'{{nom_commercial}}'}</p>
 
             <div className="flex flex-col gap-4">
               {whatsappTemplates.map(t => (
-                <div key={t.id} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex flex-col gap-2">
+                <div key={t.id} className="p-4 rounded-xl bg-white border border-slate-850 flex flex-col gap-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-bold text-slate-900">{t.name}</span>
-                    <button onClick={() => deleteWhatsAppTemplate(t.id)} className="text-red-500 hover:text-red-400 text-xs font-bold uppercase">
+                    <button onClick={() => deleteWhatsAppTemplate(t.id)} className="text-red-500 hover:text-red-600 text-xs font-bold uppercase">
                       Supprimer
                     </button>
                   </div>
@@ -1047,7 +1047,7 @@ export const ManagerDashboard: React.FC = () => {
                   placeholder="Nom du modèle (ex: Relance Impayé)"
                   value={newTemplateName}
                   onChange={(e) => setNewTemplateName(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -1056,13 +1056,13 @@ export const ManagerDashboard: React.FC = () => {
                   placeholder="Bonjour {{nom_client}}, ..."
                   value={newTemplateText}
                   onChange={(e) => setNewTemplateText(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
+                  className="w-full p-3 rounded-xl bg-white border border-slate-850 focus:outline-none focus:border-brand-orange text-xs text-slate-800"
                 />
               </div>
 
               <button
                 onClick={handleAddTemplate}
-                className="w-full py-3 rounded-xl bg-brand-emerald hover:bg-brand-emerald/95 text-white font-bold text-sm shadow-lg transition-all cursor-pointer"
+                className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-500/95 text-white font-bold text-sm shadow-lg transition-all cursor-pointer"
               >
                 Ajouter le modèle
               </button>
@@ -1073,13 +1073,13 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Edit Order Modal */}
       {selectedOrderForEdit && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xl flex flex-col gap-4 text-left">
             <div className="flex justify-between items-start border-b border-slate-200 pb-2">
               <h4 className="font-extrabold text-slate-900 text-base">Éditer Commande & Livreur</h4>
               <button 
                 onClick={() => setSelectedOrderForEdit(null)}
-                className="p-1 rounded bg-slate-950 text-slate-400 hover:text-slate-900"
+                className="p-1 rounded bg-white text-slate-400 hover:text-slate-900"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1090,7 +1090,7 @@ export const ManagerDashboard: React.FC = () => {
                 <label className="text-xs font-bold text-slate-400 uppercase">Statut Paiement</label>
                 <select 
                   value={editPaymentStatus} onChange={e => setEditPaymentStatus(e.target.value as never)}
-                  className="p-2.5 bg-slate-950 border border-slate-200 rounded-xl text-xs text-slate-700"
+                  className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700"
                 >
                   <option value="unpaid">Non payé</option>
                   <option value="partial">Partiel</option>
@@ -1102,7 +1102,7 @@ export const ManagerDashboard: React.FC = () => {
                 <label className="text-xs font-bold text-slate-455 uppercase">Statut Livraison</label>
                 <select 
                   value={editDeliveryStatus} onChange={e => setEditDeliveryStatus(e.target.value as never)}
-                  className="p-2.5 bg-slate-950 border border-slate-200 rounded-xl text-xs text-slate-700"
+                  className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-700"
                 >
                   <option value="preparing">En préparation</option>
                   <option value="shipping">En chemin</option>
@@ -1111,7 +1111,7 @@ export const ManagerDashboard: React.FC = () => {
                 </select>
               </div>
 
-              <button type="submit" className="w-full py-2.5 rounded-xl bg-brand-emerald text-white text-xs font-bold cursor-pointer">
+              <button type="submit" className="w-full py-2.5 rounded-xl bg-emerald-500 text-white text-xs font-bold cursor-pointer">
                 Valider les Modifications
               </button>
             </form>
@@ -1121,7 +1121,7 @@ export const ManagerDashboard: React.FC = () => {
 
       {/* Client Detail Modal */}
       {selectedClientForModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-2xl flex flex-col gap-5 text-left max-h-[85vh] overflow-y-auto">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
@@ -1130,7 +1130,7 @@ export const ManagerDashboard: React.FC = () => {
               </div>
               <button 
                 onClick={() => setSelectedClientForModal(null)}
-                className="p-1.5 rounded-lg bg-slate-950 border border-slate-850 hover:bg-slate-100 text-slate-400"
+                className="p-1.5 rounded-lg bg-white border border-slate-850 hover:bg-slate-100 text-slate-400"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1147,7 +1147,7 @@ export const ManagerDashboard: React.FC = () => {
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-semibold uppercase">Statut Actuel</p>
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-emerald/15 text-brand-emerald border border-brand-emerald/20 mt-1">
+                <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-white border border-emerald-200 mt-1">
                   {selectedClientForModal.status}
                 </span>
               </div>
