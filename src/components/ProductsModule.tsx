@@ -26,13 +26,13 @@ export const ProductsModule: React.FC = () => {
   }, [user]);
 
   const fetchProducts = async () => {
-    if (!user?.organizationId) return;
+    if (!user?.organization_id) return;
     setLoading(true);
     try {
       const { data, error } = await insforge.database
         .from('products')
         .select('*')
-        .eq('organization_id', user.organizationId)
+        .eq('organization_id', user.organization_id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -47,7 +47,7 @@ export const ProductsModule: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.organizationId) return;
+    if (!user?.organization_id) return;
     
     try {
       if (editingId) {
@@ -55,14 +55,14 @@ export const ProductsModule: React.FC = () => {
           .from('products')
           .update(formData)
           .eq('id', editingId)
-          .eq('organization_id', user.organizationId);
+          .eq('organization_id', user.organization_id);
         if (error) throw error;
         addToast("Produit mis à jour avec succès", "success");
       } else {
         const { error } = await insforge.database
           .from('products')
           .insert({
-            organization_id: user.organizationId,
+            organization_id: user.organization_id,
             ...formData
           });
         if (error) throw error;

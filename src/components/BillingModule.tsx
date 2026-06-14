@@ -30,13 +30,13 @@ export const BillingModule: React.FC = () => {
   }, [user, activeTab]);
 
   const fetchData = async () => {
-    if (!user?.organizationId) return;
+    if (!user?.organization_id) return;
     setLoading(true);
     try {
       // Fetch Clients & Products for the forms
       const [cliRes, prodRes] = await Promise.all([
-        insforge.database.from('clients').select('id, name, company').eq('organization_id', user.organizationId),
-        insforge.database.from('products').select('id, name, price, stock_quantity').eq('organization_id', user.organizationId)
+        insforge.database.from('clients').select('id, name, company').eq('organization_id', user.organization_id),
+        insforge.database.from('products').select('id, name, price, stock_quantity').eq('organization_id', user.organization_id)
       ]);
       if (cliRes.data) setClients(cliRes.data);
       if (prodRes.data) setProducts(prodRes.data);
@@ -45,7 +45,7 @@ export const BillingModule: React.FC = () => {
         const { data, error } = await insforge.database
           .from('quotes')
           .select('*, clients(name, company)')
-          .eq('organization_id', user.organizationId)
+          .eq('organization_id', user.organization_id)
           .order('created_at', { ascending: false });
         if (error) throw error;
         setQuotes(data || []);
@@ -53,7 +53,7 @@ export const BillingModule: React.FC = () => {
         const { data, error } = await insforge.database
           .from('invoices')
           .select('*, clients(name, company)')
-          .eq('organization_id', user.organizationId)
+          .eq('organization_id', user.organization_id)
           .order('created_at', { ascending: false });
         if (error) throw error;
         setInvoices(data || []);
@@ -100,12 +100,12 @@ export const BillingModule: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.organizationId) return;
+    if (!user?.organization_id) return;
     
     try {
       if (activeTab === 'quotes') {
         const payload = {
-          organization_id: user.organizationId,
+          organization_id: user.organization_id,
           client_id: formData.client_id,
           quote_number: 'DEV-' + Date.now().toString().slice(-6),
           items: formData.items,
@@ -121,7 +121,7 @@ export const BillingModule: React.FC = () => {
         addToast("Devis enregistré", "success");
       } else {
         const payload = {
-          organization_id: user.organizationId,
+          organization_id: user.organization_id,
           client_id: formData.client_id,
           invoice_number: 'FAC-' + Date.now().toString().slice(-6),
           items: formData.items,
