@@ -32,8 +32,7 @@ interface AuthState {
   team: UserProfile[];
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
-  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{success: boolean, requiresOtp?: boolean}>;
-  verifyOtp: (email: string, code: string) => Promise<boolean>;
+  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<boolean>;
   logout: () => void;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -156,11 +155,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) {
         addToast(error.message, "error");
         set({ isLoading: false });
-        return { success: false };
+        return false;
       }
 
       if (data?.user) {
-        // Create organization
         const { data: org, error: orgError } = await insforge.database
           .from('organizations')
           .insert({ name: orgName, industry_category: industryCategory })
@@ -170,10 +168,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (orgError || !org) {
           addToast("Erreur lors de la création de l'espace de travail", "error");
           set({ isLoading: false });
-          return { success: false };
+          return false;
         }
 
-        // Create user profile
         const { error: profileError } = await insforge.database
           .from('team_members')
           .insert({
@@ -188,21 +185,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (profileError) {
           addToast("Erreur lors de la création du profil", "error");
           set({ isLoading: false });
-          return { success: false };
-        }
-
-        // If no session, it means OTP is required
-        if (!data.session) {
-          addToast("Veuillez vérifier votre email pour le code de confirmation.", "info");
-          set({ isLoading: false });
-          return { success: true, requiresOtp: true };
+          return false;
         }
 
         addToast("Compte créé avec succès ! Bienvenue.", "success");
         await get().initializeAuth();
-        return { success: true, requiresOtp: false };
+        return true;
       }
-      return { success: false };
+      return false;
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       addToast(errorMsg || "Erreur lors de l'inscription", "error");
@@ -212,29 +202,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   
-  verifyOtp: async (email: string, token: string) => {
-    set({ isLoading: true });
-    const { addToast } = useToastStore.getState();
-    try {
-      const { data, error } = await insforge.auth.verifyOtp({
-        email,
-        token,
-        type: 'signup'
-      });
-      if (error) {
-        addToast(error.message, "error");
-        set({ isLoading: false });
-        return false;
-      }
-      addToast("Vérification réussie !", "success");
-      await get().initializeAuth();
-      return true;
-    } catch (err: any) {
-      addToast(err.message || "Erreur de vérification", "error");
-      set({ isLoading: false });
-      return false;
-    }
-  },
+  
 
   logout: async () => {
     await insforge.auth.signOut();

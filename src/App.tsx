@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from './hooks/useLocation';
 import { useAuthStore } from './store/authStore';
 import { useCrmStore } from './store/crmStore';
 import { LandingPage } from './views/LandingPage';

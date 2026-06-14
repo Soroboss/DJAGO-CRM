@@ -10,9 +10,7 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const [isSignup, setIsSignup] = useState(false);
-  const [otpPending, setOtpPending] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
-  
+    
   // Login fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,23 +22,13 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
 
   const login = useAuthStore((state) => state.login);
   const signup = useAuthStore((state) => state.signup);
-  const verifyOtp = useAuthStore((state: any) => state.verifyOtp);
   const isLoading = useAuthStore((state) => state.isLoading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otpPending) {
-      if (!otpCode) return;
-      const success = await verifyOtp(email, otpCode);
-      if (success) setOtpPending(false);
-      return;
-    }
     if (isSignup) {
       if (!email || !password || !name || !orgName) return;
-      const res = await signup(email, password, name, orgName, industryCategory);
-      if (res?.requiresOtp) {
-        setOtpPending(true);
-      }
+      await signup(email, password, name, orgName, industryCategory);
     } else {
       if (!email) return;
       await login(email, password || undefined);
@@ -124,19 +112,15 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
         <div className="w-full max-w-[420px] mt-12 lg:mt-0">
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-              {otpPending ? "Vérification requise" : isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
+              {isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
             </h2>
             <p className="text-slate-500 text-sm">
-              {otpPending 
-                ? "Veuillez entrer le code de vérification à 6 chiffres envoyé à votre adresse e-mail."
-                : isSignup 
-                  ? "Configurez le CRM pour votre entreprise en 2 minutes." 
-                  : "Connectez-vous pour accéder à votre espace de travail."}
+              {isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
             </p>
           </div>
 
           {/* Toggle Login/Signup */}
-          {!isAdmin && !otpPending && (<div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
+          {!isAdmin && (<div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
             <button 
               onClick={() => setIsSignup(false)}
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${!isSignup ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -149,11 +133,11 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
             >
               Inscription
             </button>
-          </div>)}
+          </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
-            {!otpPending && isSignup && (
+            {isSignup && (
               <>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom Complet</label>
@@ -200,7 +184,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               </>
             )}
 
-            {!otpPending && (<div className="flex flex-col gap-1.5 mt-2">
+            {true && (<div className="flex flex-col gap-1.5 mt-2">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Adresse e-mail</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
@@ -213,9 +197,9 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                 />
               </div>
-            </div>)}
+            </div>
 
-            {!otpPending && (<div className="flex flex-col gap-1.5">
+            {true && (<div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center ml-1">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
                 {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
@@ -231,25 +215,9 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                 />
               </div>
-            </div>)}
+            </div>
 
-            {otpPending && (
-              <div className="flex flex-col gap-1.5 mt-4">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1 text-center">Code PIN de Vérification</label>
-                <div className="relative group">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
-                  <input
-                    type="text"
-                    placeholder="Ex: 123456"
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
-                    required
-                    maxLength={6}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white border-2 border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange text-center text-2xl font-bold tracking-[0.5em] transition-all shadow-sm"
-                  />
-                </div>
-              </div>
-            )}
+            
             <button
               type="submit"
               disabled={isLoading}
@@ -262,7 +230,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
                 </span>
               ) : (
                 <>
-                  {otpPending ? "Vérifier le code" : isSignup ? "Créer mon Espace" : "Se Connecter"} {otpPending ? <ShieldCheck className="w-5 h-5" /> : isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                  {isSignup ? "Créer mon Espace" : "Se Connecter"} {isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
                 </>
               )}
             </button>
