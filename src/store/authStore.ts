@@ -33,7 +33,7 @@ interface AuthState {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{requiresEmailVerification: boolean, success: boolean}>;
-  verifyOtp: (email: string, code: string) => Promise<boolean>;
+  verifyOtp: (email: string, code: string, password?: string) => Promise<boolean>;
   logout: () => Promise<void>;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -261,7 +261,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  verifyOtp: async (email: string, code: string) => {
+  verifyOtp: async (email: string, code: string, password?: string) => {
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
     try {
@@ -285,14 +285,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         return false;
       }
       
-      // On sauvegarde la session dans le localStorage pour l'insforge-sdk s'il en a besoin,
-      // mais idéalement on rappelle initializeAuth ou on demande à l'utilisateur de se connecter.
-      if (responseData.access_token) {
-        localStorage.setItem('insforge-auth-token', JSON.stringify({
-          accessToken: responseData.access_token,
-          refreshToken: responseData.refresh_token,
-          expiresAt: Date.now() + (responseData.expires_in * 1000)
-        }));
+      // L'email est maintenant vérifié. On connecte l'utilisateur via le SDK.
+      if (password) {
+        const { error: signInError } = await insforge.auth.signInWithPassword({
+          email,
+          password
+        });
+        if (signInError) {
+          console.error("Erreur signInWithPassword après verifyOtp", signInError);
+        }
       }
 
       await get().initializeAuth();

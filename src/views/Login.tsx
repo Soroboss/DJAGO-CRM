@@ -45,7 +45,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !otpCode) return;
-    const success = await verifyOtp(email, otpCode);
+    const success = await verifyOtp(email, otpCode, password);
     if (success) {
       // Le store gère l'initialisation et la redirection si succès
     }
