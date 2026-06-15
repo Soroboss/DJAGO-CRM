@@ -2,41 +2,50 @@ import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
 import { insforge } from '../lib/insforge';
-import { LogOut, LayoutDashboard, Settings, Activity, ShieldCheck, Database, Users, Building, Play, Pause } from 'lucide-react';
+import { 
+  LogOut, LayoutDashboard, Settings, Activity, ShieldCheck, Database, 
+  Users, Building, Play, Pause, CreditCard, LifeBuoy 
+} from 'lucide-react';
 import { NetworkBadge } from '../components/NetworkBadge';
+
+type TabType = 'dashboard' | 'tenants' | 'users' | 'billing' | 'support' | 'settings';
 
 export const SuperAdminDashboard: React.FC = () => {
   const { logout, user } = useAuthStore();
   const { addToast } = useToastStore();
-  const [activeTab, setActiveTab] = useState<'tenants' | 'health' | 'settings'>('tenants');
+  
+  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  
   const [organizations, setOrganizations] = useState<any[]>([]);
-  const [usersCount, setUsersCount] = useState<number>(0);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchOrganizations();
+    fetchGlobalData();
   }, []);
 
-  const fetchOrganizations = async () => {
+  const fetchGlobalData = async () => {
     setLoading(true);
     try {
-      const [orgsRes, usersRes] = await Promise.all([
+      const [orgsRes, usersRes, ticketsRes] = await Promise.all([
         insforge.database.from('organizations').select('*').order('created_at', { ascending: false }),
-        insforge.database.from('team_members').select('id, organization_id')
+        insforge.database.from('team_members').select('*, organizations(name)').order('created_at', { ascending: false }),
+        insforge.database.from('tickets').select('*, organizations(name)').order('created_at', { ascending: false })
       ]);
       
       if (orgsRes.error) throw orgsRes.error;
       if (usersRes.error) throw usersRes.error;
+      if (ticketsRes.error) throw ticketsRes.error;
       
       if (orgsRes.data) setOrganizations(orgsRes.data);
-      if (usersRes.data) {
-        setTeamMembers(usersRes.data);
-        setUsersCount(usersRes.data.length);
-      }
+      if (usersRes.data) setTeamMembers(usersRes.data);
+      if (ticketsRes.data) setTickets(ticketsRes.data);
+      
     } catch (err: any) {
       console.error(err);
-      addToast("Erreur lors du chargement des tenants", "error");
+      addToast("Erreur lors du chargement des données globales", "error");
     } finally {
       setLoading(false);
     }
@@ -76,7 +85,19 @@ export const SuperAdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <nav className="flex-1 px-4 mt-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 mt-4 space-y-1 overflow-y-auto">
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'dashboard'
+                ? 'bg-orange-500 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <Activity className="w-5 h-5" />
+            <span className="font-medium text-sm">Tableau de Bord</span>
+          </button>
+          
           <button
             onClick={() => setActiveTab('tenants')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
@@ -88,27 +109,53 @@ export const SuperAdminDashboard: React.FC = () => {
             <Building className="w-5 h-5" />
             <span className="font-medium text-sm">Gestion des Tenants</span>
           </button>
+          
           <button
-            onClick={() => setActiveTab('health')}
+            onClick={() => setActiveTab('users')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
-              activeTab === 'health'
+              activeTab === 'users'
                 ? 'bg-orange-500 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
-            <Activity className="w-5 h-5" />
-            <span className="font-medium text-sm">Santé du Système</span>
+            <Users className="w-5 h-5" />
+            <span className="font-medium text-sm">Utilisateurs</span>
           </button>
+          
+          <button
+            onClick={() => setActiveTab('billing')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'billing'
+                ? 'bg-orange-500 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <CreditCard className="w-5 h-5" />
+            <span className="font-medium text-sm">Abonnements</span>
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('support')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
+              activeTab === 'support'
+                ? 'bg-orange-500 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+            }`}
+          >
+            <LifeBuoy className="w-5 h-5" />
+            <span className="font-medium text-sm">Support Global</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('settings')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer mt-4 border-t border-slate-100 pt-4 ${
               activeTab === 'settings'
                 ? 'bg-orange-500 text-white shadow-md'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
             <Settings className="w-5 h-5" />
-            <span className="font-medium text-sm">Paramètres Globaux</span>
+            <span className="font-medium text-sm">Paramètres</span>
           </button>
         </nav>
 
@@ -128,9 +175,12 @@ export const SuperAdminDashboard: React.FC = () => {
         <header className="h-20 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
+              {activeTab === 'dashboard' && 'Tableau de Bord Global'}
               {activeTab === 'tenants' && 'Gestion des Tenants'}
-              {activeTab === 'health' && 'Santé du Système'}
-              {activeTab === 'settings' && 'Paramètres'}
+              {activeTab === 'users' && 'Utilisateurs de la Plateforme'}
+              {activeTab === 'billing' && 'Abonnements & Facturation'}
+              {activeTab === 'support' && 'Support Global'}
+              {activeTab === 'settings' && 'Paramètres du Système'}
             </h2>
             <p className="text-sm text-slate-500">Bienvenue, {user?.name || 'Super Administrateur'}</p>
           </div>
@@ -144,10 +194,117 @@ export const SuperAdminDashboard: React.FC = () => {
         </header>
 
         <div className="flex-1 overflow-y-auto p-8">
+          {/* TAB: DASHBOARD */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-8 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center">
+                      <Building className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-slate-900">{organizations.length}</p>
+                    <p className="text-sm text-slate-500 font-medium">Tenants Actifs</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                      <Users className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-slate-900">{teamMembers.length}</p>
+                    <p className="text-sm text-slate-500 font-medium">Utilisateurs Globaux</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                      <CreditCard className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-slate-900">0 FCFA</p>
+                    <p className="text-sm text-slate-500 font-medium">Revenu Mensuel Estimé</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                      <LifeBuoy className="w-6 h-6" />
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-slate-900">
+                      {tickets.filter(t => t.status === 'open' || t.status === 'new').length}
+                    </p>
+                    <p className="text-sm text-slate-500 font-medium">Tickets Ouverts (Global)</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Derniers Tenants Inscrits</h3>
+                  <div className="space-y-4">
+                    {organizations.slice(0, 5).map(org => (
+                      <div key={org.id} className="flex justify-between items-center pb-4 border-b border-slate-50 last:border-0 last:pb-0">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-600">
+                            {org.name.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-900">{org.name}</p>
+                            <p className="text-xs text-slate-500">{new Date(org.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold ${org.status === 'suspended' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                          {org.status === 'suspended' ? 'Suspendu' : 'Actif'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                  <h3 className="font-bold text-slate-900 mb-4">Derniers Tickets de Support</h3>
+                  <div className="space-y-4">
+                    {tickets.slice(0, 5).map(ticket => (
+                      <div key={ticket.id} className="flex flex-col gap-2 pb-4 border-b border-slate-50 last:border-0 last:pb-0">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-semibold text-slate-900">{ticket.subject}</p>
+                            <p className="text-xs text-slate-500">Tenant: {ticket.organizations?.name || 'Inconnu'}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                            ticket.priority === 'high' ? 'bg-red-100 text-red-700' : 
+                            ticket.priority === 'medium' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+                          }`}>
+                            {ticket.priority?.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                    {tickets.length === 0 && (
+                      <p className="text-sm text-slate-500 text-center py-4">Aucun ticket pour le moment.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: TENANTS */}
           {activeTab === 'tenants' && (
             <div className="space-y-6 animate-fade-in">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-bold text-slate-900">Organisations Inscrites</h3>
+                <h3 className="text-lg font-bold text-slate-900">Toutes les Organisations</h3>
                 <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm cursor-pointer">
                   + Ajouter un Tenant
                 </button>
@@ -158,7 +315,6 @@ export const SuperAdminDashboard: React.FC = () => {
                   <table className="w-full">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-500 font-semibold">
-                        <th className="p-4">ID</th>
                         <th className="p-4">Nom de l'Organisation</th>
                         <th className="p-4">Industrie</th>
                         <th className="p-4">Statut</th>
@@ -169,17 +325,12 @@ export const SuperAdminDashboard: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {loading ? (
-                        <tr>
-                          <td colSpan={6} className="p-8 text-center text-slate-500">Chargement...</td>
-                        </tr>
+                        <tr><td colSpan={6} className="p-8 text-center text-slate-500">Chargement...</td></tr>
                       ) : organizations.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className="p-8 text-center text-slate-500">Aucune organisation trouvée.</td>
-                        </tr>
+                        <tr><td colSpan={6} className="p-8 text-center text-slate-500">Aucune organisation trouvée.</td></tr>
                       ) : (
                         organizations.map(org => (
                           <tr key={org.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 text-xs font-mono text-slate-500">{org.id.split('-')[0]}...</td>
                             <td className="p-4 font-medium text-slate-900">{org.name}</td>
                             <td className="p-4 text-sm text-slate-600">
                               <span className="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs">
@@ -200,7 +351,11 @@ export const SuperAdminDashboard: React.FC = () => {
                             <td className="p-4 text-right">
                               <button 
                                 onClick={() => toggleTenantStatus(org.id, org.status || 'active')} 
-                                className={`text-sm font-medium transition-colors cursor-pointer ${org.status === 'suspended' ? 'text-emerald-600 hover:text-emerald-700' : 'text-orange-600 hover:text-orange-700'}`}
+                                className={`text-sm font-medium transition-colors cursor-pointer px-3 py-1 border rounded-lg ${
+                                  org.status === 'suspended' 
+                                    ? 'border-emerald-200 text-emerald-600 hover:bg-emerald-50' 
+                                    : 'border-orange-200 text-orange-600 hover:bg-orange-50'
+                                }`}
                               >
                                 {org.status === 'suspended' ? 'Réactiver' : 'Suspendre'}
                               </button>
@@ -215,38 +370,160 @@ export const SuperAdminDashboard: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'health' && (
+          {/* TAB: USERS */}
+          {activeTab === 'users' && (
             <div className="space-y-6 animate-fade-in">
-              <h3 className="text-lg font-bold text-slate-900">État des Services</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <Database className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 font-medium">Base de Données</p>
-                    <p className="text-lg font-bold text-slate-900">{usersCount}</p>
-                  </div>
-                </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <Activity className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 font-medium">API Insforge</p>
-                    <p className="text-lg font-bold text-slate-900">En ligne</p>
-                  </div>
-                </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <Users className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-slate-500 font-medium">Utilisateurs Actifs</p>
-                    <p className="text-lg font-bold text-slate-900">{organizations.length} Tenants</p>
-                  </div>
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-bold text-slate-900">Tous les Utilisateurs</h3>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                        <th className="p-4">Utilisateur</th>
+                        <th className="p-4">Rôle</th>
+                        <th className="p-4">Organisation (Tenant)</th>
+                        <th className="p-4">Zone</th>
+                        <th className="p-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {loading ? (
+                        <tr><td colSpan={5} className="p-8 text-center text-slate-500">Chargement...</td></tr>
+                      ) : teamMembers.length === 0 ? (
+                        <tr><td colSpan={5} className="p-8 text-center text-slate-500">Aucun utilisateur trouvé.</td></tr>
+                      ) : (
+                        teamMembers.map(member => (
+                          <tr key={member.id} className="hover:bg-slate-50 transition-colors">
+                            <td className="p-4">
+                              <div className="flex flex-col">
+                                <span className="font-medium text-slate-900">{member.name}</span>
+                                <span className="text-xs text-slate-500">{member.email}</span>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                member.role === 'superadmin' ? 'bg-purple-100 text-purple-700' :
+                                member.role === 'dg' ? 'bg-blue-100 text-blue-700' :
+                                'bg-slate-100 text-slate-700'
+                              }`}>
+                                {member.role.toUpperCase()}
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm font-medium text-slate-700">
+                              {member.organizations?.name || 'N/A'}
+                            </td>
+                            <td className="p-4 text-sm text-slate-500">
+                              {member.zone || 'N/A'}
+                            </td>
+                            <td className="p-4 text-right">
+                              <button className="text-slate-400 hover:text-blue-600 transition-colors text-sm font-medium">
+                                Voir détails
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB: BILLING */}
+          {activeTab === 'billing' && (
+            <div className="space-y-6 animate-fade-in flex flex-col items-center justify-center py-20">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mb-6">
+                <CreditCard className="w-12 h-12 text-orange-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 text-center">Module de Facturation SaaS</h3>
+              <p className="text-slate-500 text-center max-w-lg mb-8">
+                Gérez ici les abonnements de vos tenants. Connectez Stripe ou Razorpay pour automatiser 
+                la facturation mensuelle de la plateforme DJAGO CRM.
+              </p>
+              <button className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors shadow-md">
+                Configurer Stripe
+              </button>
+            </div>
+          )}
+
+          {/* TAB: SUPPORT */}
+          {activeTab === 'support' && (
+            <div className="space-y-6 animate-fade-in">
+              <h3 className="text-lg font-bold text-slate-900">Tickets de Support (Global)</h3>
+              
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                        <th className="p-4">Sujet</th>
+                        <th className="p-4">Tenant</th>
+                        <th className="p-4">Priorité</th>
+                        <th className="p-4">Statut</th>
+                        <th className="p-4">Créé le</th>
+                        <th className="p-4 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {loading ? (
+                        <tr><td colSpan={6} className="p-8 text-center text-slate-500">Chargement...</td></tr>
+                      ) : tickets.length === 0 ? (
+                        <tr><td colSpan={6} className="p-8 text-center text-slate-500">Aucun ticket ouvert.</td></tr>
+                      ) : (
+                        tickets.map(ticket => (
+                          <tr key={ticket.id} className="hover:bg-slate-50 transition-colors">
+                            <td className="p-4 font-medium text-slate-900">{ticket.subject}</td>
+                            <td className="p-4 text-sm font-medium text-slate-700">
+                              {ticket.organizations?.name || 'N/A'}
+                            </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                ticket.priority === 'high' ? 'bg-red-100 text-red-700' : 
+                                ticket.priority === 'medium' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'
+                              }`}>
+                                {ticket.priority?.toUpperCase() || 'LOW'}
+                              </span>
+                            </td>
+                            <td className="p-4">
+                              <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                ticket.status === 'resolved' ? 'bg-emerald-100 text-emerald-700' : 
+                                'bg-yellow-100 text-yellow-700'
+                              }`}>
+                                {ticket.status?.toUpperCase() || 'NEW'}
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm text-slate-500">
+                              {new Date(ticket.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="p-4 text-right">
+                              <button className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium">
+                                Répondre
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: SETTINGS */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6 animate-fade-in flex flex-col items-center justify-center py-20">
+              <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                <Settings className="w-12 h-12 text-slate-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 text-center">Paramètres Globaux</h3>
+              <p className="text-slate-500 text-center max-w-lg mb-8">
+                Configurez les paramètres globaux de la plateforme, les emails système, et les limites par défaut des locataires.
+              </p>
             </div>
           )}
         </div>
