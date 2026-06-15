@@ -1,23 +1,21 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@insforge/sdk';
 import { insforge } from './insforge';
 
 const VITE_INSFORGE_URL = import.meta.env.VITE_INSFORGE_URL;
 const VITE_INSFORGE_ANON_KEY = import.meta.env.VITE_INSFORGE_ANON_KEY;
 
-// Un client temporaire sans persistance de session pour ne pas déconnecter l'admin
-export const silentAuthClient = createClient(VITE_INSFORGE_URL, VITE_INSFORGE_ANON_KEY, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-    detectSessionInUrl: false
-  }
+// Un client temporaire
+export const silentAuthClient = createClient({
+  baseUrl: VITE_INSFORGE_URL,
+  anonKey: VITE_INSFORGE_ANON_KEY
 });
 
 export const createUserSilently = async (email: string, password: string, name: string, role: string, organizationId: string, zone?: string) => {
   // 1. Créer l'utilisateur via le client temporaire
   const { data: authData, error: authError } = await silentAuthClient.auth.signUp({
     email,
-    password
+    password,
+    name
   });
 
   if (authError) {
@@ -28,7 +26,7 @@ export const createUserSilently = async (email: string, password: string, name: 
   let userId = authData?.user?.id;
   
   if (!userId) {
-    const { data: rpcData, error: rpcError } = await silentAuthClient.rpc('get_user_id_by_email', { user_email: email });
+    const { data: rpcData, error: rpcError } = await insforge.database.rpc('get_user_id_by_email', { user_email: email });
     if (rpcError) {
       console.error("RPC Error:", rpcError);
       throw new Error("Impossible de récupérer l'identifiant du nouvel utilisateur.");

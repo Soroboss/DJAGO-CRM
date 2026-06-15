@@ -329,37 +329,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     try {
-      // 1. Create a secondary client to avoid logging out the current user
-      const { createClient } = await import('@supabase/supabase-js');
+      // 1. Create a secondary client with InsForge SDK
+      const { createClient } = await import('@insforge/sdk');
       const insforgeUrl = import.meta.env.VITE_INSFORGE_URL || '';
       const insforgeAnonKey = import.meta.env.VITE_INSFORGE_ANON_KEY || '';
       
-      const tempClient = createClient(insforgeUrl, insforgeAnonKey, {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-          detectSessionInUrl: false
-        }
+      const tempClient = createClient({
+        baseUrl: insforgeUrl,
+        anonKey: insforgeAnonKey
       });
 
       // 2. Sign up the user
       const { data, error: signUpError } = await tempClient.auth.signUp({
         email,
         password: 'Password123!',
-        options: {
-          data: { name, role }
-        }
+        name
       });
 
       if (signUpError) {
         throw signUpError;
       }
 
-      // 3. Get the user ID using our RPC because signUp might not return the user if email verification is ON
+      // 3. Get the user ID using our RPC on the main client
       let userId = data?.user?.id;
       
       if (!userId) {
-        const { data: rpcData, error: rpcError } = await tempClient.rpc('get_user_id_by_email', { user_email: email });
+        // We use insforge.database.rpc to call the RPC because tempClient doesn't have it at top level
+        const { data: rpcData, error: rpcError } = await insforge.database.rpc('get_user_id_by_email', { user_email: email });
         if (rpcError) {
           console.error("RPC Error:", rpcError);
           throw new Error("Impossible de récupérer l'identifiant du nouvel utilisateur.");
