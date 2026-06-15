@@ -32,7 +32,8 @@ interface AuthState {
   team: UserProfile[];
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
-  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<boolean>;
+  signup: (email: string, password: string) => Promise<{requiresOtp: boolean, success: boolean}>;
+  verifyOtpAndCompleteProfile: (email: string, token: string, name: string, orgName: string, industryCategory: string) => Promise<boolean>;
   logout: () => void;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -142,7 +143,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  signup: async (email: string, password: string, name: string, orgName: string, industryCategory: string) => {
+  signup: async (email: string, password: string) => {
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
 
@@ -155,10 +156,51 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) {
         addToast(error.message, "error");
         set({ isLoading: false });
+        return { requiresOtp: false, success: false };
+      }
+
+      if (data?.user && !data.session) {
+        addToast("Un code à 6 chiffres vous a été envoyé par e-mail.", "info");
+        set({ isLoading: false });
+        return { requiresOtp: true, success: true };
+      } else if (data?.user && data.session) {
+        // If somehow email confirmation is disabled
+        set({ isLoading: false });
+        return { requiresOtp: false, success: true };
+      }
+      
+      set({ isLoading: false });
+      return { requiresOtp: false, success: false };
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      addToast(errorMsg || "Erreur lors de l'inscription", "error");
+      set({ isLoading: false });
+      return { requiresOtp: false, success: false };
+    }
+  },
+
+  verifyOtpAndCompleteProfile: async (email: string, token: string, name: string, orgName: string, industryCategory: string) => {
+    set({ isLoading: true });
+    const { addToast } = useToastStore.getState();
+
+    try {
+      // 1. Vérifier l'OTP
+      const { data, error } = await insforge.auth.verifyOtp({
+        email,
+        token,
+        type: 'signup'
+      });
+
+      if (error) {
+        addToast("Code invalide ou expiré.", "error");
+        set({ isLoading: false });
         return false;
       }
 
-      if (data?.user) {
+      if (data?.session && data.user) {
+        // L'utilisateur est maintenant connecté et identifié
+        
+        // 2. Créer l'organisation
         const { data: org, error: orgError } = await insforge.database
           .from('organizations')
           .insert({ name: orgName, industry_category: industryCategory })
@@ -171,6 +213,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           return false;
         }
 
+        // 3. Créer le profil Utilisateur
         const { error: profileError } = await insforge.database
           .from('team_members')
           .insert({
@@ -188,14 +231,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           return false;
         }
 
-        addToast("Compte créé avec succès ! Bienvenue.", "success");
+        addToast("Compte vérifié et créé avec succès ! Bienvenue.", "success");
         await get().initializeAuth();
         return true;
       }
       return false;
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
-      addToast(errorMsg || "Erreur lors de l'inscription", "error");
+      addToast(errorMsg || "Erreur lors de la vérification", "error");
       set({ isLoading: false });
       return false;
     }
