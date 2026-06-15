@@ -121,7 +121,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
             </h2>
             <p className="text-slate-500 text-sm">
               {showCheckEmail 
-                ? "Nous vous avons envoyé un lien magique pour activer votre compte."
+                ? "Entrez le code de vérification reçu."
                 : isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
             </p>
           </div>
@@ -245,13 +245,14 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               </button>
             </form>
           ) : (
-            <div className="flex flex-col items-center justify-center p-8 bg-brand-emerald/10 rounded-2xl border border-brand-emerald/20 text-center animate-fade-in">
+            <div className="flex flex-col items-center justify-center p-8 bg-brand-emerald/10 rounded-2xl border border-brand-emerald/20 text-center animate-fade-in w-full">
               <Mail className="w-16 h-16 text-brand-emerald mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Un e-mail vient de partir !</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Vérifiez vos e-mails !</h3>
               <p className="text-slate-600 mb-6">
-                Cliquez sur le lien sécurisé envoyé à <strong className="text-slate-900">{email}</strong> pour valider votre compte.
-                Vous serez automatiquement redirigé ici.
+                <strong>Cliquez sur le lien de confirmation</strong> envoyé à <strong className="text-slate-900">{email}</strong> pour valider votre compte.
+                (Veuillez ignorer le code à 6 chiffres si le mail en contient un).
               </p>
+              
               <button
                 onClick={() => setShowCheckEmail(false)}
                 className="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors"

@@ -33,7 +33,7 @@ interface AuthState {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{requiresEmailVerification: boolean, success: boolean}>;
-  logout: () => void;
+  logout: () => Promise<void>;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
   initializeAuth: () => Promise<void>;
@@ -259,9 +259,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return { requiresEmailVerification: false, success: false };
     }
   },
-
-  
-  
 
   logout: async () => {
     await insforge.auth.signOut();
