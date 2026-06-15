@@ -112,11 +112,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     return; // Sortie prématurée pour éviter de set false
                   } else {
                     console.error("Erreur création profil:", profileError);
-                    addToast("Erreur lors de la création de votre profil utilisateur.", "error");
+                    addToast("Erreur profil: " + (profileError?.message || JSON.stringify(profileError)), "error");
                   }
                 } else {
                   console.error("Erreur création organisation:", orgError);
-                  addToast("Erreur lors de la création de votre espace de travail.", "error");
+                  addToast("Erreur organisation: " + (orgError?.message || JSON.stringify(orgError)), "error");
                 }
               } else {
                 console.error("Email mismatch in pending_signup:", pendingData.email, "vs", data.user.email);
