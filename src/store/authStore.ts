@@ -33,7 +33,7 @@ interface AuthState {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{requiresEmailVerification: boolean, success: boolean}>;
-  verifyOtp: (email: string, code: string, password?: string) => Promise<boolean>;
+  verifyOtp: (email: string, code: string) => Promise<boolean>;
   logout: () => Promise<void>;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -153,6 +153,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .single();
 
         if (profileError || !profile) {
+          const pendingDataStr = localStorage.getItem('pending_signup');
+          if (pendingDataStr) {
+            // Le profil n'est pas encore créé mais on a des données en attente,
+            // on délègue à initializeAuth qui va s'en charger.
+            await get().initializeAuth();
+            return true;
+          }
           addToast("Compte authentifié, mais profil introuvable.", "warning");
           set({ isLoading: false });
           return false;
@@ -261,7 +268,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  verifyOtp: async (email: string, code: string, password?: string) => {
+  verifyOtp: async (email: string, code: string) => {
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
     try {
@@ -285,18 +292,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         return false;
       }
       
-      // L'email est maintenant vérifié. On connecte l'utilisateur via le SDK.
-      if (password) {
-        const { error: signInError } = await insforge.auth.signInWithPassword({
-          email,
-          password
-        });
-        if (signInError) {
-          console.error("Erreur signInWithPassword après verifyOtp", signInError);
-        }
-      }
-
-      await get().initializeAuth();
+      // On ne connecte pas automatiquement l'utilisateur, on arrête le chargement.
+      // Le workflow exige que l'utilisateur clique sur le bouton pour se connecter.
+      set({ isLoading: false });
       return true;
     } catch (err: unknown) {
       addToast(String(err), "error");

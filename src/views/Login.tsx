@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { ArrowLeft, Mail, Lock, LogIn, Sparkles, ShieldCheck, Zap, BarChart3, Database, Building2, User, UserPlus } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, LogIn, Sparkles, ShieldCheck, Zap, BarChart3, Database, Building2, User, UserPlus, CheckCircle } from 'lucide-react';
 import { INDUSTRIES } from '../config/industries';
 
 interface LoginProps {
@@ -26,6 +26,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const isLoading = useAuthStore((state) => state.isLoading);
 
   const [showCheckEmail, setShowCheckEmail] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [otpCode, setOtpCode] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,9 +46,9 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !otpCode) return;
-    const success = await verifyOtp(email, otpCode, password);
+    const success = await verifyOtp(email, otpCode);
     if (success) {
-      // Le store gère l'initialisation et la redirection si succès
+      setShowSuccessPopup(true);
     }
   };
 
@@ -95,7 +96,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
             <div className="p-5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
               <Zap className="w-8 h-8 text-brand-orange mb-3" />
               <h3 className="font-bold text-slate-900 mb-1">Sur-Mesure</h3>
-              <p className="text-sm text-slate-500">Le vocabulaire et les modules s'adaptent automatiquement à votre industrie.</p>
+              <p className="text-sm text-slate-500">Le vocabulaire et les modules s'adapte automatiquement à votre industrie.</p>
             </div>
             <div className="p-5 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm">
               <Database className="w-8 h-8 text-blue-400 mb-3" />
@@ -128,17 +129,19 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
         <div className="w-full max-w-[420px] mt-12 lg:mt-0">
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-              {showCheckEmail ? "Vérifiez vos e-mails" : isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
+              {showSuccessPopup ? "Inscription validée !" : showCheckEmail ? "Vérifiez vos e-mails" : isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
             </h2>
             <p className="text-slate-500 text-sm">
-              {showCheckEmail 
-                ? "Entrez le code de vérification reçu."
-                : isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
+              {showSuccessPopup 
+                ? "Votre compte a été confirmé avec succès. Vous pouvez maintenant vous connecter."
+                : showCheckEmail 
+                  ? "Entrez le code de vérification reçu."
+                  : isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
             </p>
           </div>
 
           {/* Toggle Login/Signup */}
-          {!isAdmin && !showCheckEmail && (
+          {!isAdmin && !showCheckEmail && !showSuccessPopup && (
           <div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
             <button 
               onClick={() => setIsSignup(false)}
@@ -156,7 +159,26 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
         )}
 
           {/* Form */}
-          {!showCheckEmail ? (
+          {showSuccessPopup ? (
+            <div className="flex flex-col items-center justify-center p-8 bg-brand-emerald/10 rounded-2xl border border-brand-emerald/20 text-center animate-fade-in w-full">
+              <CheckCircle className="w-16 h-16 text-brand-emerald mb-4" />
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Inscription validée !</h3>
+              <p className="text-slate-600 mb-6">
+                Votre compte a été confirmé avec succès. Vous pouvez maintenant vous connecter.
+              </p>
+              <button
+                onClick={() => {
+                  setShowSuccessPopup(false);
+                  setShowCheckEmail(false);
+                  setIsSignup(false);
+                  setOtpCode('');
+                }}
+                className="w-full py-3.5 rounded-xl bg-brand-emerald hover:bg-emerald-600 text-white font-bold transition-all shadow-md flex items-center justify-center"
+              >
+                Se connecter
+              </button>
+            </div>
+          ) : !showCheckEmail ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
               {isSignup && (
                 <>
