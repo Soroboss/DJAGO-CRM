@@ -32,10 +32,6 @@ function App() {
     setCurrentPath(path);
   };
 
-  if (isLoading) {
-    return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-slate-900">Chargement...</div>;
-  }
-
   // Render correct dashboard screen if logged in
   if (isAuthenticated && user) {
     if (user.role === 'dg') {
@@ -87,6 +83,15 @@ function App() {
           <h1 className="text-4xl font-bold text-slate-900">404</h1>
           <p className="text-slate-500">Page introuvable</p>
           <button onClick={() => navigate('/')} className="px-6 py-2 bg-brand-orange text-white rounded-xl font-bold">Retour à l'accueil</button>
+        </div>
+      )}
+      
+      {isLoading && (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-white p-6 rounded-2xl shadow-xl flex items-center gap-4">
+            <div className="w-8 h-8 border-4 border-brand-orange/30 border-t-brand-orange rounded-full animate-spin" />
+            <span className="font-bold text-slate-700">Chargement...</span>
+          </div>
         </div>
       )}
       <ToastContainer />
