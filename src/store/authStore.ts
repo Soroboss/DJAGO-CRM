@@ -81,7 +81,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           if (pendingDataStr) {
             try {
               const pendingData = JSON.parse(pendingDataStr);
-              if (pendingData.email === data.user.email) {
+              if (pendingData.email.toLowerCase() === data.user.email?.toLowerCase()) {
                 const { addToast } = useToastStore.getState();
                 
                 // Créer l'organisation
@@ -98,8 +98,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     .insert({
                       id: data.user.id,
                       name: pendingData.name,
-                      email: pendingData.email,
-                      role: pendingData.email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
+                      email: data.user.email, // utiliser l'email formaté par Supabase
+                      role: data.user.email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
                       zone: 'Global',
                       organization_id: org.id
                     });
@@ -110,8 +110,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     // Relancer l'initialisation pour charger les nouvelles données
                     await get().initializeAuth();
                     return; // Sortie prématurée pour éviter de set false
+                  } else {
+                    console.error("Erreur création profil:", profileError);
+                    addToast("Erreur lors de la création de votre profil utilisateur.", "error");
                   }
+                } else {
+                  console.error("Erreur création organisation:", orgError);
+                  addToast("Erreur lors de la création de votre espace de travail.", "error");
                 }
+              } else {
+                console.error("Email mismatch in pending_signup:", pendingData.email, "vs", data.user.email);
               }
             } catch (err) {
               console.error("Erreur lors de la finalisation post-email", err);
