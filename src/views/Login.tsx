@@ -21,31 +21,14 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const [industryCategory, setIndustryCategory] = useState(Object.keys(INDUSTRIES)[0]);
 
   const login = useAuthStore((state) => state.login);
-  const login = useAuthStore((state) => state.login);
   const signup = useAuthStore((state) => state.signup);
-  const verifyOtpAndCompleteProfile = useAuthStore((state) => state.verifyOtpAndCompleteProfile);
   const isLoading = useAuthStore((state) => state.isLoading);
-
-  // OTP State
-  const [showOtpInput, setShowOtpInput] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (showOtpInput) {
-      if (!otpCode || otpCode.length !== 6) return;
-      await verifyOtpAndCompleteProfile(email, otpCode, name, orgName, industryCategory);
-    } else if (isSignup) {
+    if (isSignup) {
       if (!email || !password || !name || !orgName) return;
-      const result = await signup(email, password);
-      if (result.requiresOtp) {
-        setShowOtpInput(true);
-      } else if (result.success) {
-        // Fallback si l'OTP n'est finalement pas requis
-        verifyOtpAndCompleteProfile(email, '000000', name, orgName, industryCategory); 
-        // Note: this fallback might fail, but if OTP is disabled, we'd need a different logic. 
-        // For now, we assume requiresOtp is true if email confirmation is enabled.
-      }
+      await signup(email, password, name, orgName, industryCategory);
     } else {
       if (!email) return;
       await login(email, password || undefined);
@@ -129,17 +112,15 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
         <div className="w-full max-w-[420px] mt-12 lg:mt-0">
           <div className="mb-8 text-center lg:text-left">
             <h2 className="text-3xl font-extrabold text-slate-900 mb-2">
-              {showOtpInput ? "Vérification E-mail" : isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
+              {isSignup ? "Créer un espace" : isAdmin ? "Administration SaaS" : "Accès Sécurisé"}
             </h2>
             <p className="text-slate-500 text-sm">
-              {showOtpInput 
-                ? "Saisissez le code à 6 chiffres envoyé à votre adresse e-mail." 
-                : isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
+              {isSignup ? "Configurez le CRM pour votre entreprise en 2 minutes." : "Connectez-vous pour accéder à votre espace de travail."}
             </p>
           </div>
 
           {/* Toggle Login/Signup */}
-          {!isAdmin && !showOtpInput && (
+          {!isAdmin && (
           <div className="flex bg-slate-200/50 p-1 rounded-xl mb-8">
             <button 
               onClick={() => setIsSignup(false)}
@@ -158,82 +139,17 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-8">
-            {showOtpInput ? (
+            {isSignup && (
               <>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Code de Vérification</label>
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom Complet</label>
                   <div className="relative group">
-                    <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-emerald transition-colors" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
                     <input
                       type="text"
-                      placeholder="123456"
-                      maxLength={6}
-                      value={otpCode}
-                      onChange={(e) => setOtpCode(e.target.value.replace(/[^0-9]/g, ''))}
-                      required
-                      className="w-full pl-12 pr-4 py-3 text-center tracking-[0.5em] font-bold text-xl rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-300 focus:outline-none focus:border-brand-emerald focus:ring-2 focus:ring-brand-emerald/20 transition-all shadow-sm"
-                    />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                {isSignup && (
-                  <>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom Complet</label>
-                      <div className="relative group">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
-                        <input
-                          type="text"
-                          placeholder="Jean Dupont"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required
-                          className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom de l'entreprise</label>
-                      <div className="relative group">
-                        <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
-                        <input
-                          type="text"
-                          placeholder="Mon Entreprise SA"
-                          value={orgName}
-                          onChange={(e) => setOrgName(e.target.value)}
-                          required
-                          className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Secteur d'activité</label>
-                      <select
-                        value={industryCategory}
-                        onChange={(e) => setIndustryCategory(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm cursor-pointer"
-                      >
-                        {Object.values(INDUSTRIES).map((ind) => (
-                          <option key={ind.id} value={ind.id}>{ind.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </>
-                )}
-
-                <div className="flex flex-col gap-1.5 mt-2">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Adresse e-mail</label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
-                    <input
-                      type="email"
-                      placeholder="nom@entreprise.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Jean Dupont"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       required
                       className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                     />
@@ -241,34 +157,73 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <div className="flex justify-between items-center ml-1">
-                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
-                    {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
-                  </div>
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nom de l'entreprise</label>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
+                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
                     <input
-                      type="password"
-                      placeholder={isSignup ? "Créez un mot de passe (min 6 car.)" : "••••••••"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      type="text"
+                      placeholder="Mon Entreprise SA"
+                      value={orgName}
+                      onChange={(e) => setOrgName(e.target.value)}
                       required
                       className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
                     />
                   </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Secteur d'activité</label>
+                  <select
+                    value={industryCategory}
+                    onChange={(e) => setIndustryCategory(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm cursor-pointer"
+                  >
+                    {Object.values(INDUSTRIES).map((ind) => (
+                      <option key={ind.id} value={ind.id}>{ind.label}</option>
+                    ))}
+                  </select>
                 </div>
               </>
             )}
 
+            <div className="flex flex-col gap-1.5 mt-2">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Adresse e-mail</label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
+                <input
+                  type="email"
+                  placeholder="nom@entreprise.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between items-center ml-1">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
+                {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
+              </div>
+              <div className="relative group">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
+                <input
+                  type="password"
+                  placeholder={isSignup ? "Créez un mot de passe (min 6 car.)" : "••••••••"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
             
             <button
               type="submit"
-              disabled={isLoading || (showOtpInput && otpCode.length !== 6)}
-              className={`w-full mt-4 py-3.5 rounded-xl text-white font-bold text-lg transition-all duration-300 shadow-md flex items-center justify-center gap-3 disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0
-                ${showOtpInput 
-                  ? 'bg-gradient-to-r from-brand-emerald to-emerald-500 hover:from-emerald-500 hover:to-brand-emerald shadow-emerald-500/20 hover:shadow-emerald-500/40'
-                  : 'bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange shadow-brand-orange/20 hover:shadow-brand-orange/40'
-                }`}
+              disabled={isLoading}
+              className="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange text-white font-bold text-lg transition-all duration-300 shadow-md shadow-brand-orange/20 hover:shadow-brand-orange/40 flex items-center justify-center gap-3 disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -277,8 +232,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
                 </span>
               ) : (
                 <>
-                  {showOtpInput ? "Vérifier le Code" : isSignup ? "Créer mon Espace" : "Se Connecter"} 
-                  {showOtpInput ? <ShieldCheck className="w-5 h-5" /> : isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
+                  {isSignup ? "Créer mon Espace" : "Se Connecter"} {isSignup ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
                 </>
               )}
             </button>
