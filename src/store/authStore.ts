@@ -177,7 +177,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             id: data.user.id,
             name,
             email,
-            role: 'dg',
+            role: email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
             zone: 'Global',
             organization_id: org.id
           });
