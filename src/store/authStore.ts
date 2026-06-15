@@ -9,7 +9,10 @@ export interface Organization {
   id: string;
   name: string;
   industry_category: string;
-  active_modules: Record<string, boolean>;
+  active_modules: any;
+  settings: any;
+  plan_id?: string;
+  subscription_status?: string;
   created_at: string;
 }
 

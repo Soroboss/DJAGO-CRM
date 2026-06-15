@@ -12,7 +12,7 @@ import {
   DollarSign, Users, Briefcase, Award, Plus, Search, 
   MapPin, Eye, Calendar, LogOut, ShieldAlert, CheckCircle2, X,
   Activity, LayoutDashboard, ChevronRight, ChevronLeft, BarChart3,
-  ShoppingCart, FileText, ClipboardList, CheckSquare, Settings, Copy, ExternalLink
+  ShoppingCart, FileText, ClipboardList, CheckSquare, Settings, Copy, ExternalLink, CreditCard
 } from 'lucide-react';
 import { type LocalClient } from '../db/localDb';
 
