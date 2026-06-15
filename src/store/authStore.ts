@@ -39,6 +39,8 @@ interface AuthState {
   verifyOtp: (email: string, code: string) => Promise<boolean>;
   logout: () => Promise<void>;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
+  updateTeammate: (id: string, updates: Partial<UserProfile>) => Promise<boolean>;
+  deleteTeammate: (id: string) => Promise<boolean>;
   fetchTeam: () => Promise<void>;
   initializeAuth: () => Promise<void>;
   updateOrganizationSettings: (settings: any) => Promise<void>;
@@ -392,6 +394,44 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (err: any) {
       addToast(`Erreur : ${err.message}`, "error");
       return null;
+    }
+  },
+
+  updateTeammate: async (id: string, updates: Partial<UserProfile>) => {
+    const { addToast } = useToastStore.getState();
+    try {
+      const { error } = await insforge.database
+        .from('team_members')
+        .update(updates)
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      addToast("Collaborateur mis à jour avec succès", "success");
+      await get().fetchTeam();
+      return true;
+    } catch (err: any) {
+      addToast(`Erreur : ${err.message}`, "error");
+      return false;
+    }
+  },
+
+  deleteTeammate: async (id: string) => {
+    const { addToast } = useToastStore.getState();
+    try {
+      const { error } = await insforge.database
+        .from('team_members')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      addToast("Collaborateur supprimé", "success");
+      await get().fetchTeam();
+      return true;
+    } catch (err: any) {
+      addToast(`Erreur : ${err.message}`, "error");
+      return false;
     }
   },
 

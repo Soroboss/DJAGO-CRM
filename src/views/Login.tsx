@@ -251,7 +251,12 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               <div className="flex flex-col gap-1.5">
                 <div className="flex justify-between items-center ml-1">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Mot de passe</label>
-                  {!isSignup && <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>}
+                  {!isSignup && (
+                    <div className="flex gap-3">
+                      <span className="text-xs text-brand-emerald hover:text-emerald-500 transition-colors cursor-pointer" onClick={() => setShowCheckEmail(true)}>J'ai un code de vérification</span>
+                      <span className="text-xs text-brand-orange hover:text-amber-500 transition-colors cursor-pointer">Mot de passe oublié ?</span>
+                    </div>
+                  )}
                 </div>
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-orange transition-colors" />
@@ -288,11 +293,21 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               <Mail className="w-16 h-16 text-brand-emerald mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Vérifiez vos e-mails !</h3>
               <p className="text-slate-600 mb-6">
-                Entrez le code à 6 chiffres envoyé à <strong className="text-slate-900">{email}</strong> pour valider votre compte.
+                Entrez le code à 6 chiffres envoyé à <strong className="text-slate-900">{email || "votre adresse"}</strong> pour valider votre compte.
                 (Ou cliquez sur le lien s'il y en a un).
               </p>
               
               <form onSubmit={handleOtpSubmit} className="w-full flex flex-col gap-4 mb-6">
+                {!email && (
+                  <input
+                    type="email"
+                    placeholder="Votre adresse e-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full pl-4 pr-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
+                  />
+                )}
                 <input
                   type="text"
                   placeholder="Code à 6 chiffres"

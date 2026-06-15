@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCrmStore } from '../store/crmStore';
-import { useAuthStore, type UserRole } from '../store/authStore';
+import { Edit2, Trash2 } from 'lucide-react';
+import { useAuthStore, type UserRole, type UserProfile } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
 import { NetworkBadge } from '../components/NetworkBadge';
 import { ProductsModule } from '../components/ProductsModule';
@@ -27,6 +28,33 @@ export const DgDashboard: React.FC = () => {
     clients, interactions, whatsappTemplates, addWhatsAppTemplate, updateWhatsAppTemplate, deleteWhatsAppTemplate, updateClientStatus,
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
+
+  const updateTeammate = useAuthStore((state) => state.updateTeammate);
+  const deleteTeammate = useAuthStore((state) => state.deleteTeammate);
+  const [editingTeammate, setEditingTeammate] = useState<UserProfile | null>(null);
+
+  const handleEditTeammate = (t: UserProfile) => {
+    setEditingTeammate(t);
+  };
+
+  const submitEditTeammate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTeammate) return;
+    const success = await updateTeammate(editingTeammate.id, {
+      role: editingTeammate.role,
+      zone: editingTeammate.zone,
+      manager_id: editingTeammate.manager_id
+    });
+    if (success) {
+      setEditingTeammate(null);
+    }
+  };
+
+  const handleDeleteTeammate = async (id: string, name: string) => {
+    if (confirm(`Voulez-vous vraiment supprimer le collaborateur ${name} ?`)) {
+      await deleteTeammate(id);
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription' | 'tenant_settings' | 'system_support'>('kpis');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
@@ -1190,6 +1218,7 @@ export const DgDashboard: React.FC = () => {
                       <th className="py-2.5 px-4 text-left">Type</th>
                       <th className="py-2.5 px-4 text-left">Zone</th>
                       <th className="py-2.5 px-4 text-left">Responsable</th>
+                      <th className="py-2.5 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1211,6 +1240,16 @@ export const DgDashboard: React.FC = () => {
                         </td>
                         <td className="py-3 px-4 text-slate-600">{t.zone}</td>
                         <td className="py-3 px-4 text-slate-400 text-xs">{getCommercialName(t.manager_id)}</td>
+                        <td className="py-3 px-4 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button onClick={() => handleEditTeammate(t)} className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors">
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleDeleteTeammate(t.id, t.name)} className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition-colors">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -1448,6 +1487,64 @@ export const DgDashboard: React.FC = () => {
           </div>
         </div>
       )}
+      {/* Edit Teammate Modal */}
+      {editingTeammate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+            <div className="flex justify-between items-center p-6 border-b border-slate-100">
+              <h3 className="font-bold tracking-tight text-slate-900">Modifier le collaborateur</h3>
+              <button onClick={() => setEditingTeammate(null)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={submitEditTeammate} className="p-6 flex flex-col gap-4">
+              <p className="text-sm font-semibold text-slate-900 mb-2">{editingTeammate.name} ({editingTeammate.email})</p>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nouveau Type</label>
+                <select
+                  value={editingTeammate.role}
+                  onChange={(e) => setEditingTeammate({ ...editingTeammate, role: e.target.value as any })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all text-sm shadow-sm"
+                >
+                  <option value="commercial">Commercial</option>
+                  <option value="manager">Manager</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nouvelle Zone</label>
+                <input
+                  type="text"
+                  value={editingTeammate.zone || ''}
+                  onChange={(e) => setEditingTeammate({ ...editingTeammate, zone: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all text-sm shadow-sm"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider ml-1">Nouveau Manager (Optionnel)</label>
+                <select
+                  value={editingTeammate.manager_id || ''}
+                  onChange={(e) => setEditingTeammate({ ...editingTeammate, manager_id: e.target.value || undefined })}
+                  className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all text-sm shadow-sm"
+                >
+                  <option value="">-- Aucun --</option>
+                  {team.filter(t => t.role === 'manager' && t.id !== editingTeammate.id).map(m => (
+                    <option key={m.id} value={m.id}>{m.name} ({m.zone})</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-end gap-3 mt-4">
+                <button type="button" onClick={() => setEditingTeammate(null)} className="px-5 py-2.5 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition-colors">
+                  Annuler
+                </button>
+                <button type="submit" className="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-brand-orange hover:bg-orange-600 transition-colors shadow-lg">
+                  Enregistrer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
