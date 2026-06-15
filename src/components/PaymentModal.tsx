@@ -112,6 +112,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, onS
               >
                 Payer {plan?.price_fcfa} FCFA
               </button>
+
+              <div className="mt-4 text-center">
+                <p className="text-xs text-slate-500 font-medium">
+                  Un problème avec le paiement ? Contactez-nous :
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mt-2">
+                  <a href="https://wa.me/2250100576526" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-colors">
+                    <Phone className="w-4 h-4" /> +225 0100576526
+                  </a>
+                  <a href="mailto:soroboss.bossimpact@gmail.com" className="text-sm font-bold text-orange-600 hover:text-orange-700 transition-colors">
+                    soroboss.bossimpact@gmail.com
+                  </a>
+                </div>
+              </div>
             </form>
           )}
         </div>
