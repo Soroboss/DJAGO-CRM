@@ -348,12 +348,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         name
       });
 
-      if (signUpError) {
-        throw signUpError;
-      }
-
-      // 3. Get the user ID using our RPC on the main client
       let userId = data?.user?.id;
+
+      if (signUpError) {
+        if (signUpError.message.toLowerCase().includes('already') || signUpError.message.toLowerCase().includes('existe déjà')) {
+          // The user exists in auth.users (likely because they were deleted from team_members before but not from auth.users)
+          // Let's recover their ID so we can recreate their profile in team_members
+          const { data: rpcData, error: rpcError } = await insforge.database.rpc('get_user_id_by_email', { user_email: email });
+          if (!rpcError && rpcData) {
+            userId = rpcData;
+          } else {
+            throw new Error("Cet e-mail est déjà utilisé par un compte existant et impossible de le récupérer.");
+          }
+        } else {
+          throw signUpError;
+        }
+      }
       
       if (!userId) {
         // We use insforge.database.rpc to call the RPC because tempClient doesn't have it at top level
