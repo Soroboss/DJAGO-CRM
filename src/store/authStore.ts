@@ -33,6 +33,7 @@ interface AuthState {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{requiresEmailVerification: boolean, success: boolean}>;
+  verifyOtp: (email: string, code: string) => Promise<boolean>;
   logout: () => Promise<void>;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -257,6 +258,49 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       addToast(errorMsg || "Erreur lors de l'inscription", "error");
       set({ isLoading: false });
       return { requiresEmailVerification: false, success: false };
+    }
+  },
+
+  verifyOtp: async (email: string, code: string) => {
+    set({ isLoading: true });
+    const { addToast } = useToastStore.getState();
+    try {
+      const supabaseUrl = import.meta.env.VITE_INSFORGE_URL;
+      const anonKey = import.meta.env.VITE_INSFORGE_ANON_KEY;
+      
+      const res = await fetch(`${supabaseUrl}/auth/v1/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': anonKey
+        },
+        body: JSON.stringify({ type: 'signup', email, token: code })
+      });
+      
+      const responseData = await res.json();
+      
+      if (!res.ok) {
+        addToast(responseData.msg || responseData.message || "Code invalide ou expiré", "error");
+        set({ isLoading: false });
+        return false;
+      }
+      
+      // On sauvegarde la session dans le localStorage pour l'insforge-sdk s'il en a besoin,
+      // mais idéalement on rappelle initializeAuth ou on demande à l'utilisateur de se connecter.
+      if (responseData.access_token) {
+        localStorage.setItem('insforge-auth-token', JSON.stringify({
+          accessToken: responseData.access_token,
+          refreshToken: responseData.refresh_token,
+          expiresAt: Date.now() + (responseData.expires_in * 1000)
+        }));
+      }
+
+      await get().initializeAuth();
+      return true;
+    } catch (err: unknown) {
+      addToast(String(err), "error");
+      set({ isLoading: false });
+      return false;
     }
   },
 

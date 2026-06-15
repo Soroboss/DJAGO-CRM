@@ -22,9 +22,11 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
 
   const login = useAuthStore((state) => state.login);
   const signup = useAuthStore((state) => state.signup);
+  const verifyOtp = useAuthStore((state) => state.verifyOtp);
   const isLoading = useAuthStore((state) => state.isLoading);
 
   const [showCheckEmail, setShowCheckEmail] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +39,15 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
     } else {
       if (!email) return;
       await login(email, password || undefined);
+    }
+  };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !otpCode) return;
+    const success = await verifyOtp(email, otpCode);
+    if (success) {
+      // Le store gère l'initialisation et la redirection si succès
     }
   };
 
@@ -249,9 +260,28 @@ export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
               <Mail className="w-16 h-16 text-brand-emerald mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Vérifiez vos e-mails !</h3>
               <p className="text-slate-600 mb-6">
-                <strong>Cliquez sur le lien de confirmation</strong> envoyé à <strong className="text-slate-900">{email}</strong> pour valider votre compte.
-                (Veuillez ignorer le code à 6 chiffres si le mail en contient un).
+                Entrez le code à 6 chiffres envoyé à <strong className="text-slate-900">{email}</strong> pour valider votre compte.
+                (Ou cliquez sur le lien s'il y en a un).
               </p>
+              
+              <form onSubmit={handleOtpSubmit} className="w-full flex flex-col gap-4 mb-6">
+                <input
+                  type="text"
+                  placeholder="Code à 6 chiffres"
+                  value={otpCode}
+                  onChange={(e) => setOtpCode(e.target.value)}
+                  maxLength={6}
+                  required
+                  className="w-full text-center tracking-[0.5em] font-bold text-2xl py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-300 focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all shadow-sm"
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || otpCode.length !== 6}
+                  className="w-full py-3.5 rounded-xl bg-brand-emerald hover:bg-emerald-600 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isLoading ? "Vérification..." : "Valider le code"}
+                </button>
+              </form>
               
               <button
                 onClick={() => setShowCheckEmail(false)}
