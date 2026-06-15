@@ -210,54 +210,57 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         return { requiresEmailVerification: false, success: false };
       }
 
-      if (data?.user) {
-        // Vérification si la confirmation e-mail est requise (pas de token)
-        // Note: TypeScript might not know about accessToken here depending on exact sdk version types, we cast it safely if needed.
+      // Si data.user est présent OU si data est présent sans erreur (cas de protection d'énumération où l'utilisateur existe déjà)
+      if (data) {
         const token = (data as any).session?.access_token || (data as any).accessToken;
-        console.log("[authStore] token presence:", !!token);
+        console.log("[authStore] token presence:", !!token, "user presence:", !!data.user);
+        
         if (!token) {
-          // Stocker localement en attendant que l'utilisateur clique sur le lien magique
+          // Stocker localement en attendant la validation
           console.log("[authStore] No token, saving pending_signup and setting requiresEmailVerification");
           localStorage.setItem('pending_signup', JSON.stringify({ name, email, orgName, industryCategory }));
-          addToast("Un lien magique vous a été envoyé par e-mail.", "info");
+          addToast("Un code de vérification vous a été envoyé par e-mail.", "info");
           set({ isLoading: false });
           return { requiresEmailVerification: true, success: true };
         }
 
-        // Si l'e-mail n'est pas requis (désactivé côté backend), on crée directement
-        const { data: org, error: orgError } = await insforge.database
-          .from('organizations')
-          .insert({ name: orgName, industry_category: industryCategory })
-          .select()
-          .single();
+        // Si l'e-mail n'est pas requis et qu'on a un token (connexion immédiate)
+        if (data.user) {
+          const { data: org, error: orgError } = await insforge.database
+            .from('organizations')
+            .insert({ name: orgName, industry_category: industryCategory })
+            .select()
+            .single();
 
-        if (orgError || !org) {
-          addToast("Erreur lors de la création de l'espace de travail", "error");
-          set({ isLoading: false });
-          return { requiresEmailVerification: false, success: false };
+          if (orgError || !org) {
+            addToast("Erreur lors de la création de l'espace de travail", "error");
+            set({ isLoading: false });
+            return { requiresEmailVerification: false, success: false };
+          }
+
+          const { error: profileError } = await insforge.database
+            .from('team_members')
+            .insert({
+              id: data.user.id,
+              name,
+              email,
+              role: email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
+              zone: 'Global',
+              organization_id: org.id
+            });
+
+          if (profileError) {
+            addToast("Erreur lors de la création du profil", "error");
+            set({ isLoading: false });
+            return { requiresEmailVerification: false, success: false };
+          }
+
+          addToast("Compte créé avec succès ! Bienvenue.", "success");
+          await get().initializeAuth();
+          return { requiresEmailVerification: false, success: true };
         }
-
-        const { error: profileError } = await insforge.database
-          .from('team_members')
-          .insert({
-            id: data.user.id,
-            name,
-            email,
-            role: email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
-            zone: 'Global',
-            organization_id: org.id
-          });
-
-        if (profileError) {
-          addToast("Erreur lors de la création du profil", "error");
-          set({ isLoading: false });
-          return { requiresEmailVerification: false, success: false };
-        }
-
-        addToast("Compte créé avec succès ! Bienvenue.", "success");
-        await get().initializeAuth();
-        return { requiresEmailVerification: false, success: true };
       }
+      
       set({ isLoading: false });
       return { requiresEmailVerification: false, success: false };
     } catch (err: unknown) {
@@ -272,9 +275,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
     try {
-      const { data, error } = await insforge.auth.verifyEmail({
+      const { data, error } = await insforge.auth.verifyOtp({
         email,
-        otp: code
+        token: code,
+        type: 'signup'
       });
       
       if (error || !data) {
