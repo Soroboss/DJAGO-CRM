@@ -7,6 +7,7 @@ import {
   Users, Building, Play, Pause, CreditCard, LifeBuoy 
 } from 'lucide-react';
 import { NetworkBadge } from '../components/NetworkBadge';
+import { createUserSilently } from '../lib/adminAuth';
 
 type TabType = 'dashboard' | 'tenants' | 'users' | 'billing' | 'support' | 'settings';
 
@@ -21,6 +22,18 @@ export const SuperAdminDashboard: React.FC = () => {
   const [tickets, setTickets] = useState<any[]>([]);
   
   const [loading, setLoading] = useState(true);
+
+  // Modal Create User State
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'commercial',
+    organization_id: '',
+    zone: ''
+  });
 
   useEffect(() => {
     fetchGlobalData();
@@ -66,6 +79,37 @@ export const SuperAdminDashboard: React.FC = () => {
     } catch (err) {
       console.error(err);
       addToast("Erreur lors de la mise à jour du statut.", "error");
+    }
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newUser.name || !newUser.email || !newUser.password || !newUser.role || !newUser.organization_id) {
+      addToast("Veuillez remplir tous les champs obligatoires", "error");
+      return;
+    }
+    
+    setIsCreatingUser(true);
+    try {
+      await createUserSilently(
+        newUser.email,
+        newUser.password,
+        newUser.name,
+        newUser.role,
+        newUser.organization_id,
+        newUser.zone
+      );
+      
+      addToast("Utilisateur créé avec succès !", "success");
+      setIsUserModalOpen(false);
+      setNewUser({ name: '', email: '', password: '', role: 'commercial', organization_id: '', zone: '' });
+      // Rafraîchir la liste
+      fetchGlobalData();
+    } catch (err: any) {
+      console.error(err);
+      addToast(err.message || "Erreur lors de la création de l'utilisateur", "error");
+    } finally {
+      setIsCreatingUser(false);
     }
   };
 
@@ -375,6 +419,12 @@ export const SuperAdminDashboard: React.FC = () => {
             <div className="space-y-6 animate-fade-in">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-bold text-slate-900">Tous les Utilisateurs</h3>
+                <button 
+                  onClick={() => setIsUserModalOpen(true)}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm cursor-pointer"
+                >
+                  + Ajouter un Utilisateur
+                </button>
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -528,6 +578,107 @@ export const SuperAdminDashboard: React.FC = () => {
           )}
         </div>
       </main>
+
+      {/* MODAL CRÉER UTILISATEUR */}
+      {isUserModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-fade-in">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <h3 className="font-bold text-lg text-slate-900">Créer un nouvel utilisateur</h3>
+              <button 
+                onClick={() => setIsUserModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 p-1"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <form onSubmit={handleCreateUser} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Nom complet *</label>
+                <input 
+                  type="text" required
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  value={newUser.name} onChange={e => setNewUser({...newUser, name: e.target.value})}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">E-mail *</label>
+                <input 
+                  type="email" required
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  value={newUser.email} onChange={e => setNewUser({...newUser, email: e.target.value})}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Mot de passe temporaire *</label>
+                <input 
+                  type="text" required
+                  placeholder="Ex: TempPass123!"
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  value={newUser.password} onChange={e => setNewUser({...newUser, password: e.target.value})}
+                />
+                <p className="text-xs text-slate-500 mt-1">L'utilisateur devra utiliser ce mot de passe pour sa première connexion.</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Rôle *</label>
+                  <select 
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value})}
+                  >
+                    <option value="dg">Directeur Général (DG)</option>
+                    <option value="manager">Manager</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="superadmin">Super Admin</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Zone</label>
+                  <input 
+                    type="text" placeholder="Ex: Nord"
+                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                    value={newUser.zone} onChange={e => setNewUser({...newUser, zone: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Tenant (Organisation) *</label>
+                <select 
+                  required
+                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  value={newUser.organization_id} onChange={e => setNewUser({...newUser, organization_id: e.target.value})}
+                >
+                  <option value="" disabled>Sélectionner une organisation</option>
+                  {organizations.map(org => (
+                    <option key={org.id} value={org.id}>{org.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex gap-3">
+                <button 
+                  type="button" onClick={() => setIsUserModalOpen(false)}
+                  className="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200 font-medium cursor-pointer"
+                >
+                  Annuler
+                </button>
+                <button 
+                  type="submit" disabled={isCreatingUser}
+                  className="flex-1 px-4 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 font-medium cursor-pointer disabled:opacity-50"
+                >
+                  {isCreatingUser ? 'Création...' : 'Créer l\'utilisateur'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
