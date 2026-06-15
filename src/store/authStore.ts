@@ -272,22 +272,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
     try {
-      const supabaseUrl = import.meta.env.VITE_INSFORGE_URL;
-      const anonKey = import.meta.env.VITE_INSFORGE_ANON_KEY;
-      
-      const res = await fetch(`${supabaseUrl}/auth/v1/verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': anonKey
-        },
-        body: JSON.stringify({ type: 'signup', email, token: code })
+      const { data, error } = await insforge.auth.verifyEmail({
+        email,
+        otp: code
       });
       
-      const responseData = await res.json();
-      
-      if (!res.ok) {
-        addToast(responseData.msg || responseData.message || "Code invalide ou expiré", "error");
+      if (error || !data) {
+        addToast(error?.message || "Code invalide ou expiré", "error");
         set({ isLoading: false });
         return false;
       }
