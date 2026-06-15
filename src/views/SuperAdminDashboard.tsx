@@ -20,6 +20,7 @@ export const SuperAdminDashboard: React.FC = () => {
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
+  const [saasPlans, setSaasPlans] = useState<any[]>([]);
   
   const [loading, setLoading] = useState(true);
 
@@ -42,19 +43,22 @@ export const SuperAdminDashboard: React.FC = () => {
   const fetchGlobalData = async () => {
     setLoading(true);
     try {
-      const [orgsRes, usersRes, ticketsRes] = await Promise.all([
-        insforge.database.from('organizations').select('*').order('created_at', { ascending: false }),
+      const [orgsRes, usersRes, ticketsRes, plansRes] = await Promise.all([
+        insforge.database.from('organizations').select('*, saas_plans(name)').order('created_at', { ascending: false }),
         insforge.database.from('team_members').select('*, organizations(name)').order('created_at', { ascending: false }),
-        insforge.database.from('tickets').select('*, organizations(name)').order('created_at', { ascending: false })
+        insforge.database.from('tickets').select('*, organizations(name)').order('created_at', { ascending: false }),
+        insforge.database.from('saas_plans').select('*').order('price_fcfa', { ascending: true })
       ]);
       
       if (orgsRes.error) throw orgsRes.error;
       if (usersRes.error) throw usersRes.error;
       if (ticketsRes.error) throw ticketsRes.error;
+      if (plansRes.error) throw plansRes.error;
       
       if (orgsRes.data) setOrganizations(orgsRes.data);
       if (usersRes.data) setTeamMembers(usersRes.data);
       if (ticketsRes.data) setTickets(ticketsRes.data);
+      if (plansRes.data) setSaasPlans(plansRes.data);
       
     } catch (err: any) {
       console.error(err);
@@ -110,6 +114,36 @@ export const SuperAdminDashboard: React.FC = () => {
       addToast(err.message || "Erreur lors de la création de l'utilisateur", "error");
     } finally {
       setIsCreatingUser(false);
+    }
+  };
+
+  const handleUpdatePlan = async (planId: string, updates: any) => {
+    try {
+      const { error } = await insforge.database
+        .from('saas_plans')
+        .update(updates)
+        .eq('id', planId);
+      if (error) throw error;
+      addToast("Palier mis à jour avec succès", "success");
+      fetchGlobalData();
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la mise à jour du palier", "error");
+    }
+  };
+
+  const handleUpdateTenantPlan = async (orgId: string, newPlanId: string) => {
+    try {
+      const { error } = await insforge.database
+        .from('organizations')
+        .update({ plan_id: newPlanId, subscription_status: 'active' })
+        .eq('id', orgId);
+      if (error) throw error;
+      addToast("Abonnement du tenant mis à jour", "success");
+      fetchGlobalData();
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la mise à jour de l'abonnement", "error");
     }
   };
 
@@ -361,6 +395,7 @@ export const SuperAdminDashboard: React.FC = () => {
                       <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs uppercase tracking-wider text-slate-500 font-semibold">
                         <th className="p-4">Nom de l'Organisation</th>
                         <th className="p-4">Industrie</th>
+                        <th className="p-4">Abonnement</th>
                         <th className="p-4">Statut</th>
                         <th className="p-4">Utilisateurs</th>
                         <th className="p-4">Créé le</th>
@@ -380,6 +415,21 @@ export const SuperAdminDashboard: React.FC = () => {
                               <span className="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs">
                                 {org.industry_category || 'N/A'}
                               </span>
+                            </td>
+                            <td className="p-4 text-sm">
+                              <div className="flex flex-col gap-1">
+                                <span className="font-semibold text-slate-900">{org.saas_plans?.name || 'Aucun plan'}</span>
+                                <select
+                                  className="text-xs border border-slate-200 rounded p-1 w-full max-w-[120px]"
+                                  value={org.plan_id || ''}
+                                  onChange={(e) => handleUpdateTenantPlan(org.id, e.target.value)}
+                                >
+                                  <option value="" disabled>Changer plan...</option>
+                                  {saasPlans.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name}</option>
+                                  ))}
+                                </select>
+                              </div>
                             </td>
                             <td className="p-4">
                               <span className={`px-2 py-1 rounded text-xs font-semibold ${org.status === 'suspended' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
@@ -566,14 +616,89 @@ export const SuperAdminDashboard: React.FC = () => {
 
           {/* TAB: SETTINGS */}
           {activeTab === 'settings' && (
-            <div className="space-y-6 animate-fade-in flex flex-col items-center justify-center py-20">
-              <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <Settings className="w-12 h-12 text-slate-400" />
+            <div className="space-y-6 animate-fade-in p-6">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+                  <Settings className="w-8 h-8 text-slate-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">Paramètres Globaux & Paliers</h3>
+                  <p className="text-slate-500">Gérez les offres d'abonnement et leurs caractéristiques.</p>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 text-center">Paramètres Globaux</h3>
-              <p className="text-slate-500 text-center max-w-lg mb-8">
-                Configurez les paramètres globaux de la plateforme, les emails système, et les limites par défaut des locataires.
-              </p>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {saasPlans.map(plan => (
+                  <div key={plan.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="text-xl font-bold text-slate-900">{plan.name}</h4>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${plan.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                        {plan.is_active ? 'Actif' : 'Inactif'}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-4 flex-1">
+                      <div>
+                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (FCFA)</label>
+                        <div className="flex items-center">
+                          <input 
+                            type="number" 
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-bold"
+                            defaultValue={plan.price_fcfa}
+                            onBlur={(e) => {
+                              if (e.target.value !== plan.price_fcfa.toString()) {
+                                handleUpdatePlan(plan.id, { price_fcfa: parseInt(e.target.value) });
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (USD)</label>
+                        <div className="flex items-center">
+                          <input 
+                            type="number" 
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-bold"
+                            defaultValue={plan.price_usd}
+                            onBlur={(e) => {
+                              if (e.target.value !== plan.price_usd.toString()) {
+                                handleUpdatePlan(plan.id, { price_usd: parseFloat(e.target.value) });
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Utilisateurs</label>
+                        <input 
+                          type="number" 
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                          defaultValue={plan.features?.max_users || 0}
+                          onBlur={(e) => {
+                            const newFeatures = { ...plan.features, max_users: parseInt(e.target.value) };
+                            handleUpdatePlan(plan.id, { features: newFeatures });
+                          }}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Clients</label>
+                        <input 
+                          type="number" 
+                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                          defaultValue={plan.features?.max_clients || 0}
+                          onBlur={(e) => {
+                            const newFeatures = { ...plan.features, max_clients: parseInt(e.target.value) };
+                            handleUpdatePlan(plan.id, { features: newFeatures });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

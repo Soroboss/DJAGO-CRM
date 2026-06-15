@@ -7,6 +7,7 @@ import { ProductsModule } from '../components/ProductsModule';
 import { BillingModule } from '../components/BillingModule';
 import { SupportModule } from '../components/SupportModule';
 import { LogisticsModule } from '../components/LogisticsModule';
+import { SubscriptionModule } from '../components/SubscriptionModule';
 import { 
   DollarSign, Users, Briefcase, Award, Plus, Search, 
   MapPin, Eye, Calendar, LogOut, ShieldAlert, CheckCircle2, X,
@@ -25,7 +26,7 @@ export const DgDashboard: React.FC = () => {
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
 
-  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics'>('kpis');
+  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription'>('kpis');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -273,6 +274,18 @@ export const DgDashboard: React.FC = () => {
               <Briefcase className="w-4 h-4" />
               <span>WhatsApp Modèles</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('subscription')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                activeTab === 'subscription'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
+                  : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
+              }`}
+            >
+              <CreditCard className="w-4 h-4" />
+              <span>Mon Abonnement</span>
+            </button>
           </nav>
         </div>
 
@@ -312,7 +325,7 @@ export const DgDashboard: React.FC = () => {
 
       {/* Mobile Horizontal Navigation Tabs */}
       <div className="md:hidden flex overflow-x-auto bg-white/40 border-b border-slate-200/40 p-2 gap-1.5 scrollbar-none shrink-0">
-        {(['kpis', 'transactions', 'orders', 'forms', 'kanban', 'feed', 'admin', 'audit', 'templates'] as const).map(tab => (
+        {(['kpis', 'transactions', 'orders', 'forms', 'kanban', 'feed', 'admin', 'audit', 'templates', 'subscription'] as const).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -331,7 +344,7 @@ export const DgDashboard: React.FC = () => {
         <div className="mb-8 border-b border-slate-200/50 pb-5 text-left animate-fade-in">
           <h1 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight !my-0">
             {activeTab === 'kpis' && "Vue d'Ensemble & KPIs"}
-            {activeTab === 'transactions' && "{vocab.transactions} & Pipeline< National"}
+            {activeTab === 'transactions' && "{vocab.transactions} & Pipeline National"}
             {activeTab === 'orders' && "Commandes & Factures Nationales"}
             {activeTab === 'forms' && "Générateur de Formulaires de Capture"}
             {activeTab === 'kanban' && "Pipeline Kanban"}
@@ -339,6 +352,7 @@ export const DgDashboard: React.FC = () => {
             {activeTab === 'admin' && "Recrutement & Collaborateurs"}
             {activeTab === 'audit' && "Audit & Suivi à 360°"}
             {activeTab === 'templates' && "Modèles WhatsApp de Relance"}
+            {activeTab === 'subscription' && "Mon Abonnement SaaS"}
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1">
             {activeTab === 'kpis' && "Supervision générale de l'activité commerciale et du chiffre d'affaires cumulé."}
@@ -350,6 +364,7 @@ export const DgDashboard: React.FC = () => {
             {activeTab === 'admin' && "Recrutez de nouveaux managers et commerciaux et gérez la répartition géographique."}
             {activeTab === 'audit' && "Inspectez en détail les relances téléphoniques, WhatsApp et terrain effectuées par commercial."}
             {activeTab === 'templates' && "Éditez et configurez les modèles d'accroche WhatsApp globaux pour vos équipes."}
+            {activeTab === 'subscription' && "Gérez votre abonnement DjagoCRM, vos factures et vos limites de licence."}
           </p>
         </div>
 
@@ -486,6 +501,13 @@ export const DgDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Tab: Subscription Module */}
+        {activeTab === 'subscription' && (
+          <div className="animate-fade-in pb-20">
+            <SubscriptionModule />
           </div>
         )}
 
