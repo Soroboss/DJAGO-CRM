@@ -1,11 +1,35 @@
-import React from 'react';
-import { ArrowRight, Wifi, MapPin, MessageSquare, ShieldCheck, TrendingUp, Users, Database, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, Wifi, MapPin, MessageSquare, ShieldCheck, TrendingUp, Users, Database, Zap, CheckCircle2 } from 'lucide-react';
+import { insforge } from '../lib/insforge';
 
 interface LandingPageProps {
   onNavigateToLogin: () => void;
+  onNavigateToSignup: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onNavigateToSignup }) => {
+  const [plans, setPlans] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const { data } = await insforge.database
+          .from('saas_plans')
+          .select('*')
+          .eq('is_active', true)
+          .order('price_fcfa', { ascending: true });
+        if (data) setPlans(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchPlans();
+  }, []);
+
+  const scrollToPricing = () => {
+    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col relative overflow-hidden">
       {/* Background Gradients / Glow blobs */}
@@ -53,7 +77,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) =
 
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <button
-              onClick={onNavigateToLogin}
+              onClick={scrollToPricing}
               className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange text-white font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] group hover:-translate-y-1"
             >
               Démarrer maintenant
@@ -147,6 +171,65 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) =
           </div>
         </div>
       </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="bg-slate-50 py-24 relative z-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-black text-slate-900 mb-4">Un tarif simple et transparent</h2>
+            <p className="text-xl text-slate-500 max-w-2xl mx-auto">Choisissez l'offre qui correspond à la taille de votre entreprise.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {plans.map((plan) => (
+              <div 
+                key={plan.id} 
+                className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:border-brand-orange/50 hover:shadow-xl transition-all flex flex-col"
+              >
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">{plan.name}</h3>
+                <p className="text-slate-500 text-sm mb-6 h-10">{plan.description}</p>
+                
+                <div className="mb-8">
+                  <span className="text-4xl font-black text-slate-900">{plan.price_fcfa.toLocaleString()}</span>
+                  <span className="text-slate-500 font-medium"> FCFA / mois</span>
+                </div>
+                
+                <ul className="space-y-4 mb-8 flex-1">
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-brand-emerald shrink-0" />
+                    <span className="text-slate-700 font-medium">
+                      {plan.features?.max_users >= 9999 ? 'Utilisateurs illimités' : `Jusqu'à ${plan.features?.max_users} utilisateurs`}
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-brand-emerald shrink-0" />
+                    <span className="text-slate-700 font-medium">
+                      {plan.features?.max_clients >= 99999 ? 'Clients illimités' : `Jusqu'à ${plan.features?.max_clients} clients`}
+                    </span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-brand-emerald shrink-0" />
+                    <span className="text-slate-700 font-medium">Support Client</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={onNavigateToSignup}
+                  className="w-full py-4 rounded-xl font-bold transition-colors bg-gradient-to-r from-slate-900 to-slate-800 hover:from-brand-orange hover:to-amber-500 text-white shadow-md flex items-center justify-center gap-2 group"
+                >
+                  S'inscrire maintenant
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            ))}
+            {plans.length === 0 && (
+              <div className="col-span-3 text-center py-10 text-slate-500">
+                Chargement des offres...
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
       
       {/* Final CTA */}
       <section className="bg-slate-900 py-24 relative z-10 overflow-hidden">
@@ -155,7 +238,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin }) =
           <h2 className="text-5xl font-black text-white mb-6">Prêt à transformer votre entreprise ?</h2>
           <p className="text-xl text-slate-400 mb-10">Rejoignez les entreprises qui ont choisi l'excellence pour leur gestion commerciale.</p>
           <button
-              onClick={onNavigateToLogin}
+              onClick={scrollToPricing}
               className="px-10 py-5 rounded-2xl bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange text-white font-bold text-xl flex items-center justify-center gap-3 mx-auto transition-all duration-300 shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] hover:-translate-y-1"
             >
               Créer votre espace maintenant

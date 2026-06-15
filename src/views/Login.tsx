@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { ArrowLeft, Mail, Lock, LogIn, Sparkles, ShieldCheck, Zap, BarChart3, Database, Building2, User, UserPlus, CheckCircle } from 'lucide-react';
 import { INDUSTRIES } from '../config/industries';
@@ -10,6 +10,12 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ onBack, isAdmin = false }) => {
   const [isSignup, setIsSignup] = useState(false);
+
+  useEffect(() => {
+    if (window.location.search.includes('mode=signup')) {
+      setIsSignup(true);
+    }
+  }, []);
     
   // Login fields
   const [email, setEmail] = useState('');

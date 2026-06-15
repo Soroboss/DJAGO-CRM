@@ -74,11 +74,12 @@ function App() {
       {currentPath === '/' && (
         <LandingPage
           onNavigateToLogin={() => navigate('/login')}
+          onNavigateToSignup={() => navigate('/login?mode=signup')}
         />
       )}
-      {currentPath === '/login' && <Login onBack={() => navigate('/')} isAdmin={false} />}
+      {(currentPath === '/login' || currentPath.startsWith('/login?')) && <Login onBack={() => navigate('/')} isAdmin={false} />}
       {currentPath === '/admin' && <Login onBack={() => navigate('/')} isAdmin={true} />}
-      {currentPath !== '/' && currentPath !== '/login' && currentPath !== '/admin' && (
+      {currentPath !== '/' && !currentPath.startsWith('/login') && currentPath !== '/admin' && (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center flex-col gap-4">
           <h1 className="text-4xl font-bold text-slate-900">404</h1>
           <p className="text-slate-500">Page introuvable</p>
