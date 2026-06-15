@@ -275,10 +275,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
     try {
-      const { data, error } = await insforge.auth.verifyOtp({
+      const { data, error } = await insforge.auth.verifyEmail({
         email,
-        token: code,
-        type: 'signup'
+        otp: code
       });
       
       if (error || !data) {
