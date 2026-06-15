@@ -419,14 +419,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   deleteTeammate: async (id: string) => {
     const { addToast } = useToastStore.getState();
     try {
-      const { error } = await insforge.database
-        .from('team_members')
-        .delete()
-        .eq('id', id);
+      const { error } = await insforge.database.rpc('delete_user_by_id', { user_to_delete: id });
 
       if (error) throw error;
       
-      addToast("Collaborateur supprimé", "success");
+      addToast("Collaborateur supprimé définitivement", "success");
       await get().fetchTeam();
       return true;
     } catch (err: any) {
