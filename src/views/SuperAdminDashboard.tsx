@@ -21,8 +21,14 @@ export const SuperAdminDashboard: React.FC = () => {
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [tickets, setTickets] = useState<any[]>([]);
   const [saasPlans, setSaasPlans] = useState<any[]>([]);
+  const [systemSettings, setSystemSettings] = useState<any>(null);
   
   const [loading, setLoading] = useState(true);
+
+  // Ticket Modal State
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [ticketMessages, setTicketMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState('');
 
   // Modal Create User State
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -43,22 +49,26 @@ export const SuperAdminDashboard: React.FC = () => {
   const fetchGlobalData = async () => {
     setLoading(true);
     try {
-      const [orgsRes, usersRes, ticketsRes, plansRes] = await Promise.all([
+      const [orgsRes, usersRes, ticketsRes, plansRes, settingsRes] = await Promise.all([
         insforge.database.from('organizations').select('*, saas_plans(name)').order('created_at', { ascending: false }),
         insforge.database.from('team_members').select('*, organizations(name)').order('created_at', { ascending: false }),
-        insforge.database.from('tickets').select('*, organizations(name)').order('created_at', { ascending: false }),
-        insforge.database.from('saas_plans').select('*').order('price_fcfa', { ascending: true })
+        insforge.database.from('global_tickets').select('*, organizations(name)').order('created_at', { ascending: false }),
+        insforge.database.from('saas_plans').select('*').order('price_fcfa', { ascending: true }),
+        insforge.database.from('system_settings').select('*').eq('id', 'global').single()
       ]);
       
       if (orgsRes.error) throw orgsRes.error;
       if (usersRes.error) throw usersRes.error;
-      if (ticketsRes.error) throw ticketsRes.error;
+      // We don't strictly throw on global_tickets if it's empty, but let's handle it
+      if (ticketsRes.error && ticketsRes.error.code !== 'PGRST116') console.error(ticketsRes.error);
       if (plansRes.error) throw plansRes.error;
+      if (settingsRes.error && settingsRes.error.code !== 'PGRST116') console.error(settingsRes.error);
       
       if (orgsRes.data) setOrganizations(orgsRes.data);
       if (usersRes.data) setTeamMembers(usersRes.data);
       if (ticketsRes.data) setTickets(ticketsRes.data);
       if (plansRes.data) setSaasPlans(plansRes.data);
+      if (settingsRes.data) setSystemSettings(settingsRes.data);
       
     } catch (err: any) {
       console.error(err);
@@ -144,6 +154,87 @@ export const SuperAdminDashboard: React.FC = () => {
     } catch (err) {
       console.error(err);
       addToast("Erreur lors de la mise à jour de l'abonnement", "error");
+    }
+  };
+
+  const loadTicketMessages = async (ticket: any) => {
+    setSelectedTicket(ticket);
+    try {
+      const { data, error } = await insforge.database
+        .from('global_ticket_messages')
+        .select('*')
+        .eq('ticket_id', ticket.id)
+        .order('created_at', { ascending: true });
+        
+      if (error) throw error;
+      setTicketMessages(data || []);
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors du chargement des messages", "error");
+    }
+  };
+
+  const handleSendTicketMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim() || !selectedTicket || !user) return;
+    
+    try {
+      const { error } = await insforge.database
+        .from('global_ticket_messages')
+        .insert([{
+          ticket_id: selectedTicket.id,
+          sender_id: user.id,
+          is_superadmin: true,
+          message: newMessage.trim()
+        }]);
+        
+      if (error) throw error;
+      setNewMessage('');
+      loadTicketMessages(selectedTicket);
+      
+      // Update ticket status to open if it was new
+      if (selectedTicket.status === 'new') {
+        await insforge.database
+          .from('global_tickets')
+          .update({ status: 'open' })
+          .eq('id', selectedTicket.id);
+        fetchGlobalData();
+      }
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de l'envoi du message", "error");
+    }
+  };
+
+  const handleCloseTicket = async () => {
+    if (!selectedTicket) return;
+    try {
+      const { error } = await insforge.database
+        .from('global_tickets')
+        .update({ status: 'resolved' })
+        .eq('id', selectedTicket.id);
+      if (error) throw error;
+      addToast("Ticket clôturé", "success");
+      setSelectedTicket(null);
+      fetchGlobalData();
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la clôture du ticket", "error");
+    }
+  };
+
+  const handleUpdateSettings = async (updates: any) => {
+    try {
+      const { error } = await insforge.database
+        .from('system_settings')
+        .update(updates)
+        .eq('id', 'global');
+      if (error) throw error;
+      addToast("Paramètres mis à jour", "success");
+      setSystemSettings({ ...systemSettings, ...updates });
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la mise à jour des paramètres", "error");
     }
   };
 
@@ -492,10 +583,10 @@ export const SuperAdminDashboard: React.FC = () => {
                     <tbody className="divide-y divide-slate-100">
                       {loading ? (
                         <tr><td colSpan={5} className="p-8 text-center text-slate-500">Chargement...</td></tr>
-                      ) : teamMembers.length === 0 ? (
-                        <tr><td colSpan={5} className="p-8 text-center text-slate-500">Aucun utilisateur trouvé.</td></tr>
+                      ) : teamMembers.filter(m => m.role === 'superadmin').length === 0 ? (
+                        <tr><td colSpan={5} className="p-8 text-center text-slate-500">Aucun super admin trouvé.</td></tr>
                       ) : (
-                        teamMembers.map(member => (
+                        teamMembers.filter(m => m.role === 'superadmin').map(member => (
                           <tr key={member.id} className="hover:bg-slate-50 transition-colors">
                             <td className="p-4">
                               <div className="flex flex-col">
@@ -600,7 +691,10 @@ export const SuperAdminDashboard: React.FC = () => {
                               {new Date(ticket.created_at).toLocaleDateString()}
                             </td>
                             <td className="p-4 text-right">
-                              <button className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium">
+                              <button 
+                                onClick={() => loadTicketMessages(ticket)}
+                                className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium"
+                              >
                                 Répondre
                               </button>
                             </td>
@@ -627,20 +721,22 @@ export const SuperAdminDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {saasPlans.map(plan => (
-                  <div key={plan.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
-                    <div className="flex justify-between items-center mb-4">
-                      <h4 className="text-xl font-bold text-slate-900">{plan.name}</h4>
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${plan.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                        {plan.is_active ? 'Actif' : 'Inactif'}
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-4 flex-1">
-                      <div>
-                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (FCFA)</label>
-                        <div className="flex items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Saas Plans configuration */}
+                <div className="space-y-6">
+                  <h4 className="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2">Paliers d'Abonnement</h4>
+                  {saasPlans.map(plan => (
+                    <div key={plan.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                      <div className="flex justify-between items-center mb-4">
+                        <h4 className="text-lg font-bold text-slate-900">{plan.name}</h4>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${plan.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                          {plan.is_active ? 'Actif' : 'Inactif'}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-4 flex-1">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (FCFA)</label>
                           <input 
                             type="number" 
                             className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-bold"
@@ -652,11 +748,8 @@ export const SuperAdminDashboard: React.FC = () => {
                             }}
                           />
                         </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (USD)</label>
-                        <div className="flex items-center">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Prix (USD)</label>
                           <input 
                             type="number" 
                             className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-bold"
@@ -668,36 +761,95 @@ export const SuperAdminDashboard: React.FC = () => {
                             }}
                           />
                         </div>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Utilisateurs</label>
-                        <input 
-                          type="number" 
-                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
-                          defaultValue={plan.features?.max_users || 0}
-                          onBlur={(e) => {
-                            const newFeatures = { ...plan.features, max_users: parseInt(e.target.value) };
-                            handleUpdatePlan(plan.id, { features: newFeatures });
-                          }}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Clients</label>
-                        <input 
-                          type="number" 
-                          className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
-                          defaultValue={plan.features?.max_clients || 0}
-                          onBlur={(e) => {
-                            const newFeatures = { ...plan.features, max_clients: parseInt(e.target.value) };
-                            handleUpdatePlan(plan.id, { features: newFeatures });
-                          }}
-                        />
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Utilisateurs</label>
+                            <input 
+                              type="number" 
+                              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                              defaultValue={plan.features?.max_users || 0}
+                              onBlur={(e) => {
+                                const newFeatures = { ...plan.features, max_users: parseInt(e.target.value) };
+                                handleUpdatePlan(plan.id, { features: newFeatures });
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Limite Clients</label>
+                            <input 
+                              type="number" 
+                              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                              defaultValue={plan.features?.max_clients || 0}
+                              onBlur={(e) => {
+                                const newFeatures = { ...plan.features, max_clients: parseInt(e.target.value) };
+                                handleUpdatePlan(plan.id, { features: newFeatures });
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Global Settings Configuration */}
+                <div className="space-y-6">
+                  <h4 className="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2">Configuration Système</h4>
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+                    <div>
+                      <h5 className="font-bold text-slate-900 mb-2">Période d'essai</h5>
+                      <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Nombre de jours par défaut</label>
+                      <input 
+                        type="number" 
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none font-bold"
+                        defaultValue={systemSettings?.default_trial_days || 14}
+                        onBlur={(e) => handleUpdateSettings({ default_trial_days: parseInt(e.target.value) })}
+                      />
+                    </div>
+                    
+                    <div className="pt-4 border-t border-slate-100">
+                      <h5 className="font-bold text-slate-900 mb-2">Passerelle de Paiement (Mobile Money)</h5>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-500 uppercase mb-1">API Key (ex: CinetPay)</label>
+                          <input 
+                            type="password" 
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                            placeholder="Entrez l'API Key"
+                            defaultValue={systemSettings?.cinetpay_api_key || ''}
+                            onBlur={(e) => handleUpdateSettings({ cinetpay_api_key: e.target.value })}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-slate-500 uppercase mb-1">Site ID</label>
+                          <input 
+                            type="text" 
+                            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
+                            placeholder="Entrez le Site ID"
+                            defaultValue={systemSettings?.cinetpay_site_id || ''}
+                            onBlur={(e) => handleUpdateSettings({ cinetpay_site_id: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                      <div>
+                        <h5 className="font-bold text-slate-900">Mode Maintenance</h5>
+                        <p className="text-sm text-slate-500">Suspendre l'accès pour tous les locataires</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="sr-only peer" 
+                          checked={systemSettings?.maintenance_mode || false}
+                          onChange={(e) => handleUpdateSettings({ maintenance_mode: e.target.checked })}
+                        />
+                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                      </label>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           )}
@@ -804,6 +956,67 @@ export const SuperAdminDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* TICKET MODAL */}
+      {selectedTicket && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl animate-fade-in">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <div>
+                <h3 className="font-bold text-lg text-slate-900">{selectedTicket.subject}</h3>
+                <p className="text-xs text-slate-500">
+                  Tenant: {selectedTicket.organizations?.name} | Statut: {selectedTicket.status}
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                {selectedTicket.status !== 'resolved' && (
+                  <button 
+                    onClick={handleCloseTicket}
+                    className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-lg hover:bg-emerald-200 transition-colors"
+                  >
+                    Marquer Résolu
+                  </button>
+                )}
+                <button 
+                  onClick={() => setSelectedTicket(null)}
+                  className="text-slate-400 hover:text-slate-600 p-1"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50">
+              {ticketMessages.map((msg) => (
+                <div key={msg.id} className={`flex flex-col ${msg.is_superadmin ? 'items-end' : 'items-start'}`}>
+                  <div className={`max-w-[80%] rounded-2xl p-4 ${msg.is_superadmin ? 'bg-orange-500 text-white rounded-tr-none' : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'}`}>
+                    <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-1">{new Date(msg.created_at).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+
+            {selectedTicket.status !== 'resolved' && (
+              <form onSubmit={handleSendTicketMessage} className="p-4 border-t border-slate-100 bg-white flex gap-2">
+                <input 
+                  type="text" 
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Écrivez votre réponse..."
+                  className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <button 
+                  type="submit"
+                  disabled={!newMessage.trim()}
+                  className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                >
+                  Envoyer
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

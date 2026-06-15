@@ -8,11 +8,12 @@ import { BillingModule } from '../components/BillingModule';
 import { SupportModule } from '../components/SupportModule';
 import { LogisticsModule } from '../components/LogisticsModule';
 import { SubscriptionModule } from '../components/SubscriptionModule';
+import { GlobalSupportModule } from '../components/GlobalSupportModule';
 import { 
   DollarSign, Users, Briefcase, Award, Plus, Search, 
   MapPin, Eye, Calendar, LogOut, ShieldAlert, CheckCircle2, X,
   Activity, LayoutDashboard, ChevronRight, ChevronLeft, BarChart3,
-  ShoppingCart, FileText, ClipboardList, CheckSquare, Settings, Copy, ExternalLink, CreditCard
+  ShoppingCart, FileText, ClipboardList, CheckSquare, Settings, Copy, ExternalLink, CreditCard, LifeBuoy
 } from 'lucide-react';
 import { type LocalClient } from '../db/localDb';
 
@@ -26,7 +27,7 @@ export const DgDashboard: React.FC = () => {
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
 
-  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription'>('kpis');
+  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription' | 'system_support'>('kpis');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -286,6 +287,18 @@ export const DgDashboard: React.FC = () => {
               <CreditCard className="w-4 h-4" />
               <span>Mon Abonnement</span>
             </button>
+
+            <button
+              onClick={() => setActiveTab('system_support')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                activeTab === 'system_support'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
+                  : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
+              }`}
+            >
+              <LifeBuoy className="w-4 h-4" />
+              <span>Support Système</span>
+            </button>
           </nav>
         </div>
 
@@ -353,6 +366,7 @@ export const DgDashboard: React.FC = () => {
             {activeTab === 'audit' && "Audit & Suivi à 360°"}
             {activeTab === 'templates' && "Modèles WhatsApp de Relance"}
             {activeTab === 'subscription' && "Mon Abonnement SaaS"}
+            {activeTab === 'system_support' && "Support Système & Assistance"}
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1">
             {activeTab === 'kpis' && "Supervision générale de l'activité commerciale et du chiffre d'affaires cumulé."}
@@ -506,8 +520,14 @@ export const DgDashboard: React.FC = () => {
 
         {/* Tab: Subscription Module */}
         {activeTab === 'subscription' && (
-          <div className="animate-fade-in pb-20">
+          <div className="bg-slate-50/50 min-h-[60vh] rounded-2xl border border-slate-200/50 p-6">
             <SubscriptionModule />
+          </div>
+        )}
+
+        {activeTab === 'system_support' && (
+          <div className="bg-slate-50/50 min-h-[60vh] rounded-2xl border border-slate-200/50 p-6">
+            <GlobalSupportModule />
           </div>
         )}
 

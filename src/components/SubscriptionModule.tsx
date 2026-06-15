@@ -3,12 +3,14 @@ import { insforge } from '../lib/insforge';
 import { useAuthStore } from '../store/authStore';
 import { useToastStore } from '../store/toastStore';
 import { ShieldCheck, CheckCircle2, CreditCard } from 'lucide-react';
+import { PaymentModal } from './PaymentModal';
 
 export const SubscriptionModule: React.FC = () => {
   const { user, organization } = useAuthStore();
   const { addToast } = useToastStore();
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
 
   useEffect(() => {
     fetchPlans();
@@ -33,6 +35,27 @@ export const SubscriptionModule: React.FC = () => {
   };
 
   const currentPlan = plans.find(p => p.id === organization?.plan_id) || plans[0];
+
+  const handlePaymentSuccess = async () => {
+    if (!selectedPlan || !organization) return;
+    try {
+      const { error } = await insforge.database
+        .from('organizations')
+        .update({ 
+          plan_id: selectedPlan.id, 
+          subscription_status: 'active' 
+        })
+        .eq('id', organization.id);
+        
+      if (error) throw error;
+      addToast(`Abonnement mis à niveau vers ${selectedPlan.name}`, "success");
+      // Mettre à jour l'état local via un rechargement partiel ou store
+      window.location.reload(); 
+    } catch (err) {
+      console.error(err);
+      addToast("Erreur lors de la mise à jour de l'abonnement", "error");
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
@@ -125,7 +148,7 @@ export const SubscriptionModule: React.FC = () => {
                       : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md'
                   }`}
                   disabled={isCurrent}
-                  onClick={() => !isCurrent && alert('Intégration de paiement à venir (Stripe/CinetPay). Veuillez contacter l\'administrateur.')}
+                  onClick={() => !isCurrent && setSelectedPlan(plan)}
                 >
                   <CreditCard className="w-5 h-5" />
                   {isCurrent ? 'Plan Actuel' : 'Mettre à niveau'}
@@ -134,6 +157,15 @@ export const SubscriptionModule: React.FC = () => {
             );
           })}
         </div>
+      )}
+
+      {selectedPlan && (
+        <PaymentModal 
+          isOpen={true}
+          plan={selectedPlan}
+          onClose={() => setSelectedPlan(null)}
+          onSuccess={handlePaymentSuccess}
+        />
       )}
     </div>
   );
