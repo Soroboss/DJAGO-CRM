@@ -280,9 +280,9 @@ export const useCrmStore = create<CrmState>((set, get) => ({
   clients: [],
   interactions: [],
   whatsappTemplates: [
-    { id: 'devis', name: 'Relance Devis', text: "Bonjour {{nom_client}} de la part de {{nom_commercial}}, je me permets de vous relancer concernant notre proposition. Avez-vous pu y jeter un coup d'œil ?" },
-    { id: 'livraison', name: 'Suivi Livraison', text: "Salut {{nom_client}}, la commande pour {{entreprise}} est en cours de préparation." },
-    { id: 'fidelisation', name: 'Fidélisation', text: "Cher {{nom_client}}, l'équipe vous remercie pour votre confiance !" }
+    { id: 'devis', name: 'Proposition Commerciale', text: "Bonjour {{nom_client}} de la part de {{nom_commercial}}, suite à notre échange concernant {{service_article}}, je me permets de vous relancer. N'hésitez pas à nous contacter au {{entreprise_phone}} ou sur {{entreprise_email}}." },
+    { id: 'livraison', name: 'Suivi Livraison', text: "Salut {{nom_client}}, l'équipe de {{entreprise_nom}} prépare actuellement votre commande pour {{service_article}} destinée à {{entreprise}}." },
+    { id: 'fidelisation', name: 'Fidélisation', text: "Cher {{nom_client}}, toute l'équipe de {{entreprise_nom}} vous remercie pour votre confiance pour {{service_article}} !" }
   ],
   offlineActions: [],
   isOnline: navigator.onLine,
