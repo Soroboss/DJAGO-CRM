@@ -37,8 +37,6 @@ export const SuperAdminDashboard: React.FC = () => {
     name: '',
     email: '',
     password: '',
-    role: 'commercial',
-    organization_id: '',
     zone: ''
   });
 
@@ -98,8 +96,8 @@ export const SuperAdminDashboard: React.FC = () => {
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newUser.name || !newUser.email || !newUser.password || !newUser.role || !newUser.organization_id) {
-      addToast("Veuillez remplir tous les champs obligatoires", "error");
+    if (!newUser.name || !newUser.email || !newUser.password || !user?.organization_id) {
+      addToast("Veuillez remplir tous les champs obligatoires (L'organisation Super Admin doit être définie)", "error");
       return;
     }
     
@@ -109,14 +107,14 @@ export const SuperAdminDashboard: React.FC = () => {
         newUser.email,
         newUser.password,
         newUser.name,
-        newUser.role,
-        newUser.organization_id,
+        'superadmin',
+        user.organization_id,
         newUser.zone
       );
       
       addToast("Utilisateur créé avec succès !", "success");
       setIsUserModalOpen(false);
-      setNewUser({ name: '', email: '', password: '', role: 'commercial', organization_id: '', zone: '' });
+      setNewUser({ name: '', email: '', password: '', zone: '' });
       // Rafraîchir la liste
       fetchGlobalData();
     } catch (err: any) {
@@ -902,39 +900,23 @@ export const SuperAdminDashboard: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Rôle *</label>
-                  <select 
-                    className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                    value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value})}
-                  >
-                    <option value="dg">Directeur Général (DG)</option>
-                    <option value="manager">Manager</option>
-                    <option value="commercial">Commercial</option>
-                    <option value="superadmin">Super Admin</option>
-                  </select>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Rôle</label>
+                  <input 
+                    type="text" 
+                    readOnly
+                    className="w-full px-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed"
+                    value="Super Admin"
+                  />
+                  <p className="text-xs text-slate-500 mt-1">L'utilisateur fera partie de votre équipe d'administration SaaS.</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Zone</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Zone (Optionnel)</label>
                   <input 
-                    type="text" placeholder="Ex: Nord"
+                    type="text" placeholder="Ex: Globale"
                     className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     value={newUser.zone} onChange={e => setNewUser({...newUser, zone: e.target.value})}
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Tenant (Organisation) *</label>
-                <select 
-                  required
-                  className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                  value={newUser.organization_id} onChange={e => setNewUser({...newUser, organization_id: e.target.value})}
-                >
-                  <option value="" disabled>Sélectionner une organisation</option>
-                  {organizations.map(org => (
-                    <option key={org.id} value={org.id}>{org.name}</option>
-                  ))}
-                </select>
               </div>
 
               <div className="pt-4 border-t border-slate-100 flex gap-3">

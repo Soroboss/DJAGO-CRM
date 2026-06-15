@@ -24,15 +24,27 @@ export const createUserSilently = async (email: string, password: string, name: 
     throw new Error(authError.message);
   }
 
-  if (!authData?.user) {
+  // 2. Get user ID, handling requireEmailVerification=true where authData.user might be null or empty
+  let userId = authData?.user?.id;
+  
+  if (!userId) {
+    const { data: rpcData, error: rpcError } = await silentAuthClient.rpc('get_user_id_by_email', { user_email: email });
+    if (rpcError) {
+      console.error("RPC Error:", rpcError);
+      throw new Error("Impossible de récupérer l'identifiant du nouvel utilisateur.");
+    }
+    userId = rpcData;
+  }
+
+  if (!userId) {
     throw new Error("L'utilisateur n'a pas pu être créé (aucune donnée retournée).");
   }
 
-  // 2. Utiliser le client principal (qui a les droits de Super Admin) pour insérer le profil
+  // 3. Utiliser le client principal pour insérer le profil
   const { error: profileError } = await insforge.database
     .from('team_members')
     .insert({
-      id: authData.user.id,
+      id: userId,
       name,
       email,
       role,
@@ -44,5 +56,5 @@ export const createUserSilently = async (email: string, password: string, name: 
     throw new Error("Compte créé mais erreur lors de l'attribution du profil: " + profileError.message);
   }
 
-  return authData.user;
+  return { id: userId, email };
 };
