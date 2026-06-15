@@ -319,7 +319,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     useToastStore.getState().addToast("Déconnexion réussie. Au revoir !", "info");
   },
 
-  createTeammate: async (name: string, email: string, role: UserRole, zone: string, managerId?: string) => {
+  createTeammate: async (name: string, email: string, role: UserRole, zone: string, managerId?: string): Promise<UserProfile | null> => {
     const { addToast } = useToastStore.getState();
     const org = get().organization;
     
@@ -329,52 +329,70 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     try {
-      // Use the REST API directly to avoid changing the current session
-      const insforgeUrl = import.meta.env.VITE_INSFORGE_URL;
-      const insforgeAnonKey = import.meta.env.VITE_INSFORGE_ANON_KEY;
+      // 1. Create a secondary client to avoid logging out the current user
+      const { createClient } = await import('@supabase/supabase-js');
+      const insforgeUrl = import.meta.env.VITE_INSFORGE_URL || '';
+      const insforgeAnonKey = import.meta.env.VITE_INSFORGE_ANON_KEY || '';
       
-      const response = await fetch(`${insforgeUrl}/auth/v1/signup`, {
-        method: 'POST',
-        headers: {
-          'apikey': insforgeAnonKey,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          password: 'Password123!', // Default password
-          data: { name, role }
-        })
+      const tempClient = createClient(insforgeUrl, insforgeAnonKey, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false
+        }
       });
 
-      const result = await response.json();
+      // 2. Sign up the user
+      const { data, error: signUpError } = await tempClient.auth.signUp({
+        email,
+        password: 'Password123!',
+        options: {
+          data: { name, role }
+        }
+      });
 
-      if (!response.ok) {
-        throw new Error(result.msg || result.message || "Erreur de création de compte");
+      if (signUpError) {
+        throw signUpError;
       }
 
-      if (result.user && result.user.id) {
-        // Now create the team_member profile
-        const { error } = await insforge.database
-          .from('team_members')
-          .insert({
-            id: result.user.id,
-            name,
-            email,
-            role,
-            zone,
-            manager_id: managerId || null,
-            organization_id: org.id
-          });
+      // 3. Get the user ID using our RPC because signUp might not return the user if email verification is ON
+      let userId = data?.user?.id;
+      
+      if (!userId) {
+        const { data: rpcData, error: rpcError } = await tempClient.rpc('get_user_id_by_email', { user_email: email });
+        if (rpcError) {
+          console.error("RPC Error:", rpcError);
+          throw new Error("Impossible de récupérer l'identifiant du nouvel utilisateur.");
+        }
+        userId = rpcData;
+      }
 
-        if (error) {
-          throw error;
+      if (userId) {
+        // 4. Create the team_member profile using the main client
+        const newUserProfile = {
+          id: userId,
+          name,
+          email,
+          role,
+          zone,
+          manager_id: managerId || null,
+          organization_id: org.id
+        };
+
+        const { error: insertError } = await insforge.database
+          .from('team_members')
+          .insert(newUserProfile);
+
+        if (insertError) {
+          throw insertError;
         }
 
-        addToast(`Collaborateur ${name} (${role}) créé avec succès ! Mdp par défaut: Password123!`, "success");
+        addToast(`Collaborateur ${name} créé ! L'utilisateur doit vérifier son email. Mdp: Password123!`, "success");
         await get().fetchTeam();
-        return result.user.id;
+        return newUserProfile as UserProfile;
+      } else {
+        throw new Error("L'utilisateur a été créé mais son ID est introuvable.");
       }
-      return null;
     } catch (err: any) {
       addToast(`Erreur : ${err.message}`, "error");
       return null;
