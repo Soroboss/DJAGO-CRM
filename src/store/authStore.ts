@@ -32,7 +32,7 @@ interface AuthState {
   team: UserProfile[];
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
-  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<boolean>;
+  signup: (email: string, password: string, name: string, orgName: string, industryCategory: string) => Promise<{requiresEmailVerification: boolean, success: boolean}>;
   logout: () => void;
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
@@ -75,6 +75,47 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           });
           await get().fetchTeam();
         } else {
+          // Profil manquant. Vérifions si on vient de valider un e-mail avec des données en attente.
+          const pendingDataStr = localStorage.getItem('pending_signup');
+          if (pendingDataStr) {
+            try {
+              const pendingData = JSON.parse(pendingDataStr);
+              if (pendingData.email === data.user.email) {
+                const { addToast } = useToastStore.getState();
+                
+                // Créer l'organisation
+                const { data: org, error: orgError } = await insforge.database
+                  .from('organizations')
+                  .insert({ name: pendingData.orgName, industry_category: pendingData.industryCategory })
+                  .select()
+                  .single();
+
+                if (!orgError && org) {
+                  // Créer le profil Utilisateur
+                  const { error: profileError } = await insforge.database
+                    .from('team_members')
+                    .insert({
+                      id: data.user.id,
+                      name: pendingData.name,
+                      email: pendingData.email,
+                      role: pendingData.email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
+                      zone: 'Global',
+                      organization_id: org.id
+                    });
+
+                  if (!profileError) {
+                    localStorage.removeItem('pending_signup');
+                    addToast("Compte vérifié et créé avec succès ! Bienvenue.", "success");
+                    // Relancer l'initialisation pour charger les nouvelles données
+                    await get().initializeAuth();
+                    return; // Sortie prématurée pour éviter de set false
+                  }
+                }
+              }
+            } catch (err) {
+              console.error("Erreur lors de la finalisation post-email", err);
+            }
+          }
           set({ isAuthenticated: false, isLoading: false });
         }
       } else {
@@ -155,10 +196,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (error) {
         addToast(error.message, "error");
         set({ isLoading: false });
-        return false;
+        return { requiresEmailVerification: false, success: false };
       }
 
       if (data?.user) {
+        // Vérification si la confirmation e-mail est requise (pas de token)
+        // Note: TypeScript might not know about accessToken here depending on exact sdk version types, we cast it safely if needed.
+        const token = (data as any).accessToken;
+        if (!token) {
+          // Stocker localement en attendant que l'utilisateur clique sur le lien magique
+          localStorage.setItem('pending_signup', JSON.stringify({ name, email, orgName, industryCategory }));
+          addToast("Un lien magique vous a été envoyé par e-mail.", "info");
+          set({ isLoading: false });
+          return { requiresEmailVerification: true, success: true };
+        }
+
+        // Si l'e-mail n'est pas requis (désactivé côté backend), on crée directement
         const { data: org, error: orgError } = await insforge.database
           .from('organizations')
           .insert({ name: orgName, industry_category: industryCategory })
@@ -168,7 +221,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (orgError || !org) {
           addToast("Erreur lors de la création de l'espace de travail", "error");
           set({ isLoading: false });
-          return false;
+          return { requiresEmailVerification: false, success: false };
         }
 
         const { error: profileError } = await insforge.database
@@ -185,19 +238,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (profileError) {
           addToast("Erreur lors de la création du profil", "error");
           set({ isLoading: false });
-          return false;
+          return { requiresEmailVerification: false, success: false };
         }
 
         addToast("Compte créé avec succès ! Bienvenue.", "success");
         await get().initializeAuth();
-        return true;
+        return { requiresEmailVerification: false, success: true };
       }
-      return false;
+      return { requiresEmailVerification: false, success: false };
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       addToast(errorMsg || "Erreur lors de l'inscription", "error");
       set({ isLoading: false });
-      return false;
+      return { requiresEmailVerification: false, success: false };
     }
   },
 
