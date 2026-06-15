@@ -1118,7 +1118,7 @@ export const DgDashboard: React.FC = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-slate-400 uppercase">Rôle</label>
+                    <label className="text-xs font-bold text-slate-400 uppercase">Type de collaborateur</label>
                     <select
                       value={newCollabRole}
                       onChange={(e) => setNewCollabRole(e.target.value as UserRole)}
@@ -1187,7 +1187,7 @@ export const DgDashboard: React.FC = () => {
                   <thead>
                     <tr className="border-b border-slate-200 text-slate-400 text-xs">
                       <th className="py-2.5 px-4 text-left">Collaborateur</th>
-                      <th className="py-2.5 px-4 text-left">Rôle</th>
+                      <th className="py-2.5 px-4 text-left">Type</th>
                       <th className="py-2.5 px-4 text-left">Zone</th>
                       <th className="py-2.5 px-4 text-left">Responsable</th>
                     </tr>

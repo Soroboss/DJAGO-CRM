@@ -321,8 +321,64 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   createTeammate: async (name: string, email: string, role: UserRole, zone: string, managerId?: string) => {
     const { addToast } = useToastStore.getState();
-    addToast(`Création de compte via admin requise pour la production.`, "warning");
-    return null;
+    const org = get().organization;
+    
+    if (!org) {
+      addToast("Organisation introuvable", "error");
+      return null;
+    }
+
+    try {
+      // Use the REST API directly to avoid changing the current session
+      const insforgeUrl = import.meta.env.VITE_INSFORGE_URL;
+      const insforgeAnonKey = import.meta.env.VITE_INSFORGE_ANON_KEY;
+      
+      const response = await fetch(`${insforgeUrl}/auth/v1/signup`, {
+        method: 'POST',
+        headers: {
+          'apikey': insforgeAnonKey,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email,
+          password: 'Password123!', // Default password
+          data: { name, role }
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.msg || result.message || "Erreur de création de compte");
+      }
+
+      if (result.user && result.user.id) {
+        // Now create the team_member profile
+        const { error } = await insforge.database
+          .from('team_members')
+          .insert({
+            id: result.user.id,
+            name,
+            email,
+            role,
+            zone,
+            manager_id: managerId || null,
+            organization_id: org.id
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        addToast(`Collaborateur ${name} (${role}) créé avec succès ! Mdp par défaut: Password123!`, "success");
+        await get().fetchTeam();
+        return result.user.id;
+      }
+      return null;
+    } catch (err: any) {
+      addToast(`Erreur : ${err.message}`, "error");
+      return null;
+    }
   },
 
   fetchTeam: async () => {
