@@ -9,6 +9,7 @@ import { SupportModule } from '../components/SupportModule';
 import { LogisticsModule } from '../components/LogisticsModule';
 import { SubscriptionModule } from '../components/SubscriptionModule';
 import { GlobalSupportModule } from '../components/GlobalSupportModule';
+import { TenantSettingsModule } from '../components/TenantSettingsModule';
 import { 
   DollarSign, Users, Briefcase, Award, Plus, Search, 
   MapPin, Eye, Calendar, LogOut, ShieldAlert, CheckCircle2, X,
@@ -27,7 +28,7 @@ export const DgDashboard: React.FC = () => {
     forms, addForm, transactions, orders, updateOrderStatus, contacts, tickets
   } = useCrmStore();
 
-  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription' | 'system_support'>('kpis');
+  const [activeTab, setActiveTab] = useState<'kpis' | 'kanban' | 'feed' | 'admin' | 'audit' | 'templates' | 'forms' | 'transactions' | 'orders' | 'products' | 'billing' | 'support' | 'logistics' | 'subscription' | 'tenant_settings' | 'system_support'>('kpis');
   const [timeFilter, setTimeFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -289,6 +290,18 @@ export const DgDashboard: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setActiveTab('tenant_settings')}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
+                activeTab === 'tenant_settings'
+                  ? 'bg-orange-500 text-slate-900 shadow-md'
+                  : 'text-slate-400 hover:text-slate-800 hover:bg-slate-50/30'
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Paramètres Entreprise</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('system_support')}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
                 activeTab === 'system_support'
@@ -338,7 +351,7 @@ export const DgDashboard: React.FC = () => {
 
       {/* Mobile Horizontal Navigation Tabs */}
       <div className="md:hidden flex overflow-x-auto bg-white/40 border-b border-slate-200/40 p-2 gap-1.5 scrollbar-none shrink-0">
-        {(['kpis', 'transactions', 'orders', 'forms', 'kanban', 'feed', 'admin', 'audit', 'templates', 'subscription'] as const).map(tab => (
+        {(['kpis', 'transactions', 'orders', 'forms', 'kanban', 'feed', 'admin', 'audit', 'templates', 'subscription', 'tenant_settings'] as const).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -366,6 +379,7 @@ export const DgDashboard: React.FC = () => {
             {activeTab === 'audit' && "Audit & Suivi à 360°"}
             {activeTab === 'templates' && "Modèles WhatsApp de Relance"}
             {activeTab === 'subscription' && "Mon Abonnement SaaS"}
+            {activeTab === 'tenant_settings' && "Paramètres de l'Entreprise"}
             {activeTab === 'system_support' && "Support Système & Assistance"}
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1">
@@ -379,6 +393,8 @@ export const DgDashboard: React.FC = () => {
             {activeTab === 'audit' && "Inspectez en détail les relances téléphoniques, WhatsApp et terrain effectuées par commercial."}
             {activeTab === 'templates' && "Éditez et configurez les modèles d'accroche WhatsApp globaux pour vos équipes."}
             {activeTab === 'subscription' && "Gérez votre abonnement DjagoCRM, vos factures et vos limites de licence."}
+            {activeTab === 'tenant_settings' && "Configurez le nom, le logo et les contacts de votre entreprise pour les modèles."}
+            {activeTab === 'system_support' && "Discutez en direct avec l'équipe technique de DjagoCRM en cas de problème."}
           </p>
         </div>
 
@@ -522,6 +538,13 @@ export const DgDashboard: React.FC = () => {
         {activeTab === 'subscription' && (
           <div className="bg-slate-50/50 min-h-[60vh] rounded-2xl border border-slate-200/50 p-6">
             <SubscriptionModule />
+          </div>
+        )}
+
+        {/* Tab: Tenant Settings */}
+        {activeTab === 'tenant_settings' && (
+          <div className="bg-slate-50/50 min-h-[60vh] rounded-2xl border border-slate-200/50 p-6">
+            <TenantSettingsModule />
           </div>
         )}
 
@@ -1276,7 +1299,7 @@ export const DgDashboard: React.FC = () => {
         {activeTab === 'templates' && (
           <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 text-left max-w-2xl mx-auto shadow-xl flex flex-col gap-6 animate-fade-in">
             <h3 className="text-lg font-bold text-slate-900">Modèles WhatsApp</h3>
-            <p className="text-xs text-slate-400">Gérez les modèles utilisés par l'équipe commerciale. Variables: {'{{nom_client}}'}, {'{{entreprise}}'}, {'{{nom_commercial}}'}</p>
+            <p className="text-xs text-slate-400">Gérez les modèles utilisés par l'équipe commerciale. Variables: {'{{nom_client}}'}, {'{{entreprise}}'}, {'{{nom_commercial}}'}, {'{{service_article}}'}, {'{{entreprise_nom}}'}, {'{{entreprise_email}}'}, {'{{entreprise_phone}}'}</p>
 
             <div className="flex flex-col gap-4">
               {whatsappTemplates.map(t => (

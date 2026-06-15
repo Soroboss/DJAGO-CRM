@@ -6,6 +6,7 @@ export interface LocalClient {
   company?: string;
   phone: string;
   email?: string;
+  service_article?: string;
   status: 'Prospect' | 'Négociation' | 'Vendu' | 'En cours de livraison' | 'Livré & Adopté';
   assigned_to?: string;
   last_contact?: string;

@@ -116,6 +116,7 @@ export const CommercialDashboard: React.FC = () => {
   const [newCompany, setNewCompany] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newEmail, setNewEmail] = useState('');
+  const [newServiceArticle, setNewServiceArticle] = useState('');
 
   // Get clients assigned to this commercial
   const myClients = clients.filter(c => c.assigned_to === user?.id);
@@ -189,12 +190,13 @@ export const CommercialDashboard: React.FC = () => {
     e.preventDefault();
     if (!newName || !newPhone || !user) return;
 
-    await addClient(newName, newCompany, newPhone, newEmail, user.id);
+    await addClient(newName, newCompany, newPhone, newEmail, newServiceArticle, user.id);
     
     setNewName('');
     setNewCompany('');
     setNewPhone('');
     setNewEmail('');
+    setNewServiceArticle('');
     setActiveTab('prospects');
   };
 
@@ -229,9 +231,13 @@ export const CommercialDashboard: React.FC = () => {
     const templateObj = whatsappTemplates.find(t => t.id === selectedWhatsAppTemplate);
     const rawTemplate = templateObj ? templateObj.text : '';
     const formattedText = rawTemplate
-      .replace(/\\{\\{nom_client\\}\\}/g, selectedClientForAction.name)
-      .replace(/\\{\\{entreprise\\}\\}/g, selectedClientForAction.company || 'votre entreprise')
-      .replace(/\\{\\{nom_commercial\\}\\}/g, user?.name || 'votre conseiller');
+      .replace(/\{\{nom_client\}\}/g, selectedClientForAction.name)
+      .replace(/\{\{entreprise\}\}/g, selectedClientForAction.company || 'votre entreprise')
+      .replace(/\{\{nom_commercial\}\}/g, user?.name || 'votre conseiller')
+      .replace(/\{\{service_article\}\}/g, selectedClientForAction.service_article || 'notre service')
+      .replace(/\{\{entreprise_nom\}\}/g, organization?.name || 'Notre Entreprise')
+      .replace(/\{\{entreprise_email\}\}/g, organization?.settings?.contact_email || '')
+      .replace(/\{\{entreprise_phone\}\}/g, organization?.settings?.contact_phone || '');
 
     await addInteraction(
       selectedClientForAction.id,
@@ -726,6 +732,17 @@ export const CommercialDashboard: React.FC = () => {
                   placeholder="Ex: Cacao d'Ivoire"
                   value={newCompany}
                   onChange={(e) => setNewCompany(e.target.value)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-400 uppercase">Service / Article Cible</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Abonnement Annuel, ou Ordinateur HP..."
+                  value={newServiceArticle}
+                  onChange={(e) => setNewServiceArticle(e.target.value)}
                   className="px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-brand-orange text-sm text-slate-800"
                 />
               </div>

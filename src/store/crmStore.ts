@@ -37,7 +37,7 @@ interface CrmState {
 
   init: () => Promise<void>;
   setIsOnline: (online: boolean) => Promise<void>;
-  addClient: (name: string, company: string, phone: string, email: string, assignedToId: string) => Promise<void>;
+  addClient: (name: string, company: string, phone: string, email: string, serviceArticle: string, assignedToId: string) => Promise<void>;
   updateClientStatus: (clientId: string, status: LocalClient['status'], performedByUserId: string) => Promise<void>;
   addInteraction: (clientId: string, type: LocalInteraction['type'], details: string, gpsCoordinates?: string, performedByUserId?: string) => Promise<void>;
   reassignClient: (clientId: string, newCommercialId: string, performedByUserId: string) => Promise<void>;
@@ -69,6 +69,7 @@ const MOCK_CLIENTS: LocalClient[] = [
     company: 'Konaté Frères & Co',
     phone: '+225 0707080910',
     email: 'moussa@konate.ci',
+    service_article: 'Logiciel de Gestion',
     status: 'Prospect',
     assigned_to: 'com-333-uuid',
     last_contact: new Date().toISOString(),
@@ -80,6 +81,7 @@ const MOCK_CLIENTS: LocalClient[] = [
     company: 'Supermarché Cocody',
     phone: '+225 0505123456',
     email: 'fatou@cocodyapp.ci',
+    service_article: 'Création de site E-commerce',
     status: 'Négociation',
     assigned_to: 'com-333-uuid',
     last_contact: new Date().toISOString(),
@@ -371,17 +373,16 @@ export const useCrmStore = create<CrmState>((set, get) => ({
     }
   },
 
-  addClient: async (name: string, company: string, phone: string, email: string, assignedToId: string) => {
-    const { addToast } = useToastStore.getState();
+  addClient: async (name: string, company: string, phone: string, email: string, serviceArticle: string, assignedToId: string) => {
     const newClient: LocalClient = {
-      id: `client-${Math.random().toString(36).substring(2, 9)}`,
+      id: crypto.randomUUID(),
       name,
-      company: company || undefined,
+      company,
       phone,
-      email: email || undefined,
+      email,
+      service_article: serviceArticle,
       status: 'Prospect',
       assigned_to: assignedToId,
-      last_contact: new Date().toISOString(),
       created_at: new Date().toISOString()
     };
 
@@ -396,7 +397,7 @@ export const useCrmStore = create<CrmState>((set, get) => ({
 
     await localDb.clients.add(newClient);
     await localDb.interactions.add(newInteraction);
-
+    
     set((state) => ({
       clients: [newClient, ...state.clients],
       interactions: [newInteraction, ...state.interactions]
@@ -419,10 +420,11 @@ export const useCrmStore = create<CrmState>((set, get) => ({
         payload: { client: newClient, interaction: newInteraction },
         timestamp: Date.now()
       });
-      addToast(`Client ${name} sauvegardé localement (Hors-ligne)`, "info");
+      useToastStore.getState().addToast(`Client ${name} sauvegardé localement (Hors-ligne)`, "info");
     }
 
     set({ offlineActions: await localDb.offlineQueue.toArray() });
+    useToastStore.getState().addToast(`Client ajouté avec succès`, "success");
   },
 
   updateClientStatus: async (clientId: string, status: LocalClient['status'], performedByUserId: string) => {

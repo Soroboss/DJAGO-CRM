@@ -41,6 +41,7 @@ interface AuthState {
   createTeammate: (name: string, email: string, role: UserRole, zone: string, managerId?: string) => Promise<UserProfile | null>;
   fetchTeam: () => Promise<void>;
   initializeAuth: () => Promise<void>;
+  updateOrganizationSettings: (settings: any) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -332,6 +333,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (e) {
       console.error("Error loading team profiles", e);
+    }
+  },
+
+  updateOrganizationSettings: async (settingsUpdate: any) => {
+    const org = get().organization;
+    if (!org) return;
+
+    const newSettings = { ...org.settings, ...settingsUpdate };
+
+    try {
+      const { error } = await insforge.database
+        .from('organizations')
+        .update({ settings: newSettings })
+        .eq('id', org.id);
+
+      if (error) throw error;
+      
+      set({ organization: { ...org, settings: newSettings } });
+      useToastStore.getState().addToast("Paramètres mis à jour avec succès", "success");
+    } catch (e) {
+      console.error("Error updating organization settings", e);
+      useToastStore.getState().addToast("Erreur lors de la mise à jour des paramètres", "error");
     }
   }
 }));

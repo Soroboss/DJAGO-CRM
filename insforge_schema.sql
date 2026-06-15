@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS clients (
   company TEXT,
   phone TEXT NOT NULL,
   email TEXT,
+  service_article TEXT,
   status client_status NOT NULL DEFAULT 'Prospect',
   assigned_to UUID REFERENCES team_members(id) ON DELETE SET NULL,
   last_contact TIMESTAMPTZ,
