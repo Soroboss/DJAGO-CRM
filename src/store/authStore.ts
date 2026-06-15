@@ -184,14 +184,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signup: async (email: string, password: string, name: string, orgName: string, industryCategory: string) => {
+    console.log("[authStore] Starting signup for", email);
     set({ isLoading: true });
     const { addToast } = useToastStore.getState();
 
     try {
-      const { data, error } = await insforge.auth.signUp({
-        email,
-        password
-      });
+      console.log("[authStore] Calling insforge.auth.signUp...");
+      const { data, error } = await Promise.race([
+        insforge.auth.signUp({ email, password }),
+        new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Timeout réseau après 15 secondes")), 15000))
+      ]);
+      console.log("[authStore] signUp returned. error:", error, "data:", !!data);
 
       if (error) {
         addToast(error.message, "error");
@@ -202,9 +205,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (data?.user) {
         // Vérification si la confirmation e-mail est requise (pas de token)
         // Note: TypeScript might not know about accessToken here depending on exact sdk version types, we cast it safely if needed.
-        const token = (data as any).accessToken;
+        const token = (data as any).session?.access_token || (data as any).accessToken;
+        console.log("[authStore] token presence:", !!token);
         if (!token) {
           // Stocker localement en attendant que l'utilisateur clique sur le lien magique
+          console.log("[authStore] No token, saving pending_signup and setting requiresEmailVerification");
           localStorage.setItem('pending_signup', JSON.stringify({ name, email, orgName, industryCategory }));
           addToast("Un lien magique vous a été envoyé par e-mail.", "info");
           set({ isLoading: false });
@@ -245,6 +250,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         await get().initializeAuth();
         return { requiresEmailVerification: false, success: true };
       }
+      set({ isLoading: false });
       return { requiresEmailVerification: false, success: false };
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : String(err);
