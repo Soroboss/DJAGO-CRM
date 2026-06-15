@@ -385,7 +385,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           throw insertError;
         }
 
-        addToast(`Collaborateur ${name} créé ! L'utilisateur doit vérifier son email. Mdp: Password123!`, "success");
+        addToast(`Collaborateur ${name} créé avec succès ! Il peut se connecter avec le mot de passe : Password123!`, "success");
         await get().fetchTeam();
         return newUserProfile as UserProfile;
       } else {
