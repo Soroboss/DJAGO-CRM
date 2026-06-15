@@ -84,14 +84,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
               if (pendingData.email.toLowerCase() === data.user.email?.toLowerCase()) {
                 const { addToast } = useToastStore.getState();
                 
-                // Créer l'organisation
-                const { data: org, error: orgError } = await insforge.database
-                  .from('organizations')
-                  .insert({ name: pendingData.orgName, industry_category: pendingData.industryCategory })
-                  .select()
-                  .single();
+                // Générer l'ID côté client pour éviter l'erreur RLS au moment du SELECT
+                const newOrgId = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                  const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                  return v.toString(16);
+                });
 
-                if (!orgError && org) {
+                // Créer l'organisation sans faire de select() car RLS empêche la lecture avant la création du team_member
+                const { error: orgError } = await insforge.database
+                  .from('organizations')
+                  .insert({ id: newOrgId, name: pendingData.orgName, industry_category: pendingData.industryCategory });
+
+                if (!orgError) {
                   // Créer le profil Utilisateur
                   const { error: profileError } = await insforge.database
                     .from('team_members')
@@ -101,7 +105,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                       email: data.user.email, // utiliser l'email formaté par Supabase
                       role: data.user.email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
                       zone: 'Global',
-                      organization_id: org.id
+                      organization_id: newOrgId
                     });
 
                   if (!profileError) {
