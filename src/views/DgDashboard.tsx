@@ -173,9 +173,13 @@ export const DgDashboard: React.FC = () => {
     : interactions;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col md:flex-row relative overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] rounded-full bg-brand-orange/10 blur-[150px] pointer-events-none animate-pulse-slow fixed" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[900px] h-[900px] rounded-full bg-brand-emerald/10 blur-[180px] pointer-events-none animate-pulse-slow fixed" style={{ animationDelay: '2s' }} />
+
       {/* Sidebar for Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200/60 p-6 h-screen sticky top-0 justify-between shrink-0">
+      <aside className="hidden md:flex flex-col w-64 glass-sidebar m-4 rounded-3xl p-6 h-[calc(100vh-2rem)] sticky top-4 justify-between shrink-0 z-10">
         <div className="flex flex-col gap-8">
           {/* Logo & Info */}
           <div className="flex items-center gap-3">
@@ -445,56 +449,56 @@ export const DgDashboard: React.FC = () => {
                 </button>
               ))}
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex items-center justify-between">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Chiffre d'Affaires</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {totalRevenue.toLocaleString()} <span className="text-sm font-bold text-orange-600">FCFA</span>
+                  <h3 className="text-3xl font-black text-slate-900 mt-2 tracking-tight">
+                    {totalRevenue.toLocaleString()} <span className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-500">FCFA</span>
                   </h3>
                   <p className="text-[10px] text-emerald-600 font-semibold mt-1">Sur contrats conclus & livrés</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-orange-500/15 text-white flex items-center justify-center border border-brand-orange/10">
-                  <DollarSign className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-orange/20 to-amber-500/20 text-brand-orange flex items-center justify-center border border-brand-orange/20 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+                  <DollarSign className="w-7 h-7" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex items-center justify-between">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Pipeline Négociation</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {pipelineValue.toLocaleString()} <span className="text-sm font-bold text-slate-400">FCFA</span>
+                  <h3 className="text-3xl font-black text-slate-900 mt-2 tracking-tight">
+                    {pipelineValue.toLocaleString()} <span className="text-base font-bold text-slate-400">FCFA</span>
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Potentiel de signature proche</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center border border-slate-200">
-                  <Briefcase className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-slate-100/50 text-slate-500 flex items-center justify-center border border-slate-200/50 shadow-sm">
+                  <Briefcase className="w-7 h-7" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex items-center justify-between">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{vocab.agents} Recrutés</span>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1.5">
-                    {team.filter(t => t.role === 'commercial').length} <span className="text-sm font-bold text-slate-400">Agents</span>
+                  <h3 className="text-3xl font-black text-slate-900 mt-2 tracking-tight">
+                    {team.filter(t => t.role === 'commercial').length} <span className="text-base font-bold text-slate-400">Agents</span>
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Répartis sur 4 zones géographiques</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
-                  <Users className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+                  <Users className="w-7 h-7" />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 flex items-center justify-between shadow-xl">
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex items-center justify-between">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Rétention {vocab.client}</span>
-                  <h3 className="text-2xl font-black text-emerald-600 mt-1.5 font-mono">
+                  <h3 className="text-3xl font-black text-emerald-500 mt-2 tracking-tight font-mono">
                     {retentionRate}%
                   </h3>
                   <p className="text-[10px] text-slate-400 mt-1">Taux d'adoption après livraison</p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-white flex items-center justify-center border border-brand-emerald/10">
-                  <Award className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-brand-emerald/15 text-brand-emerald flex items-center justify-center border border-brand-emerald/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                  <Award className="w-7 h-7" />
                 </div>
               </div>
             </div>

@@ -82,59 +82,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           });
           await get().fetchTeam();
         } else {
-          // Profil manquant. Vérifions si on vient de valider un e-mail avec des données en attente.
-          const pendingDataStr = localStorage.getItem('pending_signup');
-          if (pendingDataStr) {
-            try {
-              const pendingData = JSON.parse(pendingDataStr);
-              if (pendingData.email.toLowerCase() === data.user.email?.toLowerCase()) {
-                const { addToast } = useToastStore.getState();
-                
-                // Générer l'ID côté client pour éviter l'erreur RLS au moment du SELECT
-                const newOrgId = crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                  const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-                  return v.toString(16);
-                });
-
-                // Créer l'organisation sans faire de select() car RLS empêche la lecture avant la création du team_member
-                const { error: orgError } = await insforge.database
-                  .from('organizations')
-                  .insert({ id: newOrgId, name: pendingData.orgName, industry_category: pendingData.industryCategory });
-
-                if (!orgError) {
-                  // Créer le profil Utilisateur
-                  const { error: profileError } = await insforge.database
-                    .from('team_members')
-                    .insert({
-                      id: data.user.id,
-                      name: pendingData.name,
-                      email: data.user.email, // utiliser l'email formaté par Supabase
-                      role: data.user.email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
-                      zone: 'Global',
-                      organization_id: newOrgId
-                    });
-
-                  if (!profileError) {
-                    localStorage.removeItem('pending_signup');
-                    addToast("Compte vérifié et créé avec succès ! Bienvenue.", "success");
-                    // Relancer l'initialisation pour charger les nouvelles données
-                    await get().initializeAuth();
-                    return; // Sortie prématurée pour éviter de set false
-                  } else {
-                    console.error("Erreur création profil:", profileError);
-                    addToast("Erreur profil: " + (profileError?.message || JSON.stringify(profileError)), "error");
-                  }
-                } else {
-                  console.error("Erreur création organisation:", orgError);
-                  addToast("Erreur organisation: " + (orgError?.message || JSON.stringify(orgError)), "error");
-                }
-              } else {
-                console.error("Email mismatch in pending_signup:", pendingData.email, "vs", data.user.email);
-              }
-            } catch (err) {
-              console.error("Erreur lors de la finalisation post-email", err);
-            }
-          }
+          // Profil manquant bien qu'un user existe. 
+          // Avec le DB Trigger, cela ne devrait arriver que si le trigger a échoué.
+          console.warn("Profil introuvable pour l'utilisateur authentifié. Le trigger DB a potentiellement échoué ou l'utilisateur n'est pas encore provisionné.");
           set({ isAuthenticated: false, isLoading: false });
         }
       } else {
@@ -171,14 +121,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .single();
 
         if (profileError || !profile) {
-          const pendingDataStr = localStorage.getItem('pending_signup');
-          if (pendingDataStr) {
-            // Le profil n'est pas encore créé mais on a des données en attente,
-            // on délègue à initializeAuth qui va s'en charger.
-            await get().initializeAuth();
-            return true;
-          }
-          addToast("Compte authentifié, mais profil introuvable.", "warning");
+          addToast("Compte authentifié, mais profil introuvable (en attente de création).", "warning");
           set({ isLoading: false });
           return false;
         }
@@ -217,7 +160,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       console.log("[authStore] Calling insforge.auth.signUp...");
       const { data, error } = await Promise.race([
-        insforge.auth.signUp({ email, password }),
+        insforge.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            data: {
+              name,
+              orgName,
+              industryCategory
+            }
+          }
+        }),
         new Promise<any>((_, reject) => setTimeout(() => reject(new Error("Timeout réseau après 15 secondes")), 15000))
       ]);
       console.log("[authStore] signUp returned. error:", error, "data:", !!data);
@@ -228,52 +181,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         return { requiresEmailVerification: false, success: false };
       }
 
-      // Si data.user est présent OU si data est présent sans erreur (cas de protection d'énumération où l'utilisateur existe déjà)
       if (data) {
         const token = (data as any).session?.access_token || (data as any).accessToken;
         console.log("[authStore] token presence:", !!token, "user presence:", !!data.user);
         
         if (!token) {
-          // Stocker localement en attendant la validation
-          console.log("[authStore] No token, saving pending_signup and setting requiresEmailVerification");
-          localStorage.setItem('pending_signup', JSON.stringify({ name, email, orgName, industryCategory }));
           addToast("Un code de vérification vous a été envoyé par e-mail.", "info");
           set({ isLoading: false });
           return { requiresEmailVerification: true, success: true };
         }
 
-        // Si l'e-mail n'est pas requis et qu'on a un token (connexion immédiate)
         if (data.user) {
-          const { data: org, error: orgError } = await insforge.database
-            .from('organizations')
-            .insert({ name: orgName, industry_category: industryCategory })
-            .select()
-            .single();
-
-          if (orgError || !org) {
-            addToast("Erreur lors de la création de l'espace de travail", "error");
-            set({ isLoading: false });
-            return { requiresEmailVerification: false, success: false };
-          }
-
-          const { error: profileError } = await insforge.database
-            .from('team_members')
-            .insert({
-              id: data.user.id,
-              name,
-              email,
-              role: email.toLowerCase() === 'soroboss.bossimpact@gmail.com' ? 'superadmin' : 'dg',
-              zone: 'Global',
-              organization_id: org.id
-            });
-
-          if (profileError) {
-            addToast("Erreur lors de la création du profil", "error");
-            set({ isLoading: false });
-            return { requiresEmailVerification: false, success: false };
-          }
-
-          addToast("Compte créé avec succès ! Bienvenue.", "success");
+          // L'utilisateur est connecté automatiquement.
+          // On délègue la création du profil à initializeAuth
           await get().initializeAuth();
           return { requiresEmailVerification: false, success: true };
         }
@@ -304,10 +224,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         return false;
       }
       
-      // On ne connecte pas automatiquement l'utilisateur, on arrête le chargement.
-      // Le workflow exige que l'utilisateur clique sur le bouton pour se connecter.
-      set({ isLoading: false });
-      return true;
+      // La vérification connecte l'utilisateur automatiquement.
+      // Initialiser la session et créer le profil si nécessaire.
+      await get().initializeAuth();
+      return get().isAuthenticated;
     } catch (err: unknown) {
       addToast(String(err), "error");
       set({ isLoading: false });

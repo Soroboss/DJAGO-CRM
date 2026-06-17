@@ -58,72 +58,83 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
       </header>
 
       {/* Hero Section */}
-      <section className="flex-1 max-w-7xl mx-auto px-6 py-16 lg:py-24 grid lg:grid-cols-12 gap-12 items-center relative z-10">
-        <div className="lg:col-span-7 flex flex-col gap-6 text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-emerald/10 text-brand-emerald text-sm font-semibold w-fit border border-brand-emerald/20 tracking-wider">
-            ⚡ CONNECTÉ À INFRASTRUCTURE SÉCURISÉE - VERSION 2.0
-          </div>
-          
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 leading-[1.1] !my-0 drop-shadow-2xl">
-            Le CRM conçu pour la <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-400">
-              croissance Africaine.
-            </span>
-          </h1>
+      <section className="flex-1 max-w-7xl mx-auto px-6 py-16 lg:py-24 relative z-10 text-center flex flex-col items-center">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-emerald/10 text-brand-emerald text-sm font-semibold w-fit border border-brand-emerald/20 tracking-wider mb-6 shadow-sm">
+          ⚡ CONNECTÉ À INFRASTRUCTURE SÉCURISÉE - VERSION 2.0
+        </div>
+        
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 leading-[1.1] !my-0 drop-shadow-2xl max-w-4xl mx-auto">
+          Le CRM conçu pour la <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-400">
+            croissance Africaine.
+          </span>
+        </h1>
 
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed mt-2">
-            Passez à la vitesse supérieure. Synchronisation intelligente hors-ligne, suivi terrain GPS, et sécurité bancaire propulsée par Système. Ne perdez plus aucune donnée.
-          </p>
+        <p className="text-lg sm:text-xl text-slate-500 max-w-2xl leading-relaxed mt-6 mx-auto">
+          Passez à la vitesse supérieure. Synchronisation intelligente hors-ligne, suivi terrain GPS, et sécurité bancaire propulsée par Système. Ne perdez plus aucune donnée.
+        </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-6">
-            <button
-              onClick={scrollToPricing}
-              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange text-white font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] group hover:-translate-y-1"
-            >
-              Démarrer maintenant
-              <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
+        <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
+          <button
+            onClick={scrollToPricing}
+            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-orange to-amber-500 hover:from-amber-500 hover:to-brand-orange text-white font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_30px_rgba(249,115,22,0.5)] group hover:-translate-y-1"
+          >
+            Démarrer maintenant
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
 
-        {/* Feature Cards Showcase */}
-        <div className="lg:col-span-5 grid sm:grid-cols-2 gap-4">
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors text-left backdrop-blur-xl hover:border-brand-orange/30">
+        {/* Hero Image */}
+        <div className="mt-16 w-full relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50 z-10 pointer-events-none h-full" style={{ bottom: 0, top: '50%' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-brand-orange/20 blur-[120px] rounded-full pointer-events-none" />
+          <img 
+            src="/images/hero_crm_mockup_1781714807120.png" 
+            alt="Dashboard DjagoCRM" 
+            className="relative z-0 w-full max-w-5xl mx-auto rounded-[2rem] shadow-2xl border-4 border-white/50 object-cover transform hover:scale-[1.01] transition-transform duration-500"
+          />
+        </div>
+      </section>
+
+      {/* Feature Cards Showcase */}
+      <section className="max-w-7xl mx-auto px-6 py-10 relative z-20 lg:-mt-32">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200 hover:bg-white transition-colors text-left backdrop-blur-xl hover:border-brand-orange/30 shadow-lg">
             <div className="w-12 h-12 rounded-xl bg-brand-orange/15 flex items-center justify-center text-brand-orange mb-5 border border-brand-orange/20 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
               <Database className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Base de Données Système</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               Vos données clients sont sauvegardées en ligne instantanément et en toute sécurité.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors text-left backdrop-blur-xl hover:border-brand-emerald/30">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200 hover:bg-white transition-colors text-left backdrop-blur-xl hover:border-brand-emerald/30 shadow-lg">
             <div className="w-12 h-12 rounded-xl bg-brand-emerald/15 flex items-center justify-center text-brand-emerald mb-5 border border-brand-emerald/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
               <Wifi className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Offline-First Intelligent</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               Continuez d'enregistrer des données même sans internet. La synchronisation se fera automatiquement.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors text-left backdrop-blur-xl hover:border-amber-400/30">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200 hover:bg-white transition-colors text-left backdrop-blur-xl hover:border-amber-400/30 shadow-lg">
             <div className="w-12 h-12 rounded-xl bg-amber-400/15 flex items-center justify-center text-amber-400 mb-5 border border-amber-400/20 shadow-[0_0_15px_rgba(251,191,36,0.15)]">
               <MapPin className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">GPS et Terrain</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               Capturez la position exacte de vos commerciaux lors des visites clients pour plus de transparence.
             </p>
           </div>
 
-          <div className="p-6 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors text-left backdrop-blur-xl hover:border-blue-500/30">
+          <div className="p-6 rounded-3xl bg-white/80 border border-slate-200 hover:bg-white transition-colors text-left backdrop-blur-xl hover:border-blue-500/30 shadow-lg">
             <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center text-blue-500 mb-5 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">Sécurité et Rôles</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-500 leading-relaxed">
               Chiffrement de pointe et gestion pyramidale des droits (Super Admin, Manager, Commercial).
             </p>
           </div>
@@ -131,44 +142,63 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigateToLogin, onN
       </section>
 
       {/* Expanded Features Section */}
-      <section className="bg-white py-24 relative z-10 border-t border-slate-200">
+      <section className="bg-white py-24 relative z-10 border-t border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-24">
             <h2 className="text-4xl font-black text-slate-900 mb-4">Pourquoi choisir DjagoCRM ?</h2>
             <p className="text-xl text-slate-500 max-w-2xl mx-auto">Une suite d'outils puissants conçus pour maximiser vos ventes, suivre vos équipes terrain et sécuriser vos données.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200">
-              <div className="w-14 h-14 rounded-2xl bg-brand-orange/10 flex items-center justify-center mb-6">
-                <Users className="w-7 h-7 text-brand-orange" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">Gestion d'équipe terrain</h3>
-              <p className="text-slate-500 leading-relaxed">
-                Suivez les performances de vos commerciaux en temps réel. Le système de géolocalisation intégré assure la transparence totale des visites clients.
-              </p>
+          {/* Feature 1: Mobile Sync */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
+            <div className="order-2 lg:order-1">
+              <img 
+                src="/images/feature_mobile_sync_1781714818789.png" 
+                alt="Mobile Sync App" 
+                className="w-full rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100"
+              />
             </div>
-
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200">
+            <div className="order-1 lg:order-2">
               <div className="w-14 h-14 rounded-2xl bg-brand-emerald/10 flex items-center justify-center mb-6">
-                <MessageSquare className="w-7 h-7 text-brand-emerald" />
+                <Users className="w-7 h-7 text-brand-emerald" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">Formulaires dynamiques</h3>
-              <p className="text-slate-500 leading-relaxed">
-                Générez des formulaires de prospection sur mesure sans coder. Les données remontent automatiquement dans votre base sécurisée.
+              <h3 className="text-3xl font-black text-slate-900 mb-4">Gestion d'équipe terrain & Mode Hors-ligne</h3>
+              <p className="text-lg text-slate-500 leading-relaxed mb-6">
+                Suivez les performances de vos commerciaux en temps réel. Le système de géolocalisation intégré assure la transparence totale des visites clients. Même sans connexion internet, continuez à enregistrer vos ventes ; notre application synchronisera tout automatiquement dès le retour réseau.
               </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-brand-emerald" /> Synchronisation automatique</li>
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-brand-emerald" /> Suivi GPS des visites</li>
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-brand-emerald" /> Productivité ininterrompue</li>
+              </ul>
             </div>
+          </div>
 
-            <div className="p-8 rounded-3xl bg-slate-50 border border-slate-200">
+          {/* Feature 2: Analytics */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
               <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6">
                 <TrendingUp className="w-7 h-7 text-blue-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">Tableaux de bord IA</h3>
-              <p className="text-slate-500 leading-relaxed">
-                Visualisez votre chiffre d'affaires et la progression de vos objectifs à travers des graphiques clairs et prédictifs.
+              <h3 className="text-3xl font-black text-slate-900 mb-4">Tableaux de bord & Intelligence Visuelle</h3>
+              <p className="text-lg text-slate-500 leading-relaxed mb-6">
+                Visualisez votre chiffre d'affaires et la progression de vos objectifs à travers des graphiques clairs et prédictifs. Identifiez instantanément les opportunités de croissance et optimisez votre stratégie de vente.
               </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-blue-500" /> Métriques de performance en temps réel</li>
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-blue-500" /> Analyse des conversions</li>
+                <li className="flex items-center gap-3 text-slate-700"><CheckCircle2 className="w-5 h-5 text-blue-500" /> Tableaux de bord personnalisables</li>
+              </ul>
+            </div>
+            <div>
+              <img 
+                src="/images/feature_analytics_dashboard_1781714830207.png" 
+                alt="Analytics Dashboard" 
+                className="w-full rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate-100"
+              />
             </div>
           </div>
+
         </div>
       </section>
 
