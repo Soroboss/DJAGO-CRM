@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { Upload, Settings, Building2, MapPin } from 'lucide-react';
 
-export const TenantSettingsModule: React.FC = () => {
+interface TenantSettingsModuleProps {
+  onNavigateToTeam?: () => void;
+}
+
+export const TenantSettingsModule: React.FC<TenantSettingsModuleProps> = ({ onNavigateToTeam }) => {
   const { organization, updateOrganizationSettings } = useAuthStore();
   
   // States
@@ -24,6 +28,7 @@ export const TenantSettingsModule: React.FC = () => {
   const [logoUrl, setLogoUrl] = useState('');
   
   const [isSaving, setIsSaving] = useState(false);
+  const logoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (organization?.settings) {
@@ -82,7 +87,10 @@ export const TenantSettingsModule: React.FC = () => {
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Paramètres entreprise</h2>
           <p className="text-slate-500 text-sm mt-1">Logo, coordonnées, RCCM et RIB — affichés sur vos documents</p>
         </div>
-        <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm self-start md:self-auto">
+        <button 
+          onClick={onNavigateToTeam}
+          className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm self-start md:self-auto cursor-pointer"
+        >
           Gérer l'équipe
         </button>
       </div>
@@ -143,18 +151,23 @@ export const TenantSettingsModule: React.FC = () => {
                 )}
               </div>
               <div className="flex flex-col gap-2">
-                <button type="button" className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 transition-colors w-fit">
+                <button 
+                  type="button" 
+                  onClick={() => logoInputRef.current?.focus()}
+                  className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 transition-colors w-fit cursor-pointer"
+                >
                   <Upload className="w-4 h-4" />
                   Changer le logo
                 </button>
                 <p className="text-xs text-slate-500">PNG, JPEG ou WebP — max 5 Mo</p>
                 {/* Temporary input since there is no actual file upload implemented right now */}
                 <input 
+                  ref={logoInputRef}
                   type="url" 
                   placeholder="Ou entrez l'URL de votre logo" 
                   value={logoUrl} 
                   onChange={(e) => setLogoUrl(e.target.value)}
-                  className="mt-2 text-xs p-2 border border-slate-200 rounded-md focus:outline-none focus:border-brand-orange w-full max-w-xs"
+                  className="mt-2 text-xs p-2 border border-slate-200 rounded-md focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange w-full max-w-xs transition-all"
                 />
               </div>
             </div>

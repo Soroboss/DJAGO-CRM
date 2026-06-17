@@ -582,7 +582,7 @@ export const DgDashboard: React.FC = () => {
         {/* Tab: Tenant Settings */}
         {activeTab === 'tenant_settings' && (
           <div className="bg-slate-50/50 min-h-[60vh] rounded-2xl border border-slate-200/50 p-6">
-            <TenantSettingsModule />
+            <TenantSettingsModule onNavigateToTeam={() => setActiveTab('admin')} />
           </div>
         )}
 
