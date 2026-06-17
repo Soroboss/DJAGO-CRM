@@ -338,8 +338,8 @@ export const SuperAdminDashboard: React.FC = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden relative bg-slate-50">
-        <header className="h-20 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+      <main className="flex-1 flex flex-col m-4 md:ml-2 bg-white/40 backdrop-blur-3xl rounded-[2rem] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative z-10 overflow-hidden">
+        <header className="h-20 border-b border-white/60 bg-white/40 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10 rounded-t-[2rem]">
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
               {activeTab === 'dashboard' && 'Tableau de Bord Global'}

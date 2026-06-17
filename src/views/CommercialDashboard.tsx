@@ -7,6 +7,7 @@ import { ProductsModule } from '../components/ProductsModule';
 import { BillingModule } from '../components/BillingModule';
 import { SupportModule } from '../components/SupportModule';
 import { LogisticsModule } from '../components/LogisticsModule';
+import { ActivityFeedModule } from '../components/ActivityFeedModule';
 import { localDb, type LocalClient } from '../db/localDb';
 import { 
   Phone, MessageSquare, Mail, MapPin, Plus, Search, 
@@ -508,7 +509,7 @@ export const CommercialDashboard: React.FC = () => {
       </header>
 
       {/* Main Screen Content */}
-      <main className="flex-1 overflow-y-auto px-4 py-4 pb-24">
+      <main className="flex-1 flex flex-col m-2 md:m-4 bg-white/40 backdrop-blur-3xl rounded-[2rem] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative z-10 overflow-hidden"><div className="flex-1 overflow-y-auto px-4 py-4 pb-24">
         
         {/* TAB 1: Prospects list */}
         {activeTab === 'prospects' && (
@@ -954,55 +955,7 @@ export const CommercialDashboard: React.FC = () => {
         )}
 
         {/* TAB 6: History */}
-        {activeTab === 'history' && (
-          <div className="flex flex-col gap-4 animate-fade-in text-left">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">
-              Historique de mes Relances
-            </span>
-
-            {myInteractions.length === 0 ? (
-              <div className="p-8 rounded-2xl border border-dashed border-slate-200 text-center text-slate-400 text-sm">
-                Aucune interaction dans votre journal de bord.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4 pl-4 border-l border-slate-900">
-                {myInteractions.map((int) => {
-                  const client = clients.find(c => c.id === int.client_id);
-                  let badgeStyle = 'bg-slate-50 text-slate-400';
-                  if (int.type === 'appel') badgeStyle = 'bg-blue-50 text-blue-600 border border-blue-200';
-                  if (int.type === 'whatsapp') badgeStyle = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
-                  if (int.type === 'terrain') badgeStyle = 'bg-orange-50 text-orange-600 border border-orange-200';
-
-                  return (
-                    <div key={int.id} className="relative flex flex-col gap-1.5 text-left">
-                      <div className="absolute left-[-21px] top-1.5 w-2 h-2 rounded-full bg-slate-100 ring-2 ring-slate-955" />
-                      
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-semibold">
-                        <span>{new Date(int.created_at).toLocaleTimeString()}</span>
-                        <span>•</span>
-                        <span>{client?.name}</span>
-                      </div>
-
-                      <div className="p-3.5 rounded-xl bg-slate-50/60 border border-slate-900 flex items-start gap-3">
-                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase shrink-0 ${badgeStyle}`}>
-                          {int.type}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-slate-700 font-medium leading-relaxed">{int.details}</p>
-                          {int.gps_coordinates && (
-                            <p className="text-[9px] text-orange-600 font-bold mt-1.5 flex items-center gap-1">
-                              <Navigation className="w-3 h-3" /> GPS: {int.gps_coordinates}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
+        {activeTab === 'history' && <ActivityFeedModule scope="user" userId={user?.id} />}
 
         {activeTab === 'playbook' && (
           <div className="flex flex-col gap-4 animate-fade-in text-left">
@@ -1115,11 +1068,11 @@ export const CommercialDashboard: React.FC = () => {
           </div>
         )}
 
-      </main>
+      </div></main>
 
       {/* Fast Checkout Form Modal */}
       {fastCheckoutOpen && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm bg-slate-50 border border-slate-200 rounded-3xl p-5 shadow-2xl flex flex-col gap-4 text-left">
             <div className="flex justify-between items-start border-b border-slate-200 pb-2">
               <div>
@@ -1181,7 +1134,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Action Overlay Modals */}
       {selectedClientForAction && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-end justify-center px-4 pb-6">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-50 flex items-end justify-center px-4 pb-6">
           <div className="w-full max-w-sm p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left shadow-2xl flex flex-col gap-4 animate-toast-slide-in">
             <div className="flex justify-between items-start">
               <div>
@@ -1423,8 +1376,8 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Reply to Inbox Message Modal */}
       {selectedInboxMessage && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-5 shadow-2xl flex flex-col gap-4 text-left">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white/95 border border-white rounded-[2rem] p-6 shadow-[0_20px_60px_rgb(0,0,0,0.15)] flex flex-col gap-4 text-left">
             <div className="flex justify-between items-start border-b border-slate-200 pb-2">
               <div>
                 <h4 className="font-extrabold text-slate-900 text-base">Répondre à {selectedInboxMessage.sender_name}</h4>
@@ -1876,7 +1829,7 @@ export const CommercialDashboard: React.FC = () => {
 
       {/* Offline Queue Inspector Drawer */}
       {isQueueDrawerOpen && (
-        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xl z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-sm p-6 rounded-2xl bg-slate-50 border border-slate-200 text-left shadow-2xl flex flex-col gap-4 animate-toast-slide-in">
             <div className="flex justify-between items-start border-b border-slate-200 pb-3">
               <div>
