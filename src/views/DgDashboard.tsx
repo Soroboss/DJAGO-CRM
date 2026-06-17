@@ -504,61 +504,61 @@ export const DgDashboard: React.FC = () => {
             </div>
 
             {/* Executive Profitability, Speed & Intelligence Control Panel */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 relative z-10">
               {/* Box 1: Profitability & Unit Economics */}
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-4 shadow-xl">
-                <div className="flex justify-between items-center border-b border-slate-200 shadow-sm pb-3">
-                  <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4 text-orange-600" />
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-5">
+                <div className="flex justify-between items-center border-b border-slate-200/50 pb-4">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-orange-600" />
                     <span>Rentabilité & Unit Economics</span>
                   </h4>
-                  <span className="text-[9px] bg-orange-500/15 text-white px-2.5 py-0.5 rounded-full font-black border border-brand-orange/15">Santé : Excellente</span>
+                  <span className="text-[10px] bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3 py-1 rounded-full font-black shadow-md shadow-orange-500/20">Santé : Excellente</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">CAC Moyen (Acquisition)</span>
-                    <span className="text-xs font-black text-slate-800 block mt-1">120 000 FCFA</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">CAC Moyen</span>
+                    <span className="text-sm font-black text-slate-900 block mt-1">120 000 FCFA</span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">LTV Client (Valeur à vie)</span>
-                    <span className="text-xs font-black text-slate-800 block mt-1">1 850 000 FCFA</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">LTV Client</span>
+                    <span className="text-sm font-black text-slate-900 block mt-1">1 850 000 FCFA</span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Efficacité LTV/CAC</span>
-                    <span className="text-xs font-black text-emerald-600 block mt-1">15.4x <span className="text-[8px] text-slate-400 font-normal">(Objectif &gt; 3x)</span></span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Efficacité LTV/CAC</span>
+                    <span className="text-sm font-black text-emerald-600 block mt-1">15.4x <span className="text-[9px] text-slate-400 font-medium">(Objectif &gt; 3x)</span></span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Marge brute nette</span>
-                    <span className="text-xs font-black text-emerald-600 block mt-1 font-mono">82% <span className="text-[8px] text-slate-400 font-normal">SaaS</span></span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Marge brute</span>
+                    <span className="text-sm font-black text-emerald-600 block mt-1 font-mono">82% <span className="text-[9px] text-slate-400 font-medium">SaaS</span></span>
                   </div>
                 </div>
               </div>
 
               {/* Box 2: Speed of Execution & Business Intelligence */}
-              <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col gap-4 shadow-xl">
-                <div className="flex justify-between items-center border-b border-slate-200 shadow-sm pb-3">
-                  <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-emerald-600" />
-                    <span>Vélocité Opérationnelle & Intelligence</span>
+              <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-5">
+                <div className="flex justify-between items-center border-b border-slate-200/50 pb-4">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-emerald-600" />
+                    <span>Vélocité & Intelligence</span>
                   </h4>
-                  <span className="text-[9px] bg-emerald-500/15 text-white px-2.5 py-0.5 rounded-full font-black border border-brand-emerald/15">SLA Respecté</span>
+                  <span className="text-[10px] bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-3 py-1 rounded-full font-black shadow-md shadow-emerald-500/20">SLA Respecté</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Cycle de vente moyen</span>
-                    <span className="text-xs font-black text-slate-800 block mt-1">12.4 jours</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Cycle de vente</span>
+                    <span className="text-sm font-black text-slate-900 block mt-1">12.4 jours</span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Délai Résolution SAV</span>
-                    <span className="text-xs font-black text-slate-800 block mt-1">18 minutes</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Résolution SAV</span>
+                    <span className="text-sm font-black text-slate-900 block mt-1">18 minutes</span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Taux d'automatisation IA</span>
-                    <span className="text-xs font-black text-orange-600 block mt-1">86.2%</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Automatisation IA</span>
+                    <span className="text-sm font-black text-brand-orange block mt-1">86.2%</span>
                   </div>
-                  <div className="bg-white/45 p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <span className="text-[9px] text-slate-400 font-bold block uppercase">Check-ins GPS Terrain</span>
-                    <span className="text-xs font-black text-emerald-600 block mt-1">98.4% validité</span>
+                  <div className="bg-white/30 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-sm">
+                    <span className="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Validité Terrain</span>
+                    <span className="text-sm font-black text-emerald-600 block mt-1">98.4%</span>
                   </div>
                 </div>
               </div>
@@ -597,82 +597,82 @@ export const DgDashboard: React.FC = () => {
           const winRate = totalDeals > 0 ? Math.round((wonDeals.length / totalDeals) * 100) : 0;
 
           return (
-            <div className="flex flex-col gap-6 text-left animate-fade-in">
+            <div className="flex flex-col gap-8 text-left animate-fade-in relative z-10">
               {/* Deals KPIs */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Volume total & Win-Rate</span>
-                  <h4 className="text-xl font-black text-slate-900">{totalDeals} opportunités</h4>
-                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Volume & Win-Rate</span>
+                  <h4 className="text-2xl font-black text-slate-900 tracking-tight">{totalDeals} opportunités</h4>
+                  <div className="text-xs text-emerald-600 font-bold flex items-center gap-1.5 mt-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                     <span>Taux de réussite : {winRate}%</span>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pipeline Brut Actif</span>
-                  <h4 className="text-xl font-black text-orange-600">{activePipeline.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-slate-400">Somme des transactions en cours</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Pipeline Brut Actif</span>
+                  <h4 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-amber-500 tracking-tight">{activePipeline.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-slate-400 font-medium mt-1">Somme des transactions en cours</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pipeline Pondéré IA</span>
-                  <h4 className="text-xl font-black text-blue-600">{weightedPipeline.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-blue-450 font-semibold">Probabilité x Montant</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Pipeline Pondéré IA</span>
+                  <h4 className="text-2xl font-black text-blue-600 tracking-tight">{weightedPipeline.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-blue-500 font-semibold mt-1">Probabilité x Montant</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Chiffre Gagné (Won)</span>
-                  <h4 className="text-xl font-black text-emerald-600">{wonDealsValue.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-emerald-600/75">Signatures fermes clôturées</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Chiffre Gagné (Won)</span>
+                  <h4 className="text-2xl font-black text-emerald-500 tracking-tight">{wonDealsValue.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-emerald-600 mt-1 font-semibold">Signatures fermes clôturées</div>
                 </div>
               </div>
 
               {/* Transactions Table */}
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
-                <h3 className="text-base font-bold text-slate-900 mb-4">Suivi Financier National des Deals</h3>
+              <div className="p-8 rounded-[2rem] glass-card border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                <h3 className="text-lg font-black text-slate-900 mb-6 tracking-tight">Suivi Financier National des Deals</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-slate-200 text-slate-400 text-xs">
-                        <th className="py-2.5 px-4 text-left">Titre opportunité</th>
-                        <th className="py-2.5 px-4 text-left">Montant</th>
-                        <th className="py-2.5 px-4 text-left">Étape</th>
-                        <th className="py-2.5 px-4 text-left">Probabilité IA</th>
-                        <th className="py-2.5 px-4 text-left">Échéance</th>
-                        <th className="py-2.5 px-4 text-left">Assignataire</th>
+                      <tr className="border-b border-slate-200/50 text-slate-400 text-xs">
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Titre opportunité</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Montant</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Étape</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Probabilité IA</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Échéance</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Assignataire</th>
                       </tr>
                     </thead>
                     <tbody>
                       {transactions.map((trans) => {
                         let stageBadge = 'bg-slate-100 text-slate-600';
-                        if (trans.stage === 'won') stageBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
-                        if (trans.stage === 'lost') stageBadge = 'bg-red-50 text-red-600 border border-red-200';
-                        if (trans.stage === 'negotiation') stageBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
-                        if (trans.stage === 'proposal') stageBadge = 'bg-purple-50 text-purple-600 border border-purple-200';
+                        if (trans.stage === 'won') stageBadge = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+                        if (trans.stage === 'lost') stageBadge = 'bg-red-500/10 text-red-600 border border-red-500/20';
+                        if (trans.stage === 'negotiation') stageBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
+                        if (trans.stage === 'proposal') stageBadge = 'bg-purple-500/10 text-purple-600 border border-purple-500/20';
                         
                         return (
-                          <tr key={trans.id} className="border-b border-slate-200 shadow-sm hover:bg-slate-50/30">
-                            <td className="py-3 px-4 font-bold text-slate-900">{trans.title}</td>
-                            <td className="py-3 px-4 font-semibold text-orange-600">{trans.amount.toLocaleString()} FCFA</td>
-                            <td className="py-3 px-4">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${stageBadge}`}>
+                          <tr key={trans.id} className="border-b border-slate-100 last:border-0 hover:bg-white/40 transition-colors">
+                            <td className="py-4 px-4 font-bold text-slate-800">{trans.title}</td>
+                            <td className="py-4 px-4 font-black text-slate-900">{trans.amount.toLocaleString()} <span className="text-[10px] text-slate-400">FCFA</span></td>
+                            <td className="py-4 px-4">
+                              <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase ${stageBadge}`}>
                                 {trans.stage}
                               </span>
                             </td>
-                            <td className="py-3 px-4">
-                              <div className="flex items-center gap-2">
-                                <div className="w-16 h-1.5 rounded-full bg-slate-50 overflow-hidden">
+                            <td className="py-4 px-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-20 h-2 rounded-full bg-slate-200/50 overflow-hidden shadow-inner">
                                   <div 
                                     className="h-full bg-gradient-to-r from-orange-500 to-brand-emerald rounded-full"
                                     style={{ width: `${trans.probability}%` }}
                                   />
                                 </div>
-                                <span className="text-[10px] text-slate-400 font-bold font-mono">{trans.probability}%</span>
+                                <span className="text-xs text-slate-600 font-bold font-mono">{trans.probability}%</span>
                               </div>
                             </td>
-                            <td className="py-3 px-4 text-slate-400">{trans.expected_close_date}</td>
-                            <td className="py-3 px-4 font-bold">{getCommercialName(trans.assigned_to)}</td>
+                            <td className="py-4 px-4 text-slate-500 font-medium">{trans.expected_close_date}</td>
+                            <td className="py-4 px-4 font-bold text-slate-700">{getCommercialName(trans.assigned_to)}</td>
                           </tr>
                         );
                       })}
@@ -693,51 +693,51 @@ export const DgDashboard: React.FC = () => {
           const activeDeliveries = orders.filter(o => o.delivery_status !== 'delivered' && o.delivery_status !== 'returned').length;
 
           return (
-            <div className="flex flex-col gap-6 text-left animate-fade-in">
+            <div className="flex flex-col gap-8 text-left animate-fade-in relative z-10">
               {/* Logistics KPIs */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Total Bons Commandes</span>
-                  <h4 className="text-xl font-black text-slate-900">{totalOrders} Commandes</h4>
-                  <div className="text-[10px] text-slate-400 font-semibold">{activeDeliveries} livraisons en cours</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Total Bons Commandes</span>
+                  <h4 className="text-2xl font-black text-slate-900 tracking-tight">{totalOrders} Commandes</h4>
+                  <div className="text-xs text-slate-500 font-bold mt-1">{activeDeliveries} livraisons en cours</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">CA Encaissé (Payé)</span>
-                  <h4 className="text-xl font-black text-emerald-600">{paidAmount.toLocaleString()} FCFA</h4>
-                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">CA Encaissé (Payé)</span>
+                  <h4 className="text-2xl font-black text-emerald-500 tracking-tight">{paidAmount.toLocaleString()} FCFA</h4>
+                  <div className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1.5 mt-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                     <span>{paidOrders.length} payées</span>
                   </div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Vélocité Logistique</span>
-                  <h4 className="text-xl font-black text-blue-600">94.2% respecté</h4>
-                  <div className="text-[10px] text-slate-400">SLA moyen : 45 min</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Vélocité Logistique</span>
+                  <h4 className="text-2xl font-black text-blue-600 tracking-tight">94.2% respecté</h4>
+                  <div className="text-[10px] text-slate-400 mt-1 font-medium">SLA moyen : 45 min</div>
                 </div>
 
-                <div className="p-5 rounded-2xl bg-white/45 border border-slate-200 flex flex-col gap-1.5 shadow-md">
-                  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Retards ou Anomalies</span>
-                  <h4 className="text-xl font-black text-red-600">{unpaidOrders.length} Attentes</h4>
-                  <div className="text-[10px] text-red-450 font-semibold">Bons en attente de solde</div>
+                <div className="p-6 rounded-[2rem] glass-card glass-panel-hover flex flex-col gap-2">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Retards ou Anomalies</span>
+                  <h4 className="text-2xl font-black text-red-500 tracking-tight">{unpaidOrders.length} Attentes</h4>
+                  <div className="text-[10px] text-red-600 font-semibold mt-1">Bons en attente de solde</div>
                 </div>
               </div>
 
               {/* Orders Table */}
-              <div className="p-6 rounded-2xl bg-white/45 border border-slate-200 shadow-xl">
-                <h3 className="text-base font-bold text-slate-900 mb-4">Logistique de Commandes & Factures Nationales</h3>
+              <div className="p-8 rounded-[2rem] glass-card border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
+                <h3 className="text-lg font-black text-slate-900 mb-6 tracking-tight">Logistique de Commandes & Factures Nationales</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-slate-200 text-slate-400 text-xs">
-                        <th className="py-2.5 px-4 text-left">Client & Destinataire</th>
-                        <th className="py-2.5 px-4 text-left">Description articles</th>
-                        <th className="py-2.5 px-4 text-left">Total Facturé</th>
-                        <th className="py-2.5 px-4 text-left">Statut Paiement</th>
-                        <th className="py-2.5 px-4 text-left">Livraison Logistique</th>
-                        <th className="py-2.5 px-4 text-left">Livreur Assigné</th>
-                        <th className="py-2.5 px-4 text-left">Date</th>
+                      <tr className="border-b border-slate-200/50 text-slate-400 text-xs">
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Client & Destinataire</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Description articles</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Total Facturé</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Statut Paiement</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Livraison Logistique</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Livreur Assigné</th>
+                        <th className="py-3 px-4 text-left uppercase tracking-wider font-bold">Date</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -745,36 +745,36 @@ export const DgDashboard: React.FC = () => {
                         const client = clients.find(c => c.id === order.client_id);
                         
                         let payBadge = 'bg-slate-100 text-slate-600';
-                        if (order.payment_status === 'paid') payBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
-                        if (order.payment_status === 'partial') payBadge = 'bg-orange-50 text-orange-600 border border-orange-200';
-                        if (order.payment_status === 'unpaid') payBadge = 'bg-red-50 text-red-600 border border-red-200';
+                        if (order.payment_status === 'paid') payBadge = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+                        if (order.payment_status === 'partial') payBadge = 'bg-brand-orange/10 text-brand-orange border border-brand-orange/20';
+                        if (order.payment_status === 'unpaid') payBadge = 'bg-red-500/10 text-red-600 border border-red-500/20';
 
                         let delBadge = 'bg-slate-100 text-slate-600';
-                        if (order.delivery_status === 'delivered') delBadge = 'bg-emerald-50 text-emerald-600 border border-emerald-200';
-                        if (order.delivery_status === 'shipping') delBadge = 'bg-blue-50 text-blue-600 border border-blue-200';
-                        if (order.delivery_status === 'preparing') delBadge = 'bg-amber-50 text-amber-600 border border-amber-200';
-                        if (order.delivery_status === 'returned') delBadge = 'bg-red-50 text-red-600 border border-red-200';
+                        if (order.delivery_status === 'delivered') delBadge = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+                        if (order.delivery_status === 'shipping') delBadge = 'bg-blue-500/10 text-blue-600 border border-blue-500/20';
+                        if (order.delivery_status === 'preparing') delBadge = 'bg-amber-500/10 text-amber-600 border border-amber-500/20';
+                        if (order.delivery_status === 'returned') delBadge = 'bg-red-500/10 text-red-600 border border-red-500/20';
 
                         return (
-                          <tr key={order.id} className="border-b border-slate-200 shadow-sm hover:bg-slate-50/30">
-                            <td className="py-3 px-4">
-                              <span className="font-bold text-slate-900 block">{client?.name || '—'}</span>
-                              <span className="text-[10px] text-slate-400 block">{client?.company || 'Individuel'}</span>
+                          <tr key={order.id} className="border-b border-slate-100 last:border-0 hover:bg-white/40 transition-colors">
+                            <td className="py-4 px-4">
+                              <span className="font-bold text-slate-800 block">{client?.name || '—'}</span>
+                              <span className="text-[10px] text-slate-500 block">{client?.company || 'Individuel'}</span>
                             </td>
-                            <td className="py-3 px-4 font-semibold text-slate-700">{order.items}</td>
-                            <td className="py-3 px-4 font-mono font-bold text-orange-600">{order.total_amount.toLocaleString()} FCFA</td>
-                            <td className="py-3 px-4">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${payBadge}`}>
+                            <td className="py-4 px-4 font-medium text-slate-700">{order.items}</td>
+                            <td className="py-4 px-4 font-mono font-black text-slate-900">{order.total_amount.toLocaleString()} <span className="text-[10px] text-slate-400">FCFA</span></td>
+                            <td className="py-4 px-4">
+                              <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase ${payBadge}`}>
                                 {order.payment_status}
                               </span>
                             </td>
-                            <td className="py-3 px-4">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${delBadge}`}>
+                            <td className="py-4 px-4">
+                              <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase ${delBadge}`}>
                                 {order.delivery_status}
                               </span>
                             </td>
-                            <td className="py-3 px-4 text-xs font-semibold text-slate-400">{order.delivery_agent || '—'}</td>
-                            <td className="py-3 px-4 text-xs text-slate-400">{new Date(order.created_at).toLocaleDateString()}</td>
+                            <td className="py-4 px-4 text-xs font-semibold text-slate-600">{order.delivery_agent || '—'}</td>
+                            <td className="py-4 px-4 text-xs font-medium text-slate-500">{new Date(order.created_at).toLocaleDateString()}</td>
                           </tr>
                         );
                       })}
