@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { Upload, Settings, Building2, MapPin } from 'lucide-react';
+import { useToastStore } from '../store/toastStore';
 
 interface TenantSettingsModuleProps {
   onNavigateToTeam?: () => void;
@@ -8,6 +9,7 @@ interface TenantSettingsModuleProps {
 
 export const TenantSettingsModule: React.FC<TenantSettingsModuleProps> = ({ onNavigateToTeam }) => {
   const { organization, updateOrganizationSettings } = useAuthStore();
+  const { addToast } = useToastStore();
   
   // States
   const [orgName, setOrgName] = useState(organization?.name || '');
@@ -72,6 +74,26 @@ export const TenantSettingsModule: React.FC<TenantSettingsModuleProps> = ({ onNa
       logo_url: logoUrl
     });
     setIsSaving(false);
+    addToast("Paramètres de l'entreprise mis à jour avec succès", "success");
+  };
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      addToast("Le fichier est trop volumineux (max 5 Mo)", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        setLogoUrl(event.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   // Calculate completion
@@ -153,21 +175,19 @@ export const TenantSettingsModule: React.FC<TenantSettingsModuleProps> = ({ onNa
               <div className="flex flex-col gap-2">
                 <button 
                   type="button" 
-                  onClick={() => logoInputRef.current?.focus()}
+                  onClick={() => logoInputRef.current?.click()}
                   className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 transition-colors w-fit cursor-pointer"
                 >
                   <Upload className="w-4 h-4" />
                   Changer le logo
                 </button>
                 <p className="text-xs text-slate-500">PNG, JPEG ou WebP — max 5 Mo</p>
-                {/* Temporary input since there is no actual file upload implemented right now */}
                 <input 
                   ref={logoInputRef}
-                  type="url" 
-                  placeholder="Ou entrez l'URL de votre logo" 
-                  value={logoUrl} 
-                  onChange={(e) => setLogoUrl(e.target.value)}
-                  className="mt-2 text-xs p-2 border border-slate-200 rounded-md focus:outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange w-full max-w-xs transition-all"
+                  type="file" 
+                  accept="image/png, image/jpeg, image/webp"
+                  onChange={handleLogoChange}
+                  className="hidden"
                 />
               </div>
             </div>
