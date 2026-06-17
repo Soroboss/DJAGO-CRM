@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { insforge } from '../lib/insforge';
+import { insforge, supabase } from '../lib/insforge';
 import { useToastStore } from './toastStore';
 import { type IndustryConfig, getIndustryConfig } from '../config/industries';
 
@@ -158,9 +158,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { addToast } = useToastStore.getState();
 
     try {
-      console.log("[authStore] Calling insforge.auth.signUp...");
+      console.log("[authStore] Calling supabase.auth.signUp...");
       const { data, error } = await Promise.race([
-        insforge.auth.signUp({ 
+        supabase.auth.signUp({ 
           email, 
           password,
           options: {

@@ -1,3 +1,4 @@
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@insforge/sdk';
 
 const insforgeUrl = import.meta.env.VITE_INSFORGE_URL;
@@ -11,3 +12,5 @@ export const insforge = createClient({
   baseUrl: insforgeUrl || '',
   anonKey: insforgeAnonKey || ''
 });
+
+export const supabase = createSupabaseClient(insforgeUrl || '', insforgeAnonKey || '');
